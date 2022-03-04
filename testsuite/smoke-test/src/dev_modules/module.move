@@ -1,4 +1,4 @@
-// Copyright (c) The Diem Core Contributors
+// Copyright (c) The Aptos Core Contributors
 // SPDX-License-Identifier: Apache-2.0
 
 // Note: If this test file fails to run, it is possible that the
@@ -9,10 +9,10 @@
 address {{sender}} {
 
 module MyModule {
-    use DiemFramework::Diem::Diem;
+    use AptosFramework::Aptos::Aptos;
 
-    // The identity function for coins: takes a Diem<T> as input and hands it back
-    public fun id<T>(c: Diem<T>): Diem<T> {
+    // The identity function for coins: takes a Aptos<T> as input and hands it back
+    public fun id<T>(c: Aptos<T>): Aptos<T> {
         c
     }
 }

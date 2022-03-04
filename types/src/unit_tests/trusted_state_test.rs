@@ -1,4 +1,4 @@
-// Copyright (c) The Diem Core Contributors
+// Copyright (c) The Aptos Core Contributors
 // SPDX-License-Identifier: Apache-2.0
 
 use crate::{
@@ -15,7 +15,7 @@ use crate::{
     waypoint::Waypoint,
 };
 use bcs::test_helpers::assert_canonical_encode_decode;
-use diem_crypto::{
+use aptos_crypto::{
     ed25519::Ed25519Signature,
     hash::{CryptoHash, CryptoHasher, HashValue},
 };

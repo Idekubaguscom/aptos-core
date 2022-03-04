@@ -1,5 +1,5 @@
 #!/usr/bin/expect
-# Copyright (c) The Diem Core Contributors
+# Copyright (c) The Aptos Core Contributors
 # SPDX-License-Identifier: Apache-2.0
 
 set timeout 10
@@ -28,7 +28,7 @@ expect_before {
 }
 send "cd validator-testnet\r"
 send "docker-compose logs -f validator\r"
-expect "validator_1*Diem is running"
+expect "validator_1*Aptos is running"
 
 
 ### Ensure faucet is started

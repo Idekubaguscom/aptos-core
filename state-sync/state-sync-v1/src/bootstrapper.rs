@@ -1,4 +1,4 @@
-// Copyright (c) The Diem Core Contributors
+// Copyright (c) The Aptos Core Contributors
 // SPDX-License-Identifier: Apache-2.0
 use crate::{
     client::{CoordinatorMessage, StateSyncClient},
@@ -7,8 +7,8 @@ use crate::{
     network::{StateSyncEvents, StateSyncSender},
 };
 use consensus_notifications::ConsensusNotificationListener;
-use diem_config::{config::NodeConfig, network_id::NetworkId};
-use diem_types::waypoint::Waypoint;
+use aptos_config::{config::NodeConfig, network_id::NetworkId};
+use aptos_types::waypoint::Waypoint;
 use event_notifications::EventSubscriptionService;
 use executor_types::ChunkExecutorTrait;
 use futures::channel::mpsc;

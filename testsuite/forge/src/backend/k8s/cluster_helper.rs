@@ -1,9 +1,9 @@
-// Copyright (c) The Diem Core Contributors
+// Copyright (c) The Aptos Core Contributors
 // SPDX-License-Identifier: Apache-2.0
 
 use crate::{get_validators, k8s_retry_strategy, nodes_healthcheck, Result};
 use anyhow::{bail, format_err};
-use diem_logger::*;
+use aptos_logger::*;
 use futures::future::try_join_all;
 use hyper::{Client, Uri};
 use hyper_proxy::{Intercept, Proxy, ProxyConnector};
@@ -41,10 +41,10 @@ const TRUSTED_SCALING_FACTOR: i64 = 1;
 const GENESIS_MODULES_DIR: &str = "/diem/move/modules";
 
 async fn wait_genesis_job(kube_client: &K8sClient, era: &str) -> Result<()> {
-    diem_retrier::retry_async(k8s_retry_strategy(), || {
+    aptos_retrier::retry_async(k8s_retry_strategy(), || {
         let jobs: Api<Job> = Api::namespaced(kube_client.clone(), "default");
         Box::pin(async move {
-            let job_name = format!("diem-testnet-genesis-e{}", era);
+            let job_name = format!("aptos-testnet-genesis-e{}", era);
             debug!("Running get job: {}", &job_name);
             let genesis_job = jobs.get_status(&job_name).await.unwrap();
             debug!("Status: {:?}", genesis_job.status);
@@ -67,7 +67,7 @@ async fn nodegroup_state_check(desire_size: i64) -> Result<()> {
         return Ok(());
     }
 
-    diem_retrier::retry_async(k8s_retry_strategy(), || {
+    aptos_retrier::retry_async(k8s_retry_strategy(), || {
         Box::pin(async move {
             let status_args = ["get", "nodes"];
             let raw_nodegroup_values = Command::new(KUBECTL_BIN)
@@ -181,13 +181,13 @@ fn upgrade_helm_release(release_name: &str, helm_chart: &str, options: &[&str]) 
 fn upgrade_validator(validator_name: &str, helm_repo: &str, options: &[&str]) -> Result<()> {
     upgrade_helm_release(
         validator_name,
-        &format!("{}/diem-validator", helm_repo),
+        &format!("{}/aptos-validator", helm_repo),
         options,
     )
 }
 
 fn upgrade_testnet(helm_repo: &str, options: &[&str]) -> Result<()> {
-    upgrade_helm_release("diem", &format!("{}/testnet", helm_repo), options)
+    upgrade_helm_release("aptos", &format!("{}/testnet", helm_repo), options)
 }
 
 fn get_helm_status(helm_release_name: &str) -> Result<Value> {
@@ -205,7 +205,7 @@ fn get_helm_status(helm_release_name: &str) -> Result<Value> {
 
 fn get_helm_values(helm_release_name: &str) -> Result<Value> {
     let mut v: Value = get_helm_status(helm_release_name)
-        .map_err(|e| format_err!("failed to helm get values diem: {}", e))?;
+        .map_err(|e| format_err!("failed to helm get values aptos: {}", e))?;
     Ok(v["config"].take())
 }
 
@@ -217,7 +217,7 @@ pub fn uninstall_from_k8s_cluster() -> Result<()> {
     println!("All validators removed");
 
     // NOTE: for now, do not remove testnet helm chart since it is more expensive
-    // remove_helm_release("diem").unwrap();
+    // remove_helm_release("aptos").unwrap();
     // println!("Testnet release removed");
     Ok(())
 }
@@ -284,26 +284,26 @@ pub async fn clean_k8s_cluster(
     println!("All validators upgraded");
 
     // get testnet values
-    let v: Value = get_helm_status("diem").unwrap();
+    let v: Value = get_helm_status("aptos").unwrap();
     let version = v["version"].as_i64().expect("not a i64") as usize;
     let config = &v["config"];
 
     // prep testnet chart for release
-    helm_release_patch("diem", version).unwrap();
+    helm_release_patch("aptos", version).unwrap();
 
     // store the helm values for later use
-    let file_path = tmp_dir.path().join("diem_status.json");
+    let file_path = tmp_dir.path().join("aptos_status.json");
     println!("Wrote helm values to: {:?}", &file_path);
     let mut file = File::create(file_path).expect("Could not create file in temp dir");
     file.write_all(&config.to_string().into_bytes())
         .expect("Could not write to file");
     let file_path_str = tmp_dir
         .path()
-        .join("diem_status.json")
+        .join("aptos_status.json")
         .display()
         .to_string();
 
-    // run genesis from the directory in diem/init image
+    // run genesis from the directory in aptos/init image
     let move_modules_dir = if let Some(genesis_modules_path) = genesis_modules_path {
         genesis_modules_path
     } else {
@@ -351,7 +351,7 @@ pub async fn clean_k8s_cluster(
 }
 
 fn get_new_era() -> Result<String> {
-    let v: Value = get_helm_values("diem")?;
+    let v: Value = get_helm_values("aptos")?;
     println!("{}", v["genesis"]["era"]);
     let chain_era: &str = &era_to_string(&v["genesis"]["era"]).unwrap();
 
@@ -373,7 +373,7 @@ fn era_to_string(era_value: &Value) -> Result<String> {
 
 pub async fn create_k8s_client() -> K8sClient {
     let _ = Command::new(KUBECTL_BIN).arg("proxy").spawn();
-    let _ = diem_retrier::retry_async(k8s_retry_strategy(), || {
+    let _ = aptos_retrier::retry_async(k8s_retry_strategy(), || {
         Box::pin(async move {
             debug!("Running local kube pod healthcheck on {}", HEALTH_CHECK_URL);
             reqwest::get(HEALTH_CHECK_URL).await?.text().await?;
@@ -558,7 +558,7 @@ async fn describe_update(
     nodegroup_name: String,
     update_id: String,
 ) -> Result<()> {
-    diem_retrier::retry_async(k8s_retry_strategy(), || {
+    aptos_retrier::retry_async(k8s_retry_strategy(), || {
         let client = eks_client.clone();
         let nodegroup_name = nodegroup_name.clone();
         let update_id = update_id.clone();

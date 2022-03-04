@@ -1,4 +1,4 @@
-// Copyright (c) The Diem Core Contributors
+// Copyright (c) The Aptos Core Contributors
 // SPDX-License-Identifier: Apache-2.0
 
 use std::{
@@ -12,7 +12,7 @@ use crate::{
 };
 use async_trait::async_trait;
 use consensus_types::executed_block::ExecutedBlock;
-use diem_types::ledger_info::LedgerInfoWithSignatures;
+use aptos_types::ledger_info::LedgerInfoWithSignatures;
 use executor_types::Error;
 
 /// [ This class is used when consensus.decoupled = true ]

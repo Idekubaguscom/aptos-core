@@ -1,4 +1,4 @@
-// Copyright (c) The Diem Core Contributors
+// Copyright (c) The Aptos Core Contributors
 // SPDX-License-Identifier: Apache-2.0
 
 use crate::{
@@ -6,7 +6,7 @@ use crate::{
     remote_service::{self, RemoteService},
     safety_rules_manager,
 };
-use diem_config::config::{SafetyRulesConfig, SafetyRulesService};
+use aptos_config::config::{SafetyRulesConfig, SafetyRulesService};
 
 use std::net::SocketAddr;
 

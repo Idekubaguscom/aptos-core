@@ -1,9 +1,9 @@
-// Copyright (c) The Diem Core Contributors
+// Copyright (c) The Aptos Core Contributors
 // SPDX-License-Identifier: Apache-2.0
 
 use criterion::{criterion_group, criterion_main, BatchSize, BenchmarkId, Criterion, Throughput};
-use diem_crypto::{hash::SPARSE_MERKLE_PLACEHOLDER_HASH, HashValue};
-use diem_types::account_state_blob::AccountStateBlob;
+use aptos_crypto::{hash::SPARSE_MERKLE_PLACEHOLDER_HASH, HashValue};
+use aptos_types::account_state_blob::AccountStateBlob;
 use itertools::zip_eq;
 use rand::{distributions::Standard, prelude::StdRng, seq::IteratorRandom, Rng, SeedableRng};
 use scratchpad::{test_utils::naive_smt::NaiveSmt, SparseMerkleTree};

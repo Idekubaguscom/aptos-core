@@ -1,11 +1,11 @@
-// Copyright (c) The Diem Core Contributors
+// Copyright (c) The Aptos Core Contributors
 // SPDX-License-Identifier: Apache-2.0
 
 use crate::DbReader;
 use anyhow::{format_err, Result};
-use diem_crypto::{hash::SPARSE_MERKLE_PLACEHOLDER_HASH, HashValue};
-use diem_state_view::{StateView, StateViewId};
-use diem_types::{
+use aptos_crypto::{hash::SPARSE_MERKLE_PLACEHOLDER_HASH, HashValue};
+use aptos_state_view::{StateView, StateViewId};
+use aptos_types::{
     access_path::AccessPath,
     account_address::{AccountAddress, HashAccountAddress},
     account_state::AccountState,

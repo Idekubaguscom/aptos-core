@@ -1,4 +1,4 @@
-// Copyright (c) The Diem Core Contributors
+// Copyright (c) The Aptos Core Contributors
 // SPDX-License-Identifier: Apache-2.0
 
 use safety_rules::TSafetyRules;
@@ -11,9 +11,9 @@ use crate::{
     experimental::pipeline_phase::StatelessPipeline, metrics_safety_rules::MetricsSafetyRules,
 };
 use async_trait::async_trait;
-use diem_crypto::ed25519::Ed25519Signature;
-use diem_infallible::Mutex;
-use diem_types::ledger_info::{LedgerInfo, LedgerInfoWithSignatures};
+use aptos_crypto::ed25519::Ed25519Signature;
+use aptos_infallible::Mutex;
+use aptos_types::ledger_info::{LedgerInfo, LedgerInfoWithSignatures};
 use safety_rules::Error;
 
 /// [ This class is used when consensus.decoupled = true ]

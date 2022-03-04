@@ -1,11 +1,11 @@
-// Copyright (c) The Diem Core Contributors
+// Copyright (c) The Aptos Core Contributors
 // SPDX-License-Identifier: Apache-2.0
 
 #![forbid(unsafe_code)]
 
 //! This library implements a schematized DB on top of [RocksDB](https://rocksdb.org/). It makes
 //! sure all data passed in and out are structured according to predefined schemas and prevents
-//! access to raw keys and values. This library also enforces a set of Diem specific DB options,
+//! access to raw keys and values. This library also enforces a set of Aptos specific DB options,
 //! like custom comparators and schema-to-column-family mapping.
 //!
 //! It requires that different kinds of key-value pairs be stored in separate column
@@ -27,7 +27,7 @@ use crate::{
     schema::{KeyCodec, Schema, SeekKeyCodec, ValueCodec},
 };
 use anyhow::{ensure, format_err, Result};
-use diem_logger::prelude::*;
+use aptos_logger::prelude::*;
 use std::{
     collections::{BTreeMap, HashMap, HashSet},
     iter::Iterator,
@@ -240,7 +240,7 @@ impl DB {
 
     /// Open db as secondary.
     /// This allows to read the DB in another process while it's already opened for read / write in
-    /// one (e.g. a Diem Node)
+    /// one (e.g. a Aptos Node)
     /// https://github.com/facebook/rocksdb/blob/493f425e77043cc35ea2d89ee3c4ec0274c700cb/include/rocksdb/db.h#L176-L222
     pub fn open_as_secondary<P: AsRef<Path>>(
         primary_path: P,

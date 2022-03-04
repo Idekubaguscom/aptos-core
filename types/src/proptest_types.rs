@@ -1,11 +1,11 @@
-// Copyright (c) The Diem Core Contributors
+// Copyright (c) The Aptos Core Contributors
 // SPDX-License-Identifier: Apache-2.0
 
 use crate::{
     access_path::AccessPath,
     account_address::{self, AccountAddress},
     account_config::{
-        AccountResource, BalanceResource, DiemAccountResource, KeyRotationCapabilityResource,
+        AccountResource, BalanceResource, AptosAccountResource, KeyRotationCapabilityResource,
         WithdrawCapabilityResource,
     },
     account_state_blob::AccountStateBlob,
@@ -29,7 +29,7 @@ use crate::{
     vm_status::{KeptVMStatus, VMStatus},
     write_set::{WriteOp, WriteSet, WriteSetMut},
 };
-use diem_crypto::{
+use aptos_crypto::{
     ed25519::{self, Ed25519PrivateKey, Ed25519PublicKey, Ed25519Signature},
     test_utils::KeyPair,
     traits::*,
@@ -666,20 +666,20 @@ impl ContractEventGen {
 }
 
 #[derive(Arbitrary, Debug)]
-pub struct DiemAccountResourceGen {
+pub struct AptosAccountResourceGen {
     withdrawal_capability: Option<WithdrawCapabilityResource>,
     key_rotation_capability: Option<KeyRotationCapabilityResource>,
 }
 
-impl DiemAccountResourceGen {
+impl AptosAccountResourceGen {
     pub fn materialize(
         self,
         account_index: Index,
         universe: &AccountInfoUniverse,
-    ) -> DiemAccountResource {
+    ) -> AptosAccountResource {
         let account_info = universe.get_account_info(account_index);
 
-        DiemAccountResource::new(
+        AptosAccountResource::new(
             account_info.sequence_number,
             account_info.public_key.to_bytes().to_vec(),
             self.withdrawal_capability,
@@ -721,7 +721,7 @@ impl BalanceResourceGen {
 
 #[derive(Arbitrary, Debug)]
 pub struct AccountStateBlobGen {
-    diem_account_resource_gen: DiemAccountResourceGen,
+    aptos_account_resource_gen: AptosAccountResourceGen,
     balance_resource_gen: BalanceResourceGen,
     account_resource_gen: AccountResourceGen,
 }
@@ -732,14 +732,14 @@ impl AccountStateBlobGen {
         account_index: Index,
         universe: &AccountInfoUniverse,
     ) -> AccountStateBlob {
-        let diem_account_resource = self
-            .diem_account_resource_gen
+        let aptos_account_resource = self
+            .aptos_account_resource_gen
             .materialize(account_index, universe);
         let account_resource = self
             .account_resource_gen
             .materialize(account_index, universe);
         let balance_resource = self.balance_resource_gen.materialize();
-        AccountStateBlob::try_from((&account_resource, &diem_account_resource, &balance_resource))
+        AccountStateBlob::try_from((&account_resource, &aptos_account_resource, &balance_resource))
             .unwrap()
     }
 }

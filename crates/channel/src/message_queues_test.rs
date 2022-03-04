@@ -1,9 +1,9 @@
-// Copyright (c) The Diem Core Contributors
+// Copyright (c) The Aptos Core Contributors
 // SPDX-License-Identifier: Apache-2.0
 
 use crate::message_queues::{PerKeyQueue, QueueStyle};
-use diem_infallible::NonZeroUsize;
-use diem_types::account_address::AccountAddress;
+use aptos_infallible::NonZeroUsize;
+use aptos_types::account_address::AccountAddress;
 
 /// This represents a proposal message from a validator
 #[derive(Debug, PartialEq)]

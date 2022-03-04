@@ -1,4 +1,4 @@
-// Copyright (c) The Diem Core Contributors
+// Copyright (c) The Aptos Core Contributors
 // SPDX-License-Identifier: Apache-2.0
 
 //! All proofs generated in this module are not valid proofs. They are only for the purpose of
@@ -9,7 +9,7 @@ use crate::proof::{
     AccumulatorRangeProof, SparseMerkleLeafNode, SparseMerkleProof, SparseMerkleRangeProof,
     TransactionAccumulatorSummary,
 };
-use diem_crypto::{
+use aptos_crypto::{
     hash::{
         CryptoHash, CryptoHasher, ACCUMULATOR_PLACEHOLDER_HASH, SPARSE_MERKLE_PLACEHOLDER_HASH,
     },

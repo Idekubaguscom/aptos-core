@@ -1,6 +1,6 @@
 ---
-name: "\U0001F41B Documentation/developers.diem.com Bug report"
-about: Create a bug report to help improve the Diem Developers' Website
+name: "\U0001F41B Documentation/developers.aptos.com Bug report"
+about: Create a bug report to help improve the Aptos Developers' Website
 title: "[Bug]"
 labels: bug
 assignees: ''
@@ -10,7 +10,7 @@ assignees: ''
 # 🐛 Bug
 
 <!-- A clear and concise description of your issue with the documentation or website.
-To report a security issue, please email security@diem.com. -->
+To report a security issue, please email security@aptos.com. -->
 
 ## Steps to reproduce
 

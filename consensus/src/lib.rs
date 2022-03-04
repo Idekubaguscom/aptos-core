@@ -1,11 +1,11 @@
-// Copyright (c) The Diem Core Contributors
+// Copyright (c) The Aptos Core Contributors
 // SPDX-License-Identifier: Apache-2.0
 
 #![forbid(unsafe_code)]
 
-//! Consensus for the Diem Core blockchain
+//! Consensus for the Aptos Core blockchain
 //!
-//! The consensus protocol implemented is DiemBFT (based on
+//! The consensus protocol implemented is AptosBFT (based on
 //! [HotStuff](https://arxiv.org/pdf/1803.05069.pdf)).
 
 #![cfg_attr(not(feature = "fuzzing"), deny(missing_docs))]
@@ -36,9 +36,9 @@ mod twins;
 mod txn_manager;
 mod util;
 
-/// DiemBFT implementation
+/// AptosBFT implementation
 pub mod consensus_provider;
-/// DiemNet interface.
+/// AptosNet interface.
 pub mod network_interface;
 
 #[cfg(feature = "fuzzing")]

@@ -1,10 +1,10 @@
-// Copyright (c) The Diem Core Contributors
+// Copyright (c) The Aptos Core Contributors
 // SPDX-License-Identifier: Apache-2.0
 
 use crate::{
     smoke_test_environment::new_local_swarm,
     test_utils::{
-        assert_balance, create_and_fund_account, diem_swarm_utils::insert_waypoint,
+        assert_balance, create_and_fund_account, aptos_swarm_utils::insert_waypoint,
         transfer_and_reconfig, transfer_coins,
     },
     workspace_builder,
@@ -12,8 +12,8 @@ use crate::{
 };
 use anyhow::{bail, Result};
 use backup_cli::metadata::view::BackupStorageState;
-use diem_temppath::TempPath;
-use diem_types::{transaction::Version, waypoint::Waypoint};
+use aptos_temppath::TempPath;
+use aptos_types::{transaction::Version, waypoint::Waypoint};
 use forge::{NodeExt, Swarm, SwarmExt};
 use std::{
     fs,
@@ -92,7 +92,7 @@ async fn test_db_restore() {
     insert_waypoint(&mut node0_config, genesis_waypoint);
     node0_config.save(node0_config_path).unwrap();
     let db_dir = node0_config.storage.dir();
-    fs::remove_dir_all(db_dir.join("diemdb")).unwrap();
+    fs::remove_dir_all(db_dir.join("aptosdb")).unwrap();
     fs::remove_dir_all(db_dir.join("consensusdb")).unwrap();
 
     // restore db from backup

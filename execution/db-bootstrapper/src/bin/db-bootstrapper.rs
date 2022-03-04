@@ -1,12 +1,12 @@
-// Copyright (c) The Diem Core Contributors
+// Copyright (c) The Aptos Core Contributors
 // SPDX-License-Identifier: Apache-2.0
 
 use anyhow::{ensure, format_err, Context, Result};
-use diem_config::config::RocksdbConfig;
-use diem_temppath::TempPath;
-use diem_types::{transaction::Transaction, waypoint::Waypoint};
-use diem_vm::DiemVM;
-use diemdb::DiemDB;
+use aptos_config::config::RocksdbConfig;
+use aptos_temppath::TempPath;
+use aptos_types::{transaction::Transaction, waypoint::Waypoint};
+use aptos_vm::AptosVM;
+use aptosdb::AptosDB;
 use executor::db_bootstrapper::calculate_genesis;
 use std::{
     fs::File,
@@ -51,7 +51,7 @@ fn main() -> Result<()> {
     let tmpdir;
 
     let db = if opt.commit {
-        DiemDB::open(
+        AptosDB::open(
             &opt.db_dir,
             false,
             None, /* pruner */
@@ -62,7 +62,7 @@ fn main() -> Result<()> {
         // When not committing, we open the DB as secondary so the tool is usable along side a
         // running node on the same DB. Using a TempPath since it won't run for long.
         tmpdir = TempPath::new();
-        DiemDB::open_as_secondary(
+        AptosDB::open_as_secondary(
             opt.db_dir.as_path(),
             tmpdir.path(),
             RocksdbConfig::default(),
@@ -84,7 +84,7 @@ fn main() -> Result<()> {
         )
     }
 
-    let committer = calculate_genesis::<DiemVM>(&db, tree_state, &genesis_txn)
+    let committer = calculate_genesis::<AptosVM>(&db, tree_state, &genesis_txn)
         .with_context(|| format_err!("Failed to calculate genesis."))?;
     println!(
         "Successfully calculated genesis. Got waypoint: {}",

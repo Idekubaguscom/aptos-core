@@ -1,10 +1,10 @@
-// Copyright (c) The Diem Core Contributors
+// Copyright (c) The Aptos Core Contributors
 // SPDX-License-Identifier: Apache-2.0
 
 #![forbid(unsafe_code)]
 
 use async_trait::async_trait;
-use diem_types::{
+use aptos_types::{
     contract_event::ContractEvent, ledger_info::LedgerInfoWithSignatures, transaction::Transaction,
 };
 use futures::{
@@ -272,8 +272,8 @@ impl ConsensusSyncNotification {
 mod tests {
     use crate::{ConsensusNotification, ConsensusNotificationSender, Error};
     use claim::{assert_err, assert_matches, assert_ok};
-    use diem_crypto::{ed25519::Ed25519PrivateKey, HashValue, PrivateKey, SigningKey, Uniform};
-    use diem_types::{
+    use aptos_crypto::{ed25519::Ed25519PrivateKey, HashValue, PrivateKey, SigningKey, Uniform};
+    use aptos_types::{
         account_address::AccountAddress,
         block_info::BlockInfo,
         chain_id::ChainId,

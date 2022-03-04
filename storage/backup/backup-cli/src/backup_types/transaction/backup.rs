@@ -1,4 +1,4 @@
-// Copyright (c) The Diem Core Contributors
+// Copyright (c) The Aptos Core Contributors
 // SPDX-License-Identifier: Apache-2.0
 
 use crate::{
@@ -11,8 +11,8 @@ use crate::{
     },
 };
 use anyhow::{anyhow, Result};
-use diem_logger::prelude::*;
-use diem_types::transaction::Version;
+use aptos_logger::prelude::*;
+use aptos_types::transaction::Version;
 use once_cell::sync::Lazy;
 use std::{convert::TryInto, str::FromStr, sync::Arc};
 use structopt::StructOpt;

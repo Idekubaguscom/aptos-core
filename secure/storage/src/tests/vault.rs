@@ -1,4 +1,4 @@
-// Copyright (c) The Diem Core Contributors
+// Copyright (c) The Aptos Core Contributors
 // SPDX-License-Identifier: Apache-2.0
 
 use crate::{
@@ -9,8 +9,8 @@ use crate::{
     },
     Capability, CryptoStorage, Error, Identity, KVStorage, Namespaced, Permission, Policy, Storage,
 };
-use diem_crypto::{test_utils::TestDiemCrypto, Signature};
-use diem_vault_client::dev::{self, ROOT_TOKEN};
+use aptos_crypto::{test_utils::TestAptosCrypto, Signature};
+use aptos_vault_client::dev::{self, ROOT_TOKEN};
 
 /// VaultStorage namespace constants
 const VAULT_NAMESPACE_1: &str = "namespace_1";
@@ -48,7 +48,7 @@ const VAULT_TESTS: &[fn()] = &[
     test_vault_tokens,
 ];
 
-/// A test for verifying VaultStorage properly implements the DiemSecureStorage API and enforces
+/// A test for verifying VaultStorage properly implements the AptosSecureStorage API and enforces
 /// strict separation between unique namespaces. This test depends on running Vault, which can be
 /// done by using the provided docker run script in `docker/vault/run.sh`
 #[test]
@@ -251,7 +251,7 @@ fn test_vault_crypto_policies() {
         pubkey
     );
 
-    let message = TestDiemCrypto("Hello, World".to_string());
+    let message = TestAptosCrypto("Hello, World".to_string());
 
     // Verify exporter policy
     let exporter_token = storage.create_token(vec![EXPORTER]).unwrap();

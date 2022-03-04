@@ -1,4 +1,4 @@
-// Copyright (c) The Diem Core Contributors
+// Copyright (c) The Aptos Core Contributors
 // SPDX-License-Identifier: Apache-2.0
 
 use crate::{
@@ -13,7 +13,7 @@ use crate::{
     },
 };
 
-pub use diem_types::*;
+pub use aptos_types::*;
 
 #[derive(Debug)]
 pub struct LocalAccount {

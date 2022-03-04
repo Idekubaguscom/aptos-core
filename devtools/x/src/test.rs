@@ -1,4 +1,4 @@
-// Copyright (c) The Diem Core Contributors
+// Copyright (c) The Aptos Core Contributors
 // SPDX-License-Identifier: Apache-2.0
 
 use crate::{
@@ -22,7 +22,7 @@ pub struct Args {
     #[structopt(flatten)]
     pub(crate) package_args: SelectedPackageArgs,
     #[structopt(long, short)]
-    /// Skip running expensive diem testsuite integration tests
+    /// Skip running expensive aptos testsuite integration tests
     unit: bool,
     #[structopt(long)]
     /// Only run doctests

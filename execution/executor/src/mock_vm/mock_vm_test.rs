@@ -1,11 +1,11 @@
-// Copyright (c) The Diem Core Contributors
+// Copyright (c) The Aptos Core Contributors
 // SPDX-License-Identifier: Apache-2.0
 
 use super::{balance_ap, encode_mint_transaction, encode_transfer_transaction, seqnum_ap, MockVM};
 use anyhow::Result;
-use diem_state_view::StateView;
-use diem_types::{access_path::AccessPath, account_address::AccountAddress, write_set::WriteOp};
-use diem_vm::VMExecutor;
+use aptos_state_view::StateView;
+use aptos_types::{access_path::AccessPath, account_address::AccountAddress, write_set::WriteOp};
+use aptos_vm::VMExecutor;
 
 fn gen_address(index: u8) -> AccountAddress {
     AccountAddress::new([index; AccountAddress::LENGTH])

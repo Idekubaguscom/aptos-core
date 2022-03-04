@@ -1,4 +1,4 @@
-// Copyright (c) The Diem Core Contributors
+// Copyright (c) The Aptos Core Contributors
 // SPDX-License-Identifier: Apache-2.0
 
 //! This module implements an in-memory Sparse Merkle Tree that is similar to what we use in
@@ -86,12 +86,12 @@ use crate::sparse_merkle::{
     updater::SubTreeUpdater,
     utils::partition,
 };
-use diem_crypto::{
+use aptos_crypto::{
     hash::{CryptoHash, SPARSE_MERKLE_PLACEHOLDER_HASH},
     HashValue,
 };
-use diem_infallible::Mutex;
-use diem_types::{
+use aptos_infallible::Mutex;
+use aptos_types::{
     nibble::{nibble_path::NibblePath, ROOT_NIBBLE_HEIGHT},
     proof::SparseMerkleProof,
 };

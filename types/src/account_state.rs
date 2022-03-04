@@ -1,4 +1,4 @@
-// Copyright (c) The Diem Core Contributors
+// Copyright (c) The Aptos Core Contributors
 // SPDX-License-Identifier: Apache-2.0
 
 use crate::{
@@ -7,14 +7,14 @@ use crate::{
     account_config::{
         currency_code_from_type_tag, AccountResource, AccountRole, BalanceResource, CRSNResource,
         ChainIdResource, ChildVASP, Credential, CurrencyInfoResource, DesignatedDealer,
-        DesignatedDealerPreburns, DiemAccountResource, FreezingBit, ParentVASP,
+        DesignatedDealerPreburns, AptosAccountResource, FreezingBit, ParentVASP,
         PreburnQueueResource, PreburnResource, VASPDomainManager, VASPDomains,
     },
-    block_metadata::DiemBlockResource,
-    diem_timestamp::DiemTimestampResource,
+    block_metadata::AptosBlockResource,
+    aptos_timestamp::AptosTimestampResource,
     on_chain_config::{
         default_access_path_for_config, experimental_access_path_for_config, ConfigurationResource,
-        DiemVersion, OnChainConfig, RegisteredCurrencies, VMPublishingOption, ValidatorSet,
+        AptosVersion, OnChainConfig, RegisteredCurrencies, VMPublishingOption, ValidatorSet,
     },
     validator_config::{ValidatorConfigResource, ValidatorOperatorConfigResource},
 };
@@ -35,21 +35,21 @@ impl AccountState {
             .map(|opt_ar| opt_ar.map(|ar| ar.address()))
     }
 
-    pub fn get_diem_account_resource(&self) -> Result<Option<DiemAccountResource>> {
-        self.get_resource::<DiemAccountResource>()
+    pub fn get_aptos_account_resource(&self) -> Result<Option<AptosAccountResource>> {
+        self.get_resource::<AptosAccountResource>()
     }
 
     // Return the `AccountResource` for this blob. If the blob doesn't have an `AccountResource`
-    // then it must have a `DiemAccountResource` in which case we convert that to an
+    // then it must have a `AptosAccountResource` in which case we convert that to an
     // `AccountResource`.
     pub fn get_account_resource(&self) -> Result<Option<AccountResource>> {
         match self.get_resource::<AccountResource>()? {
             x @ Some(_) => Ok(x),
-            None => match self.get_resource::<DiemAccountResource>()? {
-                Some(diem_ar) => Ok(Some(AccountResource::new(
-                    diem_ar.sequence_number(),
-                    diem_ar.authentication_key().to_vec(),
-                    diem_ar.address(),
+            None => match self.get_resource::<AptosAccountResource>()? {
+                Some(aptos_ar) => Ok(Some(AccountResource::new(
+                    aptos_ar.sequence_number(),
+                    aptos_ar.authentication_key().to_vec(),
+                    aptos_ar.address(),
                 ))),
                 None => Ok(None),
             },
@@ -104,8 +104,8 @@ impl AccountState {
         self.get_resource::<ConfigurationResource>()
     }
 
-    pub fn get_diem_timestamp_resource(&self) -> Result<Option<DiemTimestampResource>> {
-        self.get_resource::<DiemTimestampResource>()
+    pub fn get_aptos_timestamp_resource(&self) -> Result<Option<AptosTimestampResource>> {
+        self.get_resource::<AptosTimestampResource>()
     }
 
     pub fn get_validator_config_resource(&self) -> Result<Option<ValidatorConfigResource>> {
@@ -187,8 +187,8 @@ impl AccountState {
         self.get_config::<ValidatorSet>()
     }
 
-    pub fn get_diem_version(&self) -> Result<Option<DiemVersion>> {
-        self.get_config::<DiemVersion>()
+    pub fn get_aptos_version(&self) -> Result<Option<AptosVersion>> {
+        self.get_config::<AptosVersion>()
     }
 
     pub fn get_vm_publishing_option(&self) -> Result<Option<VMPublishingOption>> {
@@ -218,8 +218,8 @@ impl AccountState {
         }
     }
 
-    pub fn get_diem_block_resource(&self) -> Result<Option<DiemBlockResource>> {
-        self.get_resource::<DiemBlockResource>()
+    pub fn get_aptos_block_resource(&self) -> Result<Option<AptosBlockResource>> {
+        self.get_resource::<AptosBlockResource>()
     }
 
     pub fn get(&self, key: &[u8]) -> Option<&Vec<u8>> {
@@ -321,9 +321,9 @@ impl fmt::Debug for AccountState {
             .map(|account_resource_opt| format!("{:#?}", account_resource_opt))
             .unwrap_or_else(|e| format!("parse error: {:#?}", e));
 
-        let diem_timestamp_str = self
-            .get_diem_timestamp_resource()
-            .map(|diem_timestamp_opt| format!("{:#?}", diem_timestamp_opt))
+        let aptos_timestamp_str = self
+            .get_aptos_timestamp_resource()
+            .map(|aptos_timestamp_opt| format!("{:#?}", aptos_timestamp_opt))
             .unwrap_or_else(|e| format!("parse: {:#?}", e));
 
         let validator_config_str = self
@@ -339,23 +339,23 @@ impl fmt::Debug for AccountState {
         write!(
             f,
             "{{ \n \
-             DiemAccountResource {{ {} }} \n \
-             DiemTimestamp {{ {} }} \n \
+             AptosAccountResource {{ {} }} \n \
+             AptosTimestamp {{ {} }} \n \
              ValidatorConfig {{ {} }} \n \
              ValidatorSet {{ {} }} \n \
              }}",
-            account_resource_str, diem_timestamp_str, validator_config_str, validator_set_str,
+            account_resource_str, aptos_timestamp_str, validator_config_str, validator_set_str,
         )
     }
 }
 
-impl TryFrom<(&AccountResource, &DiemAccountResource, &BalanceResource)> for AccountState {
+impl TryFrom<(&AccountResource, &AptosAccountResource, &BalanceResource)> for AccountState {
     type Error = Error;
 
     fn try_from(
-        (account_resource, diem_account_resource, balance_resource): (
+        (account_resource, aptos_account_resource, balance_resource): (
             &AccountResource,
-            &DiemAccountResource,
+            &AptosAccountResource,
             &BalanceResource,
         ),
     ) -> Result<Self> {
@@ -365,8 +365,8 @@ impl TryFrom<(&AccountResource, &DiemAccountResource, &BalanceResource)> for Acc
             bcs::to_bytes(account_resource)?,
         );
         btree_map.insert(
-            DiemAccountResource::resource_path(),
-            bcs::to_bytes(diem_account_resource)?,
+            AptosAccountResource::resource_path(),
+            bcs::to_bytes(aptos_account_resource)?,
         );
         btree_map.insert(
             BalanceResource::resource_path(),

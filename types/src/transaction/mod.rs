@@ -1,4 +1,4 @@
-// Copyright (c) The Diem Core Contributors
+// Copyright (c) The Aptos Core Contributors
 // SPDX-License-Identifier: Apache-2.0
 
 use crate::{
@@ -18,14 +18,14 @@ use crate::{
     write_set::WriteSet,
 };
 use anyhow::{ensure, format_err, Error, Result};
-use diem_crypto::{
+use aptos_crypto::{
     ed25519::*,
     hash::{CryptoHash, EventAccumulatorHasher},
     multi_ed25519::{MultiEd25519PublicKey, MultiEd25519Signature},
     traits::{signing_message, SigningKey},
     HashValue,
 };
-use diem_crypto_derive::{BCSCryptoHash, CryptoHasher};
+use aptos_crypto_derive::{BCSCryptoHash, CryptoHasher};
 use move_core_types::transaction_argument::convert_txn_args;
 #[cfg(any(test, feature = "fuzzing"))]
 use proptest_derive::Arbitrary;
@@ -92,7 +92,7 @@ pub struct RawTransaction {
     /// in the future to indicate that a transaction does not expire.
     expiration_timestamp_secs: u64,
 
-    /// Chain ID of the Diem network this transaction is intended for.
+    /// Chain ID of the Aptos network this transaction is intended for.
     chain_id: ChainId,
 }
 
@@ -819,7 +819,7 @@ impl From<KeptVMStatus> for TransactionStatus {
 
 #[derive(Clone, Copy, Debug, Eq, PartialEq, Ord, PartialOrd, Hash)]
 pub enum GovernanceRole {
-    DiemRoot,
+    AptosRoot,
     TreasuryCompliance,
     Validator,
     ValidatorOperator,
@@ -831,7 +831,7 @@ impl GovernanceRole {
     pub fn from_role_id(role_id: u64) -> Self {
         use GovernanceRole::*;
         match role_id {
-            0 => DiemRoot,
+            0 => AptosRoot,
             1 => TreasuryCompliance,
             2 => DesignatedDealer,
             3 => Validator,
@@ -847,7 +847,7 @@ impl GovernanceRole {
     pub fn priority(&self) -> u64 {
         use GovernanceRole::*;
         match self {
-            DiemRoot => 3,
+            AptosRoot => 3,
             TreasuryCompliance => 2,
             Validator | ValidatorOperator | DesignatedDealer => 1,
             NonGovernanceRole => 0,
@@ -1433,7 +1433,7 @@ impl AccountTransactionsWithProof {
     }
 
     // TODO(philiphayes): this will need to change to support CRSNs
-    // (Conflict-Resistant Sequence Numbers)[https://github.com/diem/dip/blob/main/dips/dip-168.md].
+    // (Conflict-Resistant Sequence Numbers)[https://github.com/aptos/dip/blob/main/dips/dip-168.md].
     //
     // If we use a separate event stream under each account for sequence numbers,
     // we'll probably need to always `include_events: true`, find the sequence
@@ -1484,7 +1484,7 @@ impl AccountTransactionsWithProof {
     }
 }
 
-/// `Transaction` will be the transaction type used internally in the diem node to represent the
+/// `Transaction` will be the transaction type used internally in the aptos node to represent the
 /// transaction to be processed and persisted.
 ///
 /// We suppress the clippy warning here as we would expect most of the transaction to be user

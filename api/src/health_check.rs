@@ -1,4 +1,4 @@
-// Copyright (c) The Diem Core Contributors
+// Copyright (c) The Aptos Core Contributors
 // SPDX-License-Identifier: Apache-2.0
 
 use anyhow::{ensure, Result};
@@ -23,11 +23,11 @@ struct HealthCheckParams {
 struct HealthCheckError;
 impl reject::Reject for HealthCheckError {}
 
-pub fn health_check_route(health_diem_db: Arc<dyn MoveDbReader>) -> BoxedFilter<(impl Reply,)> {
+pub fn health_check_route(health_aptos_db: Arc<dyn MoveDbReader>) -> BoxedFilter<(impl Reply,)> {
     warp::path!("-" / "healthy")
         .and(warp::path::end())
         .and(warp::query().map(move |params: HealthCheckParams| params))
-        .and(warp::any().map(move || health_diem_db.clone()))
+        .and(warp::any().map(move || health_aptos_db.clone()))
         .and(warp::any().map(SystemTime::now))
         .and_then(health_check)
         .boxed()
@@ -47,7 +47,7 @@ async fn health_check(
         check_latest_ledger_info_timestamp(duration, timestamp, now)
             .map_err(|_| reject::custom(HealthCheckError))?;
     }
-    Ok(Box::new("diem-node:ok"))
+    Ok(Box::new("aptos-node:ok"))
 }
 
 pub fn check_latest_ledger_info_timestamp(

@@ -1,12 +1,12 @@
-// Copyright (c) The Diem Core Contributors
+// Copyright (c) The Aptos Core Contributors
 // SPDX-License-Identifier: Apache-2.0
 
 use crate::{
     account_address::AccountAddress,
-    account_config::diem_root_address,
+    account_config::aptos_root_address,
     event::{EventHandle, EventKey},
 };
-use diem_crypto::HashValue;
+use aptos_crypto::HashValue;
 use move_core_types::{
     ident_str,
     identifier::IdentStr,
@@ -84,24 +84,24 @@ impl BlockMetadata {
 }
 
 pub fn new_block_event_key() -> EventKey {
-    EventKey::new_from_address(&diem_root_address(), 17)
+    EventKey::new_from_address(&aptos_root_address(), 17)
 }
 
-/// The path to the new block event handle under a DiemBlock::BlockMetadata resource.
+/// The path to the new block event handle under a AptosBlock::BlockMetadata resource.
 pub static NEW_BLOCK_EVENT_PATH: Lazy<Vec<u8>> = Lazy::new(|| {
-    let mut path = DiemBlockResource::resource_path();
+    let mut path = AptosBlockResource::resource_path();
     // it can be anything as long as it's referenced in AccountState::get_event_handle_by_query_path
     path.extend_from_slice(b"/new_block_event/");
     path
 });
 
 #[derive(Deserialize, Serialize)]
-pub struct DiemBlockResource {
+pub struct AptosBlockResource {
     height: u64,
     new_block_events: EventHandle,
 }
 
-impl DiemBlockResource {
+impl AptosBlockResource {
     pub fn new_block_events(&self) -> &EventHandle {
         &self.new_block_events
     }
@@ -111,12 +111,12 @@ impl DiemBlockResource {
     }
 }
 
-impl MoveStructType for DiemBlockResource {
-    const MODULE_NAME: &'static IdentStr = ident_str!("DiemBlock");
+impl MoveStructType for AptosBlockResource {
+    const MODULE_NAME: &'static IdentStr = ident_str!("AptosBlock");
     const STRUCT_NAME: &'static IdentStr = ident_str!("BlockMetadata");
 }
 
-impl MoveResource for DiemBlockResource {}
+impl MoveResource for AptosBlockResource {}
 
 #[derive(Clone, Deserialize, Serialize)]
 pub struct NewBlockEvent {

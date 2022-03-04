@@ -1,4 +1,4 @@
-// Copyright (c) The Diem Core Contributors
+// Copyright (c) The Aptos Core Contributors
 // SPDX-License-Identifier: Apache-2.0
 
 use crate::{
@@ -8,7 +8,7 @@ use crate::{
     util::mock_time_service::SimulatedTimeService,
 };
 use consensus_types::block::{block_test_utils::certificate_for_genesis, Block};
-use diem_types::validator_signer::ValidatorSigner;
+use aptos_types::validator_signer::ValidatorSigner;
 use futures::{future::BoxFuture, FutureExt};
 use std::sync::Arc;
 

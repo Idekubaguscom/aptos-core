@@ -1,7 +1,7 @@
 #!/bin/bash
-# Copyright (c) The Diem Core Contributors
+# Copyright (c) The Aptos Core Contributors
 # SPDX-License-Identifier: Apache-2.0
-# This script sets up the environment for the Diem build by installing necessary dependencies.
+# This script sets up the environment for the Aptos build by installing necessary dependencies.
 #
 # Usage ./dev_setup.sh <options>
 #   v - verbose, print all statements
@@ -18,7 +18,7 @@ SHELLCHECK_VERSION=0.7.1
 HADOLINT_VERSION=1.17.4
 SCCACHE_VERSION=0.2.16-alpha.0
 #If installing sccache from a git repp set url@revision.
-SCCACHE_GIT='https://github.com/diem/sccache.git@ef50d87a58260c30767520045e242ccdbdb965af'
+SCCACHE_GIT='https://github.com/aptos/sccache.git@ef50d87a58260c30767520045e242ccdbdb965af'
 GRCOV_VERSION=0.8.2
 GUPPY_GIT='https://github.com/facebookincubator/cargo-guppy@39ec940f36b0a0df96a330243d127cbe2db9f919'
 KUBECTL_VERSION=1.18.6
@@ -38,7 +38,7 @@ cd "$SCRIPT_PATH/.." || exit
 
 function usage {
   echo "Usage:"
-  echo "Installs or updates necessary dev tools for diem/diem."
+  echo "Installs or updates necessary dev tools for aptos/aptos."
   echo "-b batch mode, no user interactions and miminal output"
   echo "-p update ${HOME}/.profile"
   echo "-t install build tools"
@@ -50,7 +50,7 @@ function usage {
   echo "-i installs an individual tool by name"
   echo "-n will target the /opt/ dir rather than the $HOME dir.  /opt/bin/, /opt/rustup/, and /opt/dotnet/ rather than $HOME/bin/, $HOME/.rustup/, and $HOME/.dotnet/"
   echo "If no toolchain component is selected with -t, -o, -y, or -p, the behavior is as if -t had been provided."
-  echo "This command must be called from the root folder of the Diem project."
+  echo "This command must be called from the root folder of the Aptos project."
 }
 
 function add_to_profile {
@@ -587,7 +587,7 @@ function install_allure {
       if [[ "$PACKAGE_MANAGER" == "apt-get" ]]; then
         "${PRE_COMMAND[@]}" apt-get install default-jre -y --no-install-recommends
         export ALLURE=${HOME}/allure_"${ALLURE_VERSION}"-1_all.deb
-        curl -sL -o "$ALLURE" "https://github.com/diem/allure2/releases/download/${ALLURE_VERSION}/allure_${ALLURE_VERSION}-1_all.deb"
+        curl -sL -o "$ALLURE" "https://github.com/aptos/allure2/releases/download/${ALLURE_VERSION}/allure_${ALLURE_VERSION}-1_all.deb"
         "${PRE_COMMAND[@]}" dpkg -i "$ALLURE"
         rm "$ALLURE"
       elif [[ "$PACKAGE_MANAGER" == "apk" ]]; then
@@ -628,10 +628,10 @@ function install_python3 {
 
 function welcome_message {
 cat <<EOF
-Welcome to Diem!
+Welcome to Aptos!
 
 This script will download and install the necessary dependencies needed to
-build, test and inspect Diem Core.
+build, test and inspect Aptos Core.
 
 Based on your selection, these tools will be included:
 EOF
@@ -778,7 +778,7 @@ if [[ "$INSTALL_BUILD_TOOLS" == "false" ]] && \
 fi
 
 if [ ! -f rust-toolchain ]; then
-	echo "Unknown location. Please run this from the diem repository. Abort."
+	echo "Unknown location. Please run this from the aptos repository. Abort."
 	exit 1
 fi
 

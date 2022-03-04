@@ -1,12 +1,12 @@
-// Copyright (c) The Diem Core Contributors
+// Copyright (c) The Aptos Core Contributors
 // SPDX-License-Identifier: Apache-2.0
 
 use crate::{
     config::{LoggerConfig, SecureBackend},
     keys::ConfigKey,
 };
-use diem_crypto::{ed25519::Ed25519PrivateKey, Uniform};
-use diem_types::{network_address::NetworkAddress, waypoint::Waypoint, PeerId};
+use aptos_crypto::{ed25519::Ed25519PrivateKey, Uniform};
+use aptos_types::{network_address::NetworkAddress, waypoint::Waypoint, PeerId};
 use rand::rngs::StdRng;
 use serde::{Deserialize, Serialize};
 use std::{

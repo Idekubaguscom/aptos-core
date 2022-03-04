@@ -1,4 +1,4 @@
-// Copyright (c) The Diem Core Contributors
+// Copyright (c) The Aptos Core Contributors
 // SPDX-License-Identifier: Apache-2.0
 
 use crate::{
@@ -29,7 +29,7 @@ impl CreateAccountEvent {
     }
 
     pub fn event_key() -> EventKey {
-        EventKey::new_from_address(&account_config::diem_root_address(), 0)
+        EventKey::new_from_address(&account_config::aptos_root_address(), 0)
     }
 }
 

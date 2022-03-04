@@ -1,4 +1,4 @@
-// Copyright (c) The Diem Core Contributors
+// Copyright (c) The Aptos Core Contributors
 // SPDX-License-Identifier: Apache-2.0
 
 //! Mempool is used to track transactions which have been submitted but not yet
@@ -13,10 +13,10 @@ use crate::{
     counters,
     logging::{LogEntry, LogSchema, TxnsLog},
 };
-use diem_config::config::NodeConfig;
-use diem_crypto::HashValue;
-use diem_logger::prelude::*;
-use diem_types::{
+use aptos_config::config::NodeConfig;
+use aptos_crypto::HashValue;
+use aptos_logger::prelude::*;
+use aptos_types::{
     account_address::AccountAddress,
     account_config::AccountSequenceInfo,
     mempool_status::{MempoolStatus, MempoolStatusCode},
@@ -160,7 +160,7 @@ impl Mempool {
         }
 
         let expiration_time =
-            diem_infallible::duration_since_epoch() + self.system_transaction_timeout;
+            aptos_infallible::duration_since_epoch() + self.system_transaction_timeout;
         if timeline_state != TimelineState::NonQualified {
             self.metrics_cache
                 .insert((txn.sender(), txn.sequence_number()), SystemTime::now());

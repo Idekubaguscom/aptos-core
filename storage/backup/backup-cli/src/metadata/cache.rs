@@ -1,4 +1,4 @@
-// Copyright (c) The Diem Core Contributors
+// Copyright (c) The Aptos Core Contributors
 // SPDX-License-Identifier: Apache-2.0
 
 use crate::{
@@ -9,8 +9,8 @@ use crate::{
 };
 use anyhow::{anyhow, Result};
 use async_trait::async_trait;
-use diem_logger::prelude::*;
-use diem_temppath::TempPath;
+use aptos_logger::prelude::*;
+use aptos_temppath::TempPath;
 use futures::stream::poll_fn;
 use once_cell::sync::Lazy;
 use std::{

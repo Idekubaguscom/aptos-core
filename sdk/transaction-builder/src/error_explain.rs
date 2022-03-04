@@ -1,11 +1,11 @@
-// Copyright (c) The Diem Core Contributors
+// Copyright (c) The Aptos Core Contributors
 // SPDX-License-Identifier: Apache-2.0
 
-//! A module for looking up the human-readable explanation of a Diem Move
+//! A module for looking up the human-readable explanation of a Aptos Move
 //! transaction abort code.
 //!
 //! This module mostly exists as a temporary hack until we figure out a more
-//! sustainable approach towards publishing the Diem move framework release to
+//! sustainable approach towards publishing the Aptos move framework release to
 //! crates.io.
 //!
 //! Note that the ~13 KiB error descriptions will be inlined into the final binary.

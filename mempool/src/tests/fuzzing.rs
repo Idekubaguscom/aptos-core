@@ -1,13 +1,13 @@
-// Copyright (c) The Diem Core Contributors
+// Copyright (c) The Aptos Core Contributors
 // SPDX-License-Identifier: Apache-2.0
 
 use crate::{
     core_mempool::{CoreMempool, TimelineState},
     shared_mempool::{tasks, types::SharedMempool},
 };
-use diem_config::{config::NodeConfig, network_id::NetworkId};
-use diem_infallible::{Mutex, RwLock};
-use diem_types::transaction::SignedTransaction;
+use aptos_config::{config::NodeConfig, network_id::NetworkId};
+use aptos_infallible::{Mutex, RwLock};
+use aptos_types::transaction::SignedTransaction;
 use network::application::storage::PeerMetadataStorage;
 use proptest::{
     arbitrary::any,

@@ -1,9 +1,9 @@
-// Copyright (c) The Diem Core Contributors
+// Copyright (c) The Aptos Core Contributors
 // SPDX-License-Identifier: Apache-2.0
 
 use anyhow::{bail, format_err};
-use diem_rest_client::Client as RestClient;
-use diem_sdk::{
+use aptos_rest_client::Client as RestClient;
+use aptos_sdk::{
     transaction_builder::{Currency, TransactionFactory},
     types::{
         account_address::AccountAddress,
@@ -11,7 +11,7 @@ use diem_sdk::{
         LocalAccount,
     },
 };
-use diem_temppath::TempPath;
+use aptos_temppath::TempPath;
 use forge::{AdminContext, AdminTest, Result, Test};
 use move_command_line_common::files::MOVE_EXTENSION;
 use move_ir_compiler::Compiler;
@@ -61,10 +61,10 @@ impl MalformedScript {
             .join("testsuite/smoke-test/src/dev_modules/test_script.move")
             .canonicalize()?;
         let move_stdlib_dir = move_stdlib::move_stdlib_modules_full_path();
-        let diem_payment_framework_dir = diem_framework::diem_payment_modules_full_path();
+        let aptos_payment_framework_dir = diem_framework::aptos_payment_modules_full_path();
         let dependencies = &[
             move_stdlib_dir.as_str(),
-            diem_payment_framework_dir.as_str(),
+            aptos_payment_framework_dir.as_str(),
         ];
         let compiled_script = compile_program(script_path.to_str().unwrap(), dependencies)?;
 
@@ -140,7 +140,7 @@ impl ExecuteCustomModuleAndScript {
 
         // Get the path to the Move stdlib sources
         let move_stdlib_dir = move_stdlib::move_stdlib_modules_full_path();
-        let diem_payment_framework_dir = diem_framework::diem_payment_modules_full_path();
+        let aptos_payment_framework_dir = diem_framework::aptos_payment_modules_full_path();
 
         // Make a copy of module.move with "{{sender}}" substituted.
         let module_path = std::path::Path::new(env!("CARGO_MANIFEST_DIR"))
@@ -155,7 +155,7 @@ impl ExecuteCustomModuleAndScript {
             unwrapped_module_path,
             &[
                 move_stdlib_dir.as_str(),
-                diem_payment_framework_dir.as_str(),
+                aptos_payment_framework_dir.as_str(),
             ],
         )?;
 
@@ -178,7 +178,7 @@ impl ExecuteCustomModuleAndScript {
             &[
                 unwrapped_module_path,
                 move_stdlib_dir.as_str(),
-                diem_payment_framework_dir.as_str(),
+                aptos_payment_framework_dir.as_str(),
             ],
         )?;
 
@@ -236,12 +236,12 @@ pub async fn enable_open_publishing(
 ) -> Result<()> {
     let script_body = {
         let code = "
-            import 0x1.DiemTransactionPublishingOption;
+            import 0x1.AptosTransactionPublishingOption;
 
             main(account: signer) {
             label b0:
-                DiemTransactionPublishingOption.set_open_script(&account);
-                DiemTransactionPublishingOption.set_open_module(&account, true);
+                AptosTransactionPublishingOption.set_open_script(&account);
+                AptosTransactionPublishingOption.set_open_module(&account, true);
 
                 return;
             }

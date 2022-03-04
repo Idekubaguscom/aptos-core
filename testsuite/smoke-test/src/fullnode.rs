@@ -1,13 +1,13 @@
-// Copyright (c) The Diem Core Contributors
+// Copyright (c) The Aptos Core Contributors
 // SPDX-License-Identifier: Apache-2.0
 
 use std::time::{Duration, Instant};
 
 use anyhow::bail;
-use diem_config::config::NodeConfig;
-use diem_rest_client::Client as RestClient;
-use diem_sdk::{transaction_builder::Currency, types::LocalAccount};
-use diem_types::account_address::AccountAddress;
+use aptos_config::config::NodeConfig;
+use aptos_rest_client::Client as RestClient;
+use aptos_sdk::{transaction_builder::Currency, types::LocalAccount};
+use aptos_types::account_address::AccountAddress;
 use forge::{NetworkContext, NetworkTest, NodeExt, Result, Test};
 use tokio::runtime::Runtime;
 

@@ -1,9 +1,9 @@
-// Copyright (c) The Diem Core Contributors
+// Copyright (c) The Aptos Core Contributors
 // SPDX-License-Identifier: Apache-2.0
 
 use crate::streaming_client::Epoch;
-use diem_data_client::{Response, ResponsePayload};
-use diem_types::{
+use aptos_data_client::{Response, ResponsePayload};
+use aptos_types::{
     account_state_blob::AccountStatesChunkWithProof,
     ledger_info::LedgerInfoWithSignatures,
     transaction::{TransactionListWithProof, TransactionOutputListWithProof, Version},
@@ -33,7 +33,7 @@ pub enum DataPayload {
     TransactionsWithProof(TransactionListWithProof),
 }
 
-/// A request that has been sent to the Diem data client.
+/// A request that has been sent to the Aptos data client.
 #[derive(Clone, Debug, Eq, PartialEq)]
 pub enum DataClientRequest {
     AccountsWithProof(AccountsWithProofRequest),
@@ -98,7 +98,7 @@ pub struct TransactionOutputsWithProofRequest {
 /// network and will be available in `client_response` when received.
 pub struct PendingClientResponse {
     pub client_request: DataClientRequest,
-    pub client_response: Option<Result<Response<ResponsePayload>, diem_data_client::Error>>,
+    pub client_response: Option<Result<Response<ResponsePayload>, aptos_data_client::Error>>,
 }
 
 impl Debug for PendingClientResponse {

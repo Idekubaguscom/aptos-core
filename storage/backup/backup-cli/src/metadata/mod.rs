@@ -1,4 +1,4 @@
-// Copyright (c) The Diem Core Contributors
+// Copyright (c) The Aptos Core Contributors
 // SPDX-License-Identifier: Apache-2.0
 
 pub mod cache;
@@ -6,7 +6,7 @@ pub mod view;
 
 use crate::storage::{FileHandle, ShellSafeName, TextLine};
 use anyhow::Result;
-use diem_types::transaction::Version;
+use aptos_types::transaction::Version;
 use serde::{Deserialize, Serialize};
 use std::convert::TryInto;
 

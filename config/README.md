@@ -1,14 +1,14 @@
-# Diem Configuration
+# Aptos Configuration
 
-The Diem Configuration describes the operational details for a Diem Node
-(Validator or Full node) and provides the Diem Clients information on how to
+The Aptos Configuration describes the operational details for a Aptos Node
+(Validator or Full node) and provides the Aptos Clients information on how to
 connect to the blockchain and derive trust.
 
 Validators perform the BFT protocol and host the source of truth for the
 blockchain.
 
-Fullnodes offer replication services for the Diem blockchain as the primary
-entry point for Diem Clients to submit read requests (i.e., queries about the
+Fullnodes offer replication services for the Aptos blockchain as the primary
+entry point for Aptos Clients to submit read requests (i.e., queries about the
 state of the blockchain). In turn, Validators focus on optimizing transaction
 throughput.
 
@@ -17,11 +17,11 @@ blockchain or performing transactions.
 
 For a more detailed summary of the differences between a Validator and a
 Fullnode, see this [blog
-post](https://developers.diem.com/blog/2020/01/23/full-node-basics).
+post](https://developers.aptos.com/blog/2020/01/23/full-node-basics).
 
 ## Organization
 
-Diem Configuration is broken up into many utilities:
+Aptos Configuration is broken up into many utilities:
 - `src/config` hosts the core configuration file structure
 - `src/generator.rs` assists in building sets of configurations for a Validator
   or Fullnode set
@@ -40,7 +40,7 @@ configuration from many of the services.
 
 `config-builder` builds an entire configuration for a Validator or FullNode,
 including the genesis blob. It takes as one of its input parameters an index that
-specifies the specific node config to return. This can be used to create a Diem
+specifies the specific node config to return. This can be used to create a Aptos
 TestNet by constructing compatible configurations for the full set of Validators.
 Similarly the tool can be used to add Fullnodes to an existing network.  Finally,
 it enables generation of a mint/faucet client capable of performing mint
@@ -58,11 +58,11 @@ The configuration for validator `I`, can be produced by:
     config-builder validator \
         -a $PUBLIC_MULTIADDR_FOR_VALIDATOR_I \
         -b $PUBLIC_MULTIADDR_FOR_VALIDATOR_0 \
-        -d /opt/diem/data \
+        -d /opt/aptos/data \
         -i $I \
         -l $ANY_MULTIADDR_FOR_VALIDATOR_I \
         -n $TOTAL_NUMBER_OF_VALIDATORS \
-        -o /opt/diem/etc \
+        -o /opt/aptos/etc \
         -s $SHARED_SECRET
 
 As an example, this is the 2nd Validator (offset 1) in a 4 Validator TestNet:
@@ -70,17 +70,17 @@ As an example, this is the 2nd Validator (offset 1) in a 4 Validator TestNet:
     config-builder validator \
         -a "/ip4/1.1.1.2/tcp/7000" \
         -b "/ip4/1.1.1.1/tcp/7000" \
-        -d /opt/diem/data \
+        -d /opt/aptos/data \
         -i 1 \
         -l "/ip4/0.0.0.0/tcp/7000" \
         -n 4 \
-        -o /opt/diem/etc \
+        -o /opt/aptos/etc \
         -s 0123456789abcdef101112131415161718191a1b1c1d1e1f2021222324252627
 
 To create a mint service's key:
 
     config-builder faucet \
-        -o /opt/diem/etc \
+        -o /opt/aptos/etc \
         -s 0123456789abcdef101112131415161718191a1b1c1d1e1f2021222324252627
 
 Instantiating a FullNode config is similar to instantiating a Validator config.
@@ -97,10 +97,10 @@ networks.
     config-builder full-node (create | extend) \
         -a $PUBLIC_MULTIADDR_FOR_FULL_NODE_I \
         -b $PUBLIC_MULTIADDR_FOR_FULL_NODE_0 \
-        -d /opt/diem/data \
+        -d /opt/aptos/data \
         -l $ANY_MULTIADDR_FOR_FULL_NODE_I \
         -n $TOTAL_NUMBER_OF_VALIDATORS \
-        -o /opt/diem/etc \
+        -o /opt/aptos/etc \
         -s $VALIDATOR_SHARED_SECRET \
         [ -i $I -f $TOTAL_NUMBER_OF_FULL_NODES -c $FULL_NODE_SHARED_SECRET | -p ]
 
@@ -110,10 +110,10 @@ configuration.
     config-builder full-node extend \
         -a "/ip4/1.1.1.2/tcp/7100" \
         -b "/ip4/1.1.1.2/tcp/7100" \
-        -d /opt/diem/data \
+        -d /opt/aptos/data \
         -l "/ip4/0.0.0.0/tcp/7100" \
         -n 4 \
-        -o /opt/diem/etc \
+        -o /opt/aptos/etc \
         -s 0123456789abcdef101112131415161718191a1b1c1d1e1f2021222324252627 \
         -i 0 \
         -f 4 \
@@ -125,10 +125,10 @@ Validator/FullNode hybrid configured above.
     config-builder full-node create \
         -a "/ip4/1.1.1.3/tcp/7100" \
         -b "/ip4/1.1.1.2/tcp/7100" \
-        -d /opt/diem/fn/data \
+        -d /opt/aptos/fn/data \
         -l "/ip4/0.0.0.0/tcp/7100" \
         -n 4 \
-        -o /opt/diem/fn/etc \
+        -o /opt/aptos/fn/etc \
         -s 0123456789abcdef101112131415161718191a1b1c1d1e1f2021222324252627 \
         -i 1 \
         -f 4 \
@@ -139,21 +139,21 @@ Similarly a public network could be added via:
     config-builder full-node create \
         -a "/ip4/1.1.1.2/tcp/7100" \
         -b "/ip4/1.1.1.2/tcp/7100" \
-        -d /opt/diem/fn/data \
+        -d /opt/aptos/fn/data \
         -l "/ip4/0.0.0.0/tcp/7100" \
         -n 4 \
-        -o /opt/diem/etc \
+        -o /opt/aptos/etc \
         -s 0123456789abcdef101112131415161718191a1b1c1d1e1f2021222324252627 \
         -p
 
 ## Internals
 
-There are several different configurations contained within Diem Configuration.
+There are several different configurations contained within Aptos Configuration.
 
-### Diem Node Configuration
-The Diem Node configuration contains several modules:
+### Aptos Node Configuration
+The Aptos Node configuration contains several modules:
 
-- AdmissionControlConfig - Where a Diem Node hosts their AC
+- AdmissionControlConfig - Where a Aptos Node hosts their AC
 - BaseConfig - Specifies the Node's role and base directories
 - ConsensusConfig - The behaviors of Consensus including the SafetyRules TCB
 - DebugInterface - A special gRPC service for identifying internals of the
@@ -162,22 +162,22 @@ The Diem Node configuration contains several modules:
   that defines the Move standard library and the initial Validator set.
 - MempoolConfig - Parameters for configuring uncommitted transaction storage
 - MetricsConfig - Local storage for metrics
-- NetworkConfig - DiemNet configuration file that specifies peers with keys,
+- NetworkConfig - AptosNet configuration file that specifies peers with keys,
   seed addresses to connect to upstream peers, the local peers network keys,
 and other network configuration parameters
-- NodeConfig - Hosts all configuration files for a Diem Node
-- SafetyRulesConfig - Specifies the persistency strategy for Diem Safety
+- NodeConfig - Hosts all configuration files for a Aptos Node
+- SafetyRulesConfig - Specifies the persistency strategy for Aptos Safety
   Rules
 - StateSyncConfig - Specifies parameters around state sycnhronization and the
   set of peers that provide the data
-- StorageConfig - Where the DiemDB is stored and its gRPC service endpoints
+- StorageConfig - Where the AptosDB is stored and its gRPC service endpoints
 
 ### External Component Configurations
-Outside of each Diem Node, external components can also be configured:
+Outside of each Aptos Node, external components can also be configured:
 
 - KeyManagerConfig - This contains configurations details for starting and
 operating the Key Manager: the component service responsible for rotating
-cryptographic keys for Diem Nodes.
+cryptographic keys for Aptos Nodes.
 
 ### Shared Configuration
 
@@ -194,7 +194,7 @@ Configuration tests serve several purposes:
 - Verifying that default filename assumptions are maintained
 
 Several of the defaults in the configurations, in particular paths and
-addresses, have dependencies outside the Diem code base. These tests serve as
+addresses, have dependencies outside the Aptos code base. These tests serve as
 a reminder that there may be rammifications from breaking these tests, which
 may impact production deployments.
 

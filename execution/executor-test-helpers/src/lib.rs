@@ -1,14 +1,14 @@
-// Copyright (c) The Diem Core Contributors
+// Copyright (c) The Aptos Core Contributors
 // SPDX-License-Identifier: Apache-2.0
 
 pub mod integration_test_impl;
 
-use diem_config::{config::NodeConfig, utils};
-use diem_crypto::{
+use aptos_config::{config::NodeConfig, utils};
+use aptos_crypto::{
     ed25519::{Ed25519PrivateKey, Ed25519PublicKey},
     HashValue,
 };
-use diem_types::{
+use aptos_types::{
     account_address::AccountAddress,
     block_info::BlockInfo,
     block_metadata::BlockMetadata,
@@ -18,8 +18,8 @@ use diem_types::{
     validator_signer::ValidatorSigner,
     waypoint::Waypoint,
 };
-use diem_vm::{DiemVM, VMExecutor};
-use diemdb::DiemDB;
+use aptos_vm::{AptosVM, VMExecutor};
+use aptosdb::AptosDB;
 use executor::db_bootstrapper::{generate_waypoint, maybe_bootstrap};
 use executor_types::StateComputeResult;
 use std::{
@@ -40,11 +40,11 @@ pub fn bootstrap_genesis<V: VMExecutor>(
 }
 
 pub fn start_storage_service() -> (NodeConfig, JoinHandle<()>, DbReaderWriter) {
-    let (mut config, _genesis_key) = diem_genesis_tool::test_config();
+    let (mut config, _genesis_key) = aptos_genesis_tool::test_config();
     let server_port = utils::get_available_port();
     config.storage.address = SocketAddr::new(IpAddr::V4(Ipv4Addr::LOCALHOST), server_port);
-    let (db, db_rw) = DbReaderWriter::wrap(DiemDB::new_for_test(&config.storage.dir()));
-    bootstrap_genesis::<DiemVM>(&db_rw, utils::get_genesis_txn(&config).unwrap()).unwrap();
+    let (db, db_rw) = DbReaderWriter::wrap(AptosDB::new_for_test(&config.storage.dir()));
+    bootstrap_genesis::<AptosVM>(&db_rw, utils::get_genesis_txn(&config).unwrap()).unwrap();
     let handle = start_storage_service_with_db(&config, db);
     (config, handle, db_rw)
 }

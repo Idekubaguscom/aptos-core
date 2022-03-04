@@ -1,4 +1,4 @@
-// Copyright (c) The Diem Core Contributors
+// Copyright (c) The Aptos Core Contributors
 // SPDX-License-Identifier: Apache-2.0
 
 use crate::persistent_liveness_storage::PersistentLivenessStorage;
@@ -9,10 +9,10 @@ use consensus_types::{
     vote::Vote,
     vote_proposal::MaybeSignedVoteProposal,
 };
-use diem_crypto::ed25519::Ed25519Signature;
-use diem_logger::prelude::info;
-use diem_metrics::monitor;
-use diem_types::{
+use aptos_crypto::ed25519::Ed25519Signature;
+use aptos_logger::prelude::info;
+use aptos_metrics::monitor;
+use aptos_types::{
     epoch_change::EpochChangeProof,
     ledger_info::{LedgerInfo, LedgerInfoWithSignatures},
 };
@@ -156,8 +156,8 @@ mod tests {
         vote::Vote,
         vote_proposal::MaybeSignedVoteProposal,
     };
-    use diem_crypto::ed25519::Ed25519Signature;
-    use diem_types::{
+    use aptos_crypto::ed25519::Ed25519Signature;
+    use aptos_types::{
         epoch_change::EpochChangeProof,
         ledger_info::{LedgerInfo, LedgerInfoWithSignatures},
     };
@@ -245,7 +245,7 @@ mod tests {
 
     #[test]
     fn test_perform_initialize_ok() {
-        ::diem_logger::Logger::init_for_testing();
+        ::aptos_logger::Logger::init_for_testing();
         let (_, mock_storage) = EmptyStorage::start_for_testing();
         let mock_safety_rules = MockSafetyRules::new(0, 10, Ok(()));
         let mut metric_safety_rules =
@@ -255,7 +255,7 @@ mod tests {
 
     #[test]
     fn test_perform_initialize_error() {
-        ::diem_logger::Logger::init_for_testing();
+        ::aptos_logger::Logger::init_for_testing();
         let (_, mock_storage) = EmptyStorage::start_for_testing();
         let mock_safety_rules = MockSafetyRules::new(
             0,

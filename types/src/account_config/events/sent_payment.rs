@@ -1,4 +1,4 @@
-// Copyright (c) The Diem Core Contributors
+// Copyright (c) The Aptos Core Contributors
 // SPDX-License-Identifier: Apache-2.0
 
 use crate::{
@@ -22,7 +22,7 @@ pub struct SentPaymentEvent {
 }
 
 impl SentPaymentEvent {
-    // TODO: should only be used for diem client testing and be removed eventually
+    // TODO: should only be used for aptos client testing and be removed eventually
     pub fn new(
         amount: u64,
         currency_code: Identifier,

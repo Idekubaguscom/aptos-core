@@ -1,13 +1,13 @@
-// Copyright (c) The Diem Core Contributors
+// Copyright (c) The Aptos Core Contributors
 // SPDX-License-Identifier: Apache-2.0
 
 use crate::{
     scale_sts_replica, FullNode, HealthCheckError, Node, NodeExt, Result, Validator, Version,
 };
 use anyhow::{format_err, Context};
-use diem_config::config::NodeConfig;
-use diem_rest_client::Client as RestClient;
-use diem_sdk::types::PeerId;
+use aptos_config::config::NodeConfig;
+use aptos_rest_client::Client as RestClient;
+use aptos_sdk::types::PeerId;
 use reqwest::Url;
 use serde_json::Value;
 use std::{

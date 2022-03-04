@@ -1,4 +1,4 @@
-// Copyright (c) The Diem Core Contributors
+// Copyright (c) The Aptos Core Contributors
 // SPDX-License-Identifier: Apache-2.0
 
 #![forbid(unsafe_code)]
@@ -10,9 +10,9 @@ use crate::{
 };
 use ::network::ProtocolId;
 use bounded_executor::BoundedExecutor;
-use diem_config::config::StorageServiceConfig;
-use diem_logger::prelude::*;
-use diem_types::{
+use aptos_config::config::StorageServiceConfig;
+use aptos_logger::prelude::*;
+use aptos_types::{
     account_state_blob::AccountStatesChunkWithProof,
     epoch_change::EpochChangeProof,
     transaction::{TransactionListWithProof, TransactionOutputListWithProof, Version},
@@ -291,7 +291,7 @@ impl<T: StorageReaderInterface> Handler<T> {
     }
 }
 
-/// The interface into local storage (e.g., the Diem DB) used by the storage
+/// The interface into local storage (e.g., the Aptos DB) used by the storage
 /// server to handle client requests.
 pub trait StorageReaderInterface: Clone + Send + 'static {
     /// Returns a data summary of the underlying storage state.

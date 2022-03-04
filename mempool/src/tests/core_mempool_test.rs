@@ -1,4 +1,4 @@
-// Copyright (c) The Diem Core Contributors
+// Copyright (c) The Aptos Core Contributors
 // SPDX-License-Identifier: Apache-2.0
 
 use crate::{
@@ -8,9 +8,9 @@ use crate::{
         TestTransaction,
     },
 };
-use diem_config::config::NodeConfig;
-use diem_crypto::HashValue;
-use diem_types::{
+use aptos_config::config::NodeConfig;
+use aptos_crypto::HashValue;
+use aptos_types::{
     account_config::AccountSequenceInfo,
     transaction::{GovernanceRole, SignedTransaction},
 };
@@ -184,7 +184,7 @@ fn test_transaction_eviction_crsns() {
 #[test]
 fn test_ordering_of_governance_transactions() {
     let gov_roles = vec![
-        GovernanceRole::DiemRoot,
+        GovernanceRole::AptosRoot,
         GovernanceRole::TreasuryCompliance,
         GovernanceRole::Validator,
         GovernanceRole::ValidatorOperator,

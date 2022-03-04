@@ -1,16 +1,16 @@
 ---
 id: network
 title: Network
-custom_edit_url: https://github.com/diem/diem/edit/main/network/README.md
+custom_edit_url: https://github.com/aptos/aptos/edit/main/network/README.md
 ---
 
 ## Overview
 
-For more detailed info, see the [DiemNet Specification](../specifications/network/README.md).
+For more detailed info, see the [AptosNet Specification](../specifications/network/README.md).
 
-DiemNet is the primary protocol for communication between any two nodes in the
-Diem ecosystem. It is specifically designed to facilitate the consensus, shared
-mempool, and state sync protocols. DiemNet tries to maintain at-most one connection
+AptosNet is the primary protocol for communication between any two nodes in the
+Aptos ecosystem. It is specifically designed to facilitate the consensus, shared
+mempool, and state sync protocols. AptosNet tries to maintain at-most one connection
 with each remote peer; the application protocols to that remote peer are then
 multiplexed over the single peer connection.
 
@@ -61,7 +61,7 @@ partial membership views, sophisticated failure detectors, or network overlays.
                       +----------------------+--------------------+   +---------------------+
                       |        Peer(s)       |                    |
                       +----------------------+                    |
-                      |                DiemTransport              |
+                      |                AptosTransport              |
                       +-------------------------------------------+
 ```
 
@@ -72,7 +72,7 @@ independent "tasks." The [tokio](https://tokio.rs/) framework is used as the tas
 runtime. The primary subcomponents in the network module are:
 
 * [`Network Interface`] &mdash; The interface provided to application modules
-using DiemNet.
+using AptosNet.
 
 * [`PeerManager`] &mdash; Listens for incoming connections, and dials outbound
 connections to other peers. Demultiplexes and forwards inbound messages from
@@ -84,10 +84,10 @@ components of new or closed connections. Optionally can be connected to
 writes [`NetworkMessage`]es from/to the wire. Currently, it implements the two
 protocols: DirectSend and Rpc.
 
-+ [`DiemTransport`] &mdash; A secure, reliable transport. It uses [NoiseIK] over
++ [`AptosTransport`] &mdash; A secure, reliable transport. It uses [NoiseIK] over
 TCP to negotiate an encrypted and authenticated connection between peers.
-The DiemNet version and any Diem-specific application protocols are negotiated
-afterward using the [DiemNet Handshake Protocol].
+The AptosNet version and any Aptos-specific application protocols are negotiated
+afterward using the [AptosNet Handshake Protocol].
 
 * [`ConnectivityManager`] &mdash; Establishes connections to known peers found
 via Discovery. Notifies [`PeerManager`] to make outbound dials, or disconnects based
@@ -96,7 +96,7 @@ on updates to known peers via Discovery updates.
 * [`validator-set-discovery`] &mdash; Discovers the set of peers to connect to
 via on-chain configuration. These are the `validator_network_addresses` and
 `fullnode_network_addresses` of each [`ValidatorConfig`] in the
-[`DiemSystem::validators`] set. Notifies the [`ConnectivityManager`] of updates
+[`AptosSystem::validators`] set. Notifies the [`ConnectivityManager`] of updates
 to the known peer set.
 
 * [`HealthChecker`] &mdash; Performs periodic liveness probes to ensure the
@@ -125,19 +125,19 @@ configurable static timeout.
         │   ├── direct_send        # Protocol for fire-and-forget style message delivery
         │   ├── health_checker     # Protocol for health probing
         │   ├── rpc                # Protocol for remote procedure calls
-        │   └── wire               # Protocol for DiemNet handshakes and messaging
+        │   └── wire               # Protocol for AptosNet handshakes and messaging
         ├── transport              # The base transport layer for dialing/listening
         └── noise                  # Noise handshaking and wire integration
 
 [`ConnectivityManager`]: ./src/connectivity_manager/mod.rs
-[DiemNet Handshake Protocol]: ../specifications/network/handshake-v1.md
-[`DiemSystem::validators`]: ../diem-move/diem-framework/core/doc/DiemSystem.md#struct-diemsystem
-[`DiemTransport`]: ./src/transport/mod.rs
+[AptosNet Handshake Protocol]: ../specifications/network/handshake-v1.md
+[`AptosSystem::validators`]: ../aptos-move/diem-framework/core/doc/AptosSystem.md#struct-aptossystem
+[`AptosTransport`]: ./src/transport/mod.rs
 [`HealthChecker`]: ./src/protocols/health_checker/mod.rs
 [`Network Interface`]: ./src/protocols/network/mod.rs
 [`NetworkMessage`]: ./src/protocols/wire/messaging/v1/mod.rs
 [NoiseIK]: ../specifications/network/noise.md
 [`PeerManager`]: ./src/peer_manager/mod.rs
 [`Peer`]: ./src/peer/mod.rs
-[`ValidatorConfig`]: ../diem-move/diem-framework/core/doc/ValidatorConfig.md#struct-config
+[`ValidatorConfig`]: ../aptos-move/diem-framework/core/doc/ValidatorConfig.md#struct-config
 [`validator-set-discovery`]: discovery/src/lib.rs

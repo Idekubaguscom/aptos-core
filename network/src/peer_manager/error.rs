@@ -1,10 +1,10 @@
-// Copyright (c) The Diem Core Contributors
+// Copyright (c) The Aptos Core Contributors
 // SPDX-License-Identifier: Apache-2.0
 
 //! Errors that originate from the PeerManager module
 
 use crate::protocols::wire::messaging::v1 as wire;
-use diem_types::{network_address::NetworkAddress, PeerId};
+use aptos_types::{network_address::NetworkAddress, PeerId};
 use futures::channel::{mpsc, oneshot};
 use thiserror::Error;
 

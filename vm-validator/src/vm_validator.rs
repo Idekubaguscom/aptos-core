@@ -1,16 +1,16 @@
-// Copyright (c) The Diem Core Contributors
+// Copyright (c) The Aptos Core Contributors
 // SPDX-License-Identifier: Apache-2.0
 
 use anyhow::Result;
-use diem_state_view::StateViewId;
-use diem_types::{
+use aptos_state_view::StateViewId;
+use aptos_types::{
     account_address::AccountAddress,
     account_config::{AccountResource, AccountSequenceInfo},
     account_state::AccountState,
-    on_chain_config::{DiemVersion, OnChainConfigPayload, VMConfig, VMPublishingOption},
+    on_chain_config::{AptosVersion, OnChainConfigPayload, VMConfig, VMPublishingOption},
     transaction::{SignedTransaction, VMValidatorResult},
 };
-use diem_vm::DiemVM;
+use aptos_vm::AptosVM;
 use executor::components::apply_chunk_output::IntoLedgerView;
 use fail::fail_point;
 use std::{convert::TryFrom, sync::Arc};
@@ -21,7 +21,7 @@ use storage_interface::{state_view::VerifiedStateView, DbReader};
 mod vm_validator_test;
 
 pub trait TransactionValidation: Send + Sync + Clone {
-    type ValidationInstance: diem_vm::VMValidator;
+    type ValidationInstance: aptos_vm::VMValidator;
 
     /// Validate a txn from client
     fn validate_transaction(&self, _txn: SignedTransaction) -> Result<VMValidatorResult>;
@@ -52,7 +52,7 @@ fn latest_state_view(db_reader: &Arc<dyn DbReader>) -> VerifiedStateView {
 pub struct VMValidator {
     db_reader: Arc<dyn DbReader>,
     cached_state_view: VerifiedStateView,
-    vm: DiemVM,
+    vm: AptosVM,
 }
 
 impl Clone for VMValidator {
@@ -65,7 +65,7 @@ impl VMValidator {
     pub fn new(db_reader: Arc<dyn DbReader>) -> Self {
         let cached_state_view = latest_state_view(&db_reader);
 
-        let vm = DiemVM::new_for_validation(&cached_state_view);
+        let vm = AptosVM::new_for_validation(&cached_state_view);
         VMValidator {
             db_reader,
             cached_state_view,
@@ -75,7 +75,7 @@ impl VMValidator {
 }
 
 impl TransactionValidation for VMValidator {
-    type ValidationInstance = DiemVM;
+    type ValidationInstance = AptosVM;
 
     fn validate_transaction(&self, txn: SignedTransaction) -> Result<VMValidatorResult> {
         fail_point!("vm_validator::validate_transaction", |_| {
@@ -83,7 +83,7 @@ impl TransactionValidation for VMValidator {
                 "Injected error in vm_validator::validate_transaction"
             ))
         });
-        use diem_vm::VMValidator;
+        use aptos_vm::VMValidator;
 
         Ok(self.vm.validate_transaction(txn, &self.cached_state_view))
     }
@@ -91,10 +91,10 @@ impl TransactionValidation for VMValidator {
     fn restart(&mut self, config: OnChainConfigPayload) -> Result<()> {
         self.notify_commit();
         let vm_config = config.get::<VMConfig>()?;
-        let version = config.get::<DiemVersion>()?;
+        let version = config.get::<AptosVersion>()?;
         let publishing_option = config.get::<VMPublishingOption>()?;
 
-        self.vm = DiemVM::init_with_config(version, vm_config, publishing_option);
+        self.vm = AptosVM::init_with_config(version, vm_config, publishing_option);
         Ok(())
     }
 

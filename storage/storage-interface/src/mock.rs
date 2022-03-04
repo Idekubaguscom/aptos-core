@@ -1,11 +1,11 @@
-// Copyright (c) The Diem Core Contributors
+// Copyright (c) The Aptos Core Contributors
 // SPDX-License-Identifier: Apache-2.0
 
 //! This module provides mock dbreader for tests.
 
 use crate::{DbReader, DbWriter};
 use anyhow::Result;
-use diem_types::{
+use aptos_types::{
     account_address::AccountAddress, account_config::AccountResource, account_state::AccountState,
     account_state_blob::AccountStateBlob,
 };

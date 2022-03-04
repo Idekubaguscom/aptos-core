@@ -37,9 +37,9 @@ runs:
           sudo mkdir -p /opt/git || true
           sudo chmod -R g+rw /opt/
           sudo chgrp -R wheel /opt/
-          mv /Users/runner/work/diem/diem /opt/git/diem
-          ln -s /opt/git/diem /Users/runner/work/diem/diem
-          cd /opt/git/diem
+          mv /Users/runner/work/aptos/aptos /opt/git/aptos
+          ln -s /opt/git/aptos /Users/runner/work/aptos/aptos
+          cd /opt/git/aptos
         fi
 
         # prepare move lang prover tooling.

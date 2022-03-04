@@ -1,6 +1,6 @@
-# Diem Swiss Knife
+# Aptos Swiss Knife
 
-`swiss-knife` can be used to generate and serialize (BCS) raw and signed Diem transactions for a supported set of move scripts (See the `MoveScriptParams` enum for a list of supported MoveScripts). This binary is intended for use both by humans (interactive use) and to be called by automation (programs in any language which support json).
+`swiss-knife` can be used to generate and serialize (BCS) raw and signed Aptos transactions for a supported set of move scripts (See the `MoveScriptParams` enum for a list of supported MoveScripts). This binary is intended for use both by humans (interactive use) and to be called by automation (programs in any language which support json).
 
 `swiss-knife` expects json input from stdin (wherever applicable) and writes json output to stdout. The output json object will always have two fields: `error_message` and `data`. If the operation succeeds, then `data` is set, otherwise `error_message` is set. Only one of them will be set and the other one will be an empty string.
 
@@ -16,7 +16,7 @@ The `sample_inputs` folder contains a list of sample json inputs for various ope
 ## Examples for generate-raw-txn and generate-signed-txn operations
 
 ```
-# Generate a peer_to_peer_transafer raw transaction (https://github.com/diem/diem/blob/1f86705b/language/transaction-builder/src/generated.rs#L447)
+# Generate a peer_to_peer_transafer raw transaction (https://github.com/aptos/aptos/blob/1f86705b/language/transaction-builder/src/generated.rs#L447)
 # For the txn_params json schema, look at the `struct TxnParams`
 # For the script_params json schema, look at the `struct MoveScriptParams`
 # Note about chain_id: For chain_id parameter, refer to the `enum NamedChain` in `chain_id.rs`. Also, please note that the numeric representation of the chain id ("0", "1", "2", etc.) can also be passed to the chain_id
@@ -42,7 +42,7 @@ $ cargo run -p swiss-knife -- generate-signed-txn < sample_inputs/generate_signe
   }
 }
 
-# Generate a preburn raw transaction (https://github.com/diem/diem/blob/1f86705b/language/transaction-builder/src/generated.rs#L480)
+# Generate a preburn raw transaction (https://github.com/aptos/aptos/blob/1f86705b/language/transaction-builder/src/generated.rs#L480)
 $ cargo run -p swiss-knife -- generate-raw-txn < sample_inputs/generate_raw_txn_preburn.json
 
 {
@@ -68,7 +68,7 @@ $ cargo run -p swiss-knife -- generate-raw-txn < sample_inputs/generate_raw_txn_
 
 ## Generate a Ed25519 Keypair
 
-Generate a Ed25519 Keypair and corresponding diem account address and auth key associated with this keypair.
+Generate a Ed25519 Keypair and corresponding aptos account address and auth key associated with this keypair.
 Optionally provide a seed to deterministically generate a Ed25519 Keypair
 
 
@@ -79,8 +79,8 @@ $ cargo run -p swiss-knife -- generate-test-ed25519-keypair
 {
   "error_message": "",
   "data": {
-    "diem_account_address": "e1b3d22871989e9fd9dc6814b2f4fc41",
-    "diem_auth_key": "5a06116a9801533249b06eeef54db2f1e1b3d22871989e9fd9dc6814b2f4fc41",
+    "aptos_account_address": "e1b3d22871989e9fd9dc6814b2f4fc41",
+    "aptos_auth_key": "5a06116a9801533249b06eeef54db2f1e1b3d22871989e9fd9dc6814b2f4fc41",
     "private_key": "b2f7f581d6de3c06a822fd6e7e8265fbc00f8401696a5bdc34f5a6d2ff3f922f",
     "public_key": "edd0f6de342a1e6a7236d6244f23d83eedfcecd059a386c85055701498e77033"
   }
@@ -92,8 +92,8 @@ $ cargo run -p swiss-knife -- generate-test-ed25519-keypair --seed 0
 {
   "error_message": "",
   "data": {
-    "diem_account_address": "e1b3d22871989e9fd9dc6814b2f4fc41",
-    "diem_auth_key": "5a06116a9801533249b06eeef54db2f1e1b3d22871989e9fd9dc6814b2f4fc41",
+    "aptos_account_address": "e1b3d22871989e9fd9dc6814b2f4fc41",
+    "aptos_auth_key": "5a06116a9801533249b06eeef54db2f1e1b3d22871989e9fd9dc6814b2f4fc41",
     "private_key": "b2f7f581d6de3c06a822fd6e7e8265fbc00f8401696a5bdc34f5a6d2ff3f922f",
     "public_key": "edd0f6de342a1e6a7236d6244f23d83eedfcecd059a386c85055701498e77033"
   }
@@ -141,6 +141,6 @@ $ cargo run -p swiss-knife -- verify-ed25519-signature < sample_inputs/verify_si
 ```
 
 (Note that this is not a test of a transaction signature. This only tests the
-"raw" internal Ed255519 library used in Diem, and will only allow you to
+"raw" internal Ed255519 library used in Aptos, and will only allow you to
 e.g. get certainty that we use Ed25519 variant 'pure' as opposed to
 'pre-hashed'. For testing a transaction signature, see the previous example)

@@ -1,4 +1,4 @@
-// Copyright (c) The Diem Core Contributors
+// Copyright (c) The Aptos Core Contributors
 // SPDX-License-Identifier: Apache-2.0
 
 #![forbid(unsafe_code)]
@@ -12,10 +12,10 @@ use crate::{
 };
 use anyhow::{anyhow, ensure, Result};
 use consensus_types::block::Block as ConsensusBlock;
-use diem_crypto::HashValue;
-use diem_infallible::Mutex;
-use diem_logger::{debug, info};
-use diem_types::{ledger_info::LedgerInfo, proof::definition::LeafCount};
+use aptos_crypto::HashValue;
+use aptos_infallible::Mutex;
+use aptos_logger::{debug, info};
+use aptos_types::{ledger_info::LedgerInfo, proof::definition::LeafCount};
 use executor_types::{Error, ExecutedChunk};
 use std::{
     collections::{hash_map::Entry, HashMap},

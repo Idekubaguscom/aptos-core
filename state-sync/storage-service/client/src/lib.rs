@@ -1,11 +1,11 @@
-// Copyright (c) The Diem Core Contributors
+// Copyright (c) The Aptos Core Contributors
 // SPDX-License-Identifier: Apache-2.0
 
 #![forbid(unsafe_code)]
 
 use async_trait::async_trait;
-use diem_config::network_id::PeerNetworkId;
-use diem_types::PeerId;
+use aptos_config::network_id::PeerNetworkId;
+use aptos_types::PeerId;
 use network::{
     application::{
         interface::{MultiNetworkSender, NetworkInterface},
@@ -26,7 +26,7 @@ use thiserror::Error;
 
 #[derive(Debug, Error)]
 pub enum Error {
-    #[error("DiemNet Rpc error: {0}")]
+    #[error("AptosNet Rpc error: {0}")]
     RpcError(#[from] RpcError),
 
     #[error("Error from remote storage service: {0}")]

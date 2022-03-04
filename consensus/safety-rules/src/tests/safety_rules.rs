@@ -1,9 +1,9 @@
-// Copyright (c) The Diem Core Contributors
+// Copyright (c) The Aptos Core Contributors
 // SPDX-License-Identifier: Apache-2.0
 
 use crate::{test_utils, tests::suite, SafetyRules};
-use diem_crypto::{ed25519::Ed25519PrivateKey, Uniform};
-use diem_types::validator_signer::ValidatorSigner;
+use aptos_crypto::{ed25519::Ed25519PrivateKey, Uniform};
+use aptos_types::validator_signer::ValidatorSigner;
 
 #[test]
 fn test() {

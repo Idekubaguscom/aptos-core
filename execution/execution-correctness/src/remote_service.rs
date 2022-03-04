@@ -1,15 +1,15 @@
-// Copyright (c) The Diem Core Contributors
+// Copyright (c) The Aptos Core Contributors
 // SPDX-License-Identifier: Apache-2.0
 
 use crate::serializer::{
     ExecutionCorrectnessInput, SerializerClient, SerializerService, TSerializerClient,
 };
-use diem_crypto::ed25519::Ed25519PrivateKey;
-use diem_infallible::Mutex;
-use diem_logger::warn;
-use diem_secure_net::{NetworkClient, NetworkServer};
+use aptos_crypto::ed25519::Ed25519PrivateKey;
+use aptos_infallible::Mutex;
+use aptos_logger::warn;
+use aptos_secure_net::{NetworkClient, NetworkServer};
 
-use diem_vm::DiemVM;
+use aptos_vm::AptosVM;
 use executor::block_executor::BlockExecutor;
 use executor_types::Error;
 use std::net::SocketAddr;
@@ -34,7 +34,7 @@ pub fn execute(
     prikey: Option<Ed25519PrivateKey>,
     network_timeout: u64,
 ) {
-    let block_executor = Box::new(BlockExecutor::<DiemVM>::new(DbReaderWriter::new(
+    let block_executor = Box::new(BlockExecutor::<AptosVM>::new(DbReaderWriter::new(
         StorageClient::new(&storage_addr, network_timeout),
     )));
     let serializer_service = SerializerService::new(block_executor, prikey);

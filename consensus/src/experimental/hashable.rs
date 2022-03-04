@@ -1,7 +1,7 @@
-// Copyright (c) The Diem Core Contributors
+// Copyright (c) The Aptos Core Contributors
 // SPDX-License-Identifier: Apache-2.0
 
-use diem_crypto::HashValue;
+use aptos_crypto::HashValue;
 
 pub trait Hashable {
     fn hash(&self) -> HashValue;

@@ -1,9 +1,9 @@
-// Copyright (c) The Diem Core Contributors
+// Copyright (c) The Aptos Core Contributors
 // SPDX-License-Identifier: Apache-2.0
 
 use crate::subaddress::{Subaddress, SubaddressParseError};
 use bech32::{self, u5, FromBase32, ToBase32};
-use diem_sdk::{
+use aptos_sdk::{
     move_types::account_address::AccountAddressParseError,
     transaction_builder::Currency,
     types::{
@@ -18,8 +18,8 @@ use url::Url;
 const DIEM_BECH32_VERSION_LENGTH: usize = 1;
 const DIEM_BECH32_VERSION: u8 = 1;
 
-/// Intent is a struct holdind data decoded from Diem Intent Identifier string
-/// https://dip.diem.com/dip-5/#format
+/// Intent is a struct holdind data decoded from Aptos Intent Identifier string
+/// https://dip.aptos.com/dip-5/#format
 #[derive(Ord, PartialOrd, Eq, PartialEq, Hash, Clone)]
 pub struct Intent {
     account_address: AccountAddress,
@@ -30,13 +30,13 @@ pub struct Intent {
 }
 
 impl Intent {
-    /// Encode Intent as a Diem intent identifier (https://dip.diem.com/dip-5/).
+    /// Encode Intent as a Aptos intent identifier (https://dip.aptos.com/dip-5/).
     ///
     /// ## Example
     /// ```
     /// use offchain::identifier::Intent;
     /// use std::str::FromStr;
-    /// let identifier = "diem://dm1p7ujcndcl7nudzwt8fglhx6wxn08kgs5tm6mz4us2vfufk?c=XUS&am=4500";
+    /// let identifier = "aptos://dm1p7ujcndcl7nudzwt8fglhx6wxn08kgs5tm6mz4us2vfufk?c=XUS&am=4500";
     /// let intent = Intent::from_str(identifier).unwrap();
     /// assert_eq!(intent.to_encoded_string().unwrap(), identifier);
     /// ```
@@ -73,7 +73,7 @@ impl Intent {
 impl FromStr for Intent {
     type Err = IntentIdentifierError;
 
-    /// Decode Diem intent identifier (https://dip.diem.com/dip-5/) int 3 parts:
+    /// Decode Aptos intent identifier (https://dip.aptos.com/dip-5/) int 3 parts:
     /// 1. account identifier: account address & sub-address
     /// 2. currency
     /// 3. amount
@@ -83,14 +83,14 @@ impl FromStr for Intent {
     /// use offchain::identifier::HumanReadablePrefix;
     /// use offchain::identifier::Intent;
     /// use std::str::FromStr;
-    /// let identifier = "diem://dm1p7ujcndcl7nudzwt8fglhx6wxn08kgs5tm6mz4us2vfufk?c=XUS&am=4500";
+    /// let identifier = "aptos://dm1p7ujcndcl7nudzwt8fglhx6wxn08kgs5tm6mz4us2vfufk?c=XUS&am=4500";
     /// let intent = Intent::from_str(identifier).unwrap();
     /// assert_eq!(intent.hrp(), &HumanReadablePrefix::DM);
     /// assert_eq!(intent.amount(), Some(4500));
     /// ```
     fn from_str(encoded_intent_identifier: &str) -> Result<Intent, IntentIdentifierError> {
         let result: Url = Url::parse(encoded_intent_identifier)?;
-        if result.scheme() != "diem" {
+        if result.scheme() != "aptos" {
             return Err(IntentIdentifierError::Parse(format!(
                 "Unknown intent identifier scheme {}",
                 result.scheme()
@@ -132,7 +132,7 @@ pub enum IntentIdentifierError {
 }
 
 /// Defines the available HRPs (human readable prefix) as defined in
-/// https://dip.diem.com/dip-5/#format
+/// https://dip.aptos.com/dip-5/#format
 #[derive(Copy, Clone, Debug, PartialEq, Eq, Ord, PartialOrd, Hash)]
 pub enum HumanReadablePrefix {
     DM,
@@ -178,8 +178,8 @@ fn encode_account(
     let five_bit_data = [account_address.to_vec(), subaddress.to_vec()]
         .concat()
         .to_base32();
-    let diem_encoding_version = vec![u5::try_from_u8(DIEM_BECH32_VERSION)?];
-    let bytes = [diem_encoding_version, five_bit_data].concat();
+    let aptos_encoding_version = vec![u5::try_from_u8(DIEM_BECH32_VERSION)?];
+    let bytes = [aptos_encoding_version, five_bit_data].concat();
     bech32::encode(hrp.as_str(), bytes, bech32::Variant::Bech32)
 }
 
@@ -195,11 +195,11 @@ fn decode_account(
         )));
     }
 
-    let diem_address_version = data[0].to_u8();
-    if diem_address_version != DIEM_BECH32_VERSION {
+    let aptos_address_version = data[0].to_u8();
+    if aptos_address_version != DIEM_BECH32_VERSION {
         return Err(IntentIdentifierError::Parse(format!(
-            "Unsupported Diem Bech32 Version {}, expected {}",
-            diem_address_version, DIEM_BECH32_VERSION,
+            "Unsupported Aptos Bech32 Version {}, expected {}",
+            aptos_address_version, DIEM_BECH32_VERSION,
         )));
     }
 
@@ -213,7 +213,7 @@ fn decode_account(
 }
 
 /// Encode account identifier string(encoded), currency and amount into
-/// Diem intent identifier (https://dip.diem.com/dip-5/)
+/// Aptos intent identifier (https://dip.aptos.com/dip-5/)
 fn encode_intent(
     encoded_account_identifier: &str,
     currency: Option<Currency>,
@@ -227,10 +227,10 @@ fn encode_intent(
         params.push(format!("am={}", am));
     }
     if !params.is_empty() {
-        return format!("diem://{}?{}", encoded_account_identifier, params.join("&"));
+        return format!("aptos://{}?{}", encoded_account_identifier, params.join("&"));
     }
 
-    return format!("diem://{}", encoded_account_identifier);
+    return format!("aptos://{}", encoded_account_identifier);
 }
 
 fn normalize_amount(input: Option<&String>) -> Result<Option<u64>, IntentIdentifierError> {
@@ -275,7 +275,7 @@ fn currency_from_str(currency: &str) -> Result<Currency, IntentIdentifierError> 
 mod tests {
     use super::*;
     use bech32::{self, FromBase32, ToBase32};
-    use diem_sdk::types::account_address::AccountAddress;
+    use aptos_sdk::types::account_address::AccountAddress;
     use rstest::rstest;
 
     const ACCOUNT_ADDRESS: &str = "f72589b71ff4f8d139674a3f7369c69b";
@@ -285,13 +285,13 @@ mod tests {
     #[test]
     fn test_encode_intent_parameterless() {
         let intent_id = encode_intent("an_account_identifier", None, None);
-        assert_eq!(intent_id, "diem://an_account_identifier");
+        assert_eq!(intent_id, "aptos://an_account_identifier");
     }
 
     #[test]
     fn test_encode_intent_parameters() {
         let intent_id = encode_intent("an_account_identifier", Some(Currency::XUS), Some(45_00));
-        assert_eq!(intent_id, "diem://an_account_identifier?c=XUS&am=4500");
+        assert_eq!(intent_id, "aptos://an_account_identifier?c=XUS&am=4500");
     }
 
     #[test]
@@ -346,7 +346,7 @@ mod tests {
 
     #[rstest]
     #[case(
-        "diem://dm1p7ujcndcl7nudzwt8fglhx6wxn08kgs5tm6mz4us2vfufk?c=XUS&am=4500",
+        "aptos://dm1p7ujcndcl7nudzwt8fglhx6wxn08kgs5tm6mz4us2vfufk?c=XUS&am=4500",
         HumanReadablePrefix::DM,
         ACCOUNT_ADDRESS,
         SUBADDRESS,
@@ -354,7 +354,7 @@ mod tests {
         Some(4500)
     )]
     #[case(
-        "diem://tdm1p7ujcndcl7nudzwt8fglhx6wxnvqqqqqqqqqqqqqv88j4s",
+        "aptos://tdm1p7ujcndcl7nudzwt8fglhx6wxnvqqqqqqqqqqqqqv88j4s",
         HumanReadablePrefix::TDM,
         ACCOUNT_ADDRESS,
         ZERO_SUBADDRESS,

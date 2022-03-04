@@ -1,9 +1,9 @@
-// Copyright (c) The Diem Core Contributors
+// Copyright (c) The Aptos Core Contributors
 // SPDX-License-Identifier: Apache-2.0
 
 use crate::{data_notification::NotificationId, data_stream::DataStreamListener, error::Error};
 use async_trait::async_trait;
-use diem_types::{ledger_info::LedgerInfoWithSignatures, transaction::Version};
+use aptos_types::{ledger_info::LedgerInfoWithSignatures, transaction::Version};
 use futures::{
     channel::{mpsc, oneshot},
     stream::FusedStream,
@@ -16,7 +16,7 @@ use std::{
 
 pub type Epoch = u64;
 
-/// The streaming client used by state sync to fetch data from the Diem network
+/// The streaming client used by state sync to fetch data from the Aptos network
 /// to synchronize local state.
 ///
 /// Notes:

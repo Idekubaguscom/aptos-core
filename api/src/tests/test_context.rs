@@ -1,28 +1,28 @@
-// Copyright (c) The Diem Core Contributors
+// Copyright (c) The Aptos Core Contributors
 // SPDX-License-Identifier: Apache-2.0
 
 use crate::{context::Context, index, tests::pretty};
 use bytes::Bytes;
-use diem_api_types::{
+use aptos_api_types::{
     mime_types, HexEncodedBytes, TransactionOnChainData, X_DIEM_CHAIN_ID, X_DIEM_LEDGER_TIMESTAMP,
     X_DIEM_LEDGER_VERSION,
 };
-use diem_config::config::{ApiConfig, RoleType};
-use diem_crypto::{hash::HashValue, SigningKey};
-use diem_genesis_tool::validator_builder::{RootKeys, ValidatorBuilder};
-use diem_global_constants::OWNER_ACCOUNT;
-use diem_mempool::mocks::MockSharedMempool;
-use diem_sdk::{
+use aptos_config::config::{ApiConfig, RoleType};
+use aptos_crypto::{hash::HashValue, SigningKey};
+use aptos_genesis_tool::validator_builder::{RootKeys, ValidatorBuilder};
+use aptos_global_constants::OWNER_ACCOUNT;
+use aptos_mempool::mocks::MockSharedMempool;
+use aptos_sdk::{
     transaction_builder::{Currency, TransactionFactory},
     types::{
-        account_config::{diem_root_address, treasury_compliance_account_address},
+        account_config::{aptos_root_address, treasury_compliance_account_address},
         transaction::SignedTransaction,
         AccountKey, LocalAccount,
     },
 };
-use diem_secure_storage::KVStorage;
-use diem_temppath::TempPath;
-use diem_types::{
+use aptos_secure_storage::KVStorage;
+use aptos_temppath::TempPath;
+use aptos_types::{
     account_address::AccountAddress,
     account_config::testnet_dd_account_address,
     block_info::BlockInfo,
@@ -32,8 +32,8 @@ use diem_types::{
     on_chain_config::VMPublishingOption,
     transaction::{Transaction, TransactionStatus},
 };
-use diem_vm::DiemVM;
-use diemdb::DiemDB;
+use aptos_vm::AptosVM;
+use aptosdb::AptosDB;
 use executor::db_bootstrapper;
 use executor_types::BlockExecutorTrait;
 use hyper::Response;
@@ -61,9 +61,9 @@ pub fn new_test_context() -> TestContext {
     let (root_keys, genesis, genesis_waypoint, validators) = builder.build(&mut rng).unwrap();
     let validator_owner = validators[0].storage().get(OWNER_ACCOUNT).unwrap().value;
 
-    let (db, db_rw) = DbReaderWriter::wrap(DiemDB::new_for_test(&tmp_dir));
+    let (db, db_rw) = DbReaderWriter::wrap(AptosDB::new_for_test(&tmp_dir));
     let ret =
-        db_bootstrapper::maybe_bootstrap::<DiemVM>(&db_rw, &genesis, genesis_waypoint).unwrap();
+        db_bootstrapper::maybe_bootstrap::<AptosVM>(&db_rw, &genesis, genesis_waypoint).unwrap();
     assert!(ret);
 
     let mempool = MockSharedMempool::new_in_runtime(&db_rw, VMValidator::new(db.clone()));
@@ -79,7 +79,7 @@ pub fn new_test_context() -> TestContext {
         rng,
         root_keys,
         validator_owner,
-        Box::new(BlockExecutor::<DiemVM>::new(db_rw)),
+        Box::new(BlockExecutor::<AptosVM>::new(db_rw)),
         mempool,
         db,
     )
@@ -90,7 +90,7 @@ pub struct TestContext {
     pub context: Context,
     pub validator_owner: AccountAddress,
     pub mempool: Arc<MockSharedMempool>,
-    pub db: Arc<DiemDB>,
+    pub db: Arc<AptosDB>,
     rng: rand::rngs::StdRng,
     root_keys: Arc<RootKeys>,
     executor: Arc<dyn BlockExecutorTrait>,
@@ -105,7 +105,7 @@ impl TestContext {
         validator_owner: AccountAddress,
         executor: Box<dyn BlockExecutorTrait>,
         mempool: MockSharedMempool,
-        db: Arc<DiemDB>,
+        db: Arc<AptosDB>,
     ) -> Self {
         Self {
             context,
@@ -144,7 +144,7 @@ impl TestContext {
     }
 
     pub fn root_account(&self) -> LocalAccount {
-        LocalAccount::new(diem_root_address(), self.root_keys.root_key.clone(), 0)
+        LocalAccount::new(aptos_root_address(), self.root_keys.root_key.clone(), 0)
     }
 
     pub fn gen_account(&mut self) -> LocalAccount {
@@ -185,7 +185,7 @@ impl TestContext {
             .into_inner()
     }
 
-    pub fn get_latest_ledger_info(&self) -> diem_api_types::LedgerInfo {
+    pub fn get_latest_ledger_info(&self) -> aptos_api_types::LedgerInfo {
         self.context.get_latest_ledger_info().unwrap()
     }
 

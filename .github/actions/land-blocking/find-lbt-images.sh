@@ -1,8 +1,8 @@
 #!/bin/bash
-# Copyright (c) The Diem Core Contributors
+# Copyright (c) The Aptos Core Contributors
 # SPDX-License-Identifier: Apache-2.0
 
-REPOS=(diem/validator diem/init diem/validator_tcb)
+REPOS=(aptos/validator aptos/init aptos/validator_tcb)
 # the number of commits backwards we want to look
 END=50
 

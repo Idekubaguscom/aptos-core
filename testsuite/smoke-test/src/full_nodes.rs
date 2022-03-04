@@ -1,4 +1,4 @@
-// Copyright (c) The Diem Core Contributors
+// Copyright (c) The Aptos Core Contributors
 // SPDX-License-Identifier: Apache-2.0
 
 use crate::{
@@ -7,11 +7,11 @@ use crate::{
         assert_balance, create_and_fund_account, transfer_coins, transfer_coins_non_blocking,
     },
 };
-use diem_config::{
+use aptos_config::{
     config::{DiscoveryMethod, NodeConfig, Peer, PeerRole, HANDSHAKE_VERSION},
     network_id::NetworkId,
 };
-use diem_types::network_address::{NetworkAddress, Protocol};
+use aptos_types::network_address::{NetworkAddress, Protocol};
 use forge::{NodeExt, Swarm, SwarmExt};
 use std::{
     collections::HashSet,

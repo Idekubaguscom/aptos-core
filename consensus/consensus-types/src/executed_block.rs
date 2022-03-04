@@ -1,4 +1,4 @@
-// Copyright (c) The Diem Core Contributors
+// Copyright (c) The Aptos Core Contributors
 // SPDX-License-Identifier: Apache-2.0
 
 use crate::{
@@ -7,8 +7,8 @@ use crate::{
     quorum_cert::QuorumCert,
     vote_proposal::{MaybeSignedVoteProposal, VoteProposal},
 };
-use diem_crypto::hash::HashValue;
-use diem_types::{
+use aptos_crypto::hash::HashValue;
+use aptos_types::{
     block_info::BlockInfo,
     contract_event::ContractEvent,
     transaction::{Transaction, TransactionStatus},

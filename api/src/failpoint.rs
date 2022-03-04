@@ -1,9 +1,9 @@
-// Copyright (c) The Diem Core Contributors
+// Copyright (c) The Aptos Core Contributors
 // SPDX-License-Identifier: Apache-2.0
 
 #[allow(unused_imports)]
 use anyhow::{format_err, Result};
-use diem_api_types::Error;
+use aptos_api_types::Error;
 
 #[allow(unused_variables)]
 #[inline]

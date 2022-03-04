@@ -1,4 +1,4 @@
-// Copyright (c) The Diem Core Contributors
+// Copyright (c) The Aptos Core Contributors
 // SPDX-License-Identifier: Apache-2.0
 
 use crate::{
@@ -6,9 +6,9 @@ use crate::{
     quorum_cert::QuorumCert,
     vote_data::VoteData,
 };
-use diem_crypto::hash::HashValue;
-use diem_crypto_derive::{BCSCryptoHash, CryptoHasher};
-use diem_types::{
+use aptos_crypto::hash::HashValue;
+use aptos_crypto_derive::{BCSCryptoHash, CryptoHasher};
+use aptos_types::{
     block_info::BlockInfo,
     ledger_info::{LedgerInfo, LedgerInfoWithSignatures},
 };
@@ -209,7 +209,7 @@ impl BlockData {
 
 #[test]
 fn test_reconfiguration_suffix() {
-    use diem_types::{
+    use aptos_types::{
         account_address::AccountAddress, epoch_state::EpochState, on_chain_config::ValidatorSet,
     };
 

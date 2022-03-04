@@ -1,4 +1,4 @@
-// Copyright (c) The Diem Core Contributors
+// Copyright (c) The Aptos Core Contributors
 // SPDX-License-Identifier: Apache-2.0
 
 use crate::{
@@ -9,12 +9,12 @@ use crate::{
     serializer::{SerializerClient, SerializerService},
     thread::ThreadService,
 };
-use diem_config::config::{ExecutionCorrectnessService, NodeConfig};
-use diem_crypto::ed25519::Ed25519PrivateKey;
-use diem_global_constants::EXECUTION_KEY;
-use diem_secure_storage::{CryptoStorage, Storage};
+use aptos_config::config::{ExecutionCorrectnessService, NodeConfig};
+use aptos_crypto::ed25519::Ed25519PrivateKey;
+use aptos_global_constants::EXECUTION_KEY;
+use aptos_secure_storage::{CryptoStorage, Storage};
 
-use diem_vm::DiemVM;
+use aptos_vm::AptosVM;
 use executor::block_executor::BlockExecutor;
 use std::{convert::TryInto, net::SocketAddr, sync::Arc};
 use storage_client::StorageClient;
@@ -84,7 +84,7 @@ impl ExecutionCorrectnessManager {
     }
 
     pub fn new_local(db: DbReaderWriter, execution_prikey: Option<Ed25519PrivateKey>) -> Self {
-        let block_executor = Box::new(BlockExecutor::<DiemVM>::new(db));
+        let block_executor = Box::new(BlockExecutor::<AptosVM>::new(db));
         Self {
             internal_execution_correctness: ExecutionCorrectnessWrapper::Local(Arc::new(
                 LocalService::new(block_executor, execution_prikey),
@@ -104,7 +104,7 @@ impl ExecutionCorrectnessManager {
         execution_prikey: Option<Ed25519PrivateKey>,
         timeout: u64,
     ) -> Self {
-        let block_executor = Box::new(BlockExecutor::<DiemVM>::new(DbReaderWriter::new(
+        let block_executor = Box::new(BlockExecutor::<AptosVM>::new(DbReaderWriter::new(
             StorageClient::new(&storage_address, timeout),
         )));
         let serializer_service = SerializerService::new(block_executor, execution_prikey);

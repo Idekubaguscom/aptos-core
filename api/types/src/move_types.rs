@@ -1,10 +1,10 @@
-// Copyright (c) The Diem Core Contributors
+// Copyright (c) The Aptos Core Contributors
 // SPDX-License-Identifier: Apache-2.0
 
 use crate::{Address, Bytecode};
 
 use anyhow::{bail, format_err};
-use diem_types::{account_config::CORE_CODE_ADDRESS, event::EventKey, transaction::Module};
+use aptos_types::{account_config::CORE_CODE_ADDRESS, event::EventKey, transaction::Module};
 use move_binary_format::{
     access::ModuleAccess,
     file_format::{
@@ -968,7 +968,7 @@ mod tests {
         U64,
     };
 
-    use diem_types::account_address::AccountAddress;
+    use aptos_types::account_address::AccountAddress;
     use move_binary_format::file_format::AbilitySet;
     use move_core_types::{
         identifier::Identifier,
@@ -1099,9 +1099,9 @@ mod tests {
         test_serialize_deserialize(
             MoveModuleId {
                 address: "0x1".parse().unwrap(),
-                name: "Diem".parse().unwrap(),
+                name: "Aptos".parse().unwrap(),
             },
-            json!("0x1::Diem"),
+            json!("0x1::Aptos"),
         );
     }
 
@@ -1128,16 +1128,16 @@ mod tests {
                 .to_string()
         );
         assert_eq!(
-            "invalid Move module id: Diem::Diem",
-            "Diem::Diem"
+            "invalid Move module id: Aptos::Aptos",
+            "Aptos::Aptos"
                 .parse::<MoveModuleId>()
                 .err()
                 .unwrap()
                 .to_string()
         );
         assert_eq!(
-            "invalid Move module id: 0x1::Diem::Diem",
-            "0x1::Diem::Diem"
+            "invalid Move module id: 0x1::Aptos::Aptos",
+            "0x1::Aptos::Aptos"
                 .parse::<MoveModuleId>()
                 .err()
                 .unwrap()
@@ -1151,11 +1151,11 @@ mod tests {
             ScriptFunctionId {
                 module: MoveModuleId {
                     address: "0x1".parse().unwrap(),
-                    name: "Diem".parse().unwrap(),
+                    name: "Aptos".parse().unwrap(),
                 },
                 name: "Add".parse().unwrap(),
             },
-            json!("0x1::Diem::Add"),
+            json!("0x1::Aptos::Add"),
         );
     }
 
@@ -1190,24 +1190,24 @@ mod tests {
                 .to_string()
         );
         assert_eq!(
-            "invalid script function id \"Diem::Diem\"",
-            "Diem::Diem"
+            "invalid script function id \"Aptos::Aptos\"",
+            "Aptos::Aptos"
                 .parse::<ScriptFunctionId>()
                 .err()
                 .unwrap()
                 .to_string()
         );
         assert_eq!(
-            "invalid script function id \"Diem::Diem::??\"",
-            "Diem::Diem::??"
+            "invalid script function id \"Aptos::Aptos::??\"",
+            "Aptos::Aptos::??"
                 .parse::<ScriptFunctionId>()
                 .err()
                 .unwrap()
                 .to_string()
         );
         assert_eq!(
-            "invalid script function id \"0x1::Diem::Diem::Diem\"",
-            "0x1::Diem::Diem::Diem"
+            "invalid script function id \"0x1::Aptos::Aptos::Aptos\"",
+            "0x1::Aptos::Aptos::Aptos"
                 .parse::<ScriptFunctionId>()
                 .err()
                 .unwrap()

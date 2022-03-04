@@ -1,11 +1,11 @@
-// Copyright (c) The Diem Core Contributors
+// Copyright (c) The Aptos Core Contributors
 // SPDX-License-Identifier: Apache-2.0
 
 use crate::core_mempool::{CoreMempool, TimelineState, TxnPointer};
 use anyhow::{format_err, Result};
-use diem_config::config::NodeConfig;
-use diem_crypto::{ed25519::Ed25519PrivateKey, PrivateKey, Uniform};
-use diem_types::{
+use aptos_config::config::NodeConfig;
+use aptos_crypto::{ed25519::Ed25519PrivateKey, PrivateKey, Uniform};
+use aptos_types::{
     account_address::AccountAddress,
     account_config::{AccountSequenceInfo, XUS_NAME},
     chain_id::ChainId,

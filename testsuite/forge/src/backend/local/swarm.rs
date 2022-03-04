@@ -1,4 +1,4 @@
-// Copyright (c) The Diem Core Contributors
+// Copyright (c) The Aptos Core Contributors
 // SPDX-License-Identifier: Apache-2.0
 
 use crate::{
@@ -6,9 +6,9 @@ use crate::{
     Validator, Version,
 };
 use anyhow::{anyhow, bail, Result};
-use diem_config::config::NodeConfig;
-use diem_genesis_tool::{fullnode_builder::FullnodeConfig, validator_builder::ValidatorBuilder};
-use diem_sdk::{
+use aptos_config::config::NodeConfig;
+use aptos_genesis_tool::{fullnode_builder::FullnodeConfig, validator_builder::ValidatorBuilder};
+use aptos_sdk::{
     crypto::ed25519::Ed25519PrivateKey,
     types::{
         chain_id::ChainId, transaction::Transaction, waypoint::Waypoint, AccountKey, LocalAccount,
@@ -171,14 +171,14 @@ impl LocalSwarmBuilder {
             .collect::<Result<HashMap<_, _>>>()?;
 
         let root_account = LocalAccount::new(
-            diem_sdk::types::account_config::diem_root_address(),
+            aptos_sdk::types::account_config::aptos_root_address(),
             AccountKey::from_private_key(root_keys.root_key),
             0,
         );
 
         // Designated dealer account is built to have the same private key as the TC account
         let designated_dealer_account = LocalAccount::new(
-            diem_sdk::types::account_config::testnet_dd_account_address(),
+            aptos_sdk::types::account_config::testnet_dd_account_address(),
             AccountKey::from_private_key(
                 Ed25519PrivateKey::try_from(root_keys.treasury_compliance_key.to_bytes().as_ref())
                     .unwrap(),
@@ -187,7 +187,7 @@ impl LocalSwarmBuilder {
         );
 
         let treasury_compliance_account = LocalAccount::new(
-            diem_sdk::types::account_config::treasury_compliance_account_address(),
+            aptos_sdk::types::account_config::treasury_compliance_account_address(),
             AccountKey::from_private_key(root_keys.treasury_compliance_key),
             0,
         );
@@ -257,10 +257,10 @@ impl LocalSwarm {
                     Ok(()) => *done = true,
 
                     Err(HealthCheckError::Unknown(e)) => {
-                        return Err(anyhow!("Diem node '{}' is not running: {}", node.name(), e));
+                        return Err(anyhow!("Aptos node '{}' is not running: {}", node.name(), e));
                     }
                     Err(HealthCheckError::NotRunning) => {
-                        return Err(anyhow!("Diem node '{}' is not running", node.name()));
+                        return Err(anyhow!("Aptos node '{}' is not running", node.name()));
                     }
                     Err(HealthCheckError::Failure(e)) => {
                         println!("health check failure: {}", e);

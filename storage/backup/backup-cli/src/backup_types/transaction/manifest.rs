@@ -1,9 +1,9 @@
-// Copyright (c) The Diem Core Contributors
+// Copyright (c) The Aptos Core Contributors
 // SPDX-License-Identifier: Apache-2.0
 
 use crate::storage::FileHandle;
 use anyhow::{ensure, Result};
-use diem_types::transaction::Version;
+use aptos_types::transaction::Version;
 use serde::{Deserialize, Serialize};
 
 /// A chunk of a transaction backup manifest to represent the

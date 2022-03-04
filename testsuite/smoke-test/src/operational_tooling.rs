@@ -1,35 +1,35 @@
-// Copyright (c) The Diem Core Contributors
+// Copyright (c) The Aptos Core Contributors
 // SPDX-License-Identifier: Apache-2.0
 
 use crate::{
     smoke_test_environment::new_local_swarm,
     test_utils::{
-        diem_swarm_utils::{create_root_storage, load_validators_backend_storage},
+        aptos_swarm_utils::{create_root_storage, load_validators_backend_storage},
         write_key_to_file_bcs_format, write_key_to_file_hex_format,
     },
 };
 use anyhow::{bail, Result};
-use diem_config::{
+use aptos_config::{
     config::{PeerRole, SecureBackend},
     network_id::NetworkId,
 };
-use diem_crypto::{
+use aptos_crypto::{
     ed25519::{Ed25519PrivateKey, Ed25519PublicKey},
     x25519, HashValue, PrivateKey, Uniform, ValidCryptoMaterialStringExt,
 };
-use diem_global_constants::{
+use aptos_global_constants::{
     CONSENSUS_KEY, FULLNODE_NETWORK_KEY, GENESIS_WAYPOINT, OPERATOR_ACCOUNT, OPERATOR_KEY,
     OWNER_ACCOUNT, OWNER_KEY, VALIDATOR_NETWORK_ADDRESS_KEYS, VALIDATOR_NETWORK_KEY, WAYPOINT,
 };
-use diem_management::storage::to_x25519;
-use diem_operational_tool::{
+use aptos_management::storage::to_x25519;
+use aptos_operational_tool::{
     keys::{EncodingType, KeyType},
     test_helper::OperationalTool,
 };
-use diem_rest_client::Client as RestClient;
-use diem_secure_storage::{CryptoStorage, KVStorage, Storage};
-use diem_temppath::TempPath;
-use diem_types::{
+use aptos_rest_client::Client as RestClient;
+use aptos_secure_storage::{CryptoStorage, KVStorage, Storage};
+use aptos_temppath::TempPath;
+use aptos_types::{
     account_address::{from_identity_public_key, AccountAddress},
     account_state::AccountState,
     account_state_blob::AccountStateBlob,
@@ -276,13 +276,13 @@ async fn test_set_operator_and_add_new_validator() {
         swarm.validators().next().unwrap(),
         write_key_to_file_hex_format,
     );
-    let diem_backend = create_root_storage(&mut swarm);
+    let aptos_backend = create_root_storage(&mut swarm);
     let val_human_name = "new_validator";
     let (txn_ctx, _) = op_tool
         .create_validator(
             val_human_name,
             validator_key_path.to_str().unwrap(),
-            &diem_backend,
+            &aptos_backend,
             false,
         )
         .await
@@ -301,7 +301,7 @@ async fn test_set_operator_and_add_new_validator() {
         .create_validator_operator(
             op_human_name,
             operator_key_path.to_str().unwrap(),
-            &diem_backend,
+            &aptos_backend,
             true,
         )
         .await
@@ -405,7 +405,7 @@ async fn test_set_operator_and_add_new_validator() {
 
     // Add the validator to the validator set
     let txn_ctx = op_tool
-        .add_validator(validator_account, &diem_backend, true)
+        .add_validator(validator_account, &aptos_backend, true)
         .await
         .unwrap();
 
@@ -432,7 +432,7 @@ async fn test_set_operator_and_add_new_validator() {
 
     // Try and add the same validator again and watch it fail
     let txn_ctx = op_tool
-        .add_validator(validator_account, &diem_backend, false)
+        .add_validator(validator_account, &aptos_backend, false)
         .await
         .unwrap();
     assert!(!txn_ctx.execution_result.unwrap().success);

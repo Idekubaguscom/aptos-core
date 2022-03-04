@@ -1,4 +1,4 @@
-// Copyright (c) The Diem Core Contributors
+// Copyright (c) The Aptos Core Contributors
 // SPDX-License-Identifier: Apache-2.0
 
 //! Interface between Consensus and Network layers.
@@ -6,7 +6,7 @@
 use crate::counters;
 use anyhow::anyhow;
 use async_trait::async_trait;
-use channel::{diem_channel, message_queues::QueueStyle};
+use channel::{aptos_channel, message_queues::QueueStyle};
 use consensus_types::{
     block_retrieval::{BlockRetrievalRequest, BlockRetrievalResponse},
     epoch_retrieval::EpochRetrievalRequest,
@@ -15,9 +15,9 @@ use consensus_types::{
     sync_info::SyncInfo,
     vote_msg::VoteMsg,
 };
-use diem_config::network_id::{NetworkId, PeerNetworkId};
-use diem_logger::prelude::*;
-use diem_types::{epoch_change::EpochChangeProof, PeerId};
+use aptos_config::network_id::{NetworkId, PeerNetworkId};
+use aptos_logger::prelude::*;
+use aptos_types::{epoch_change::EpochChangeProof, PeerId};
 use network::{
     application::storage::PeerMetadataStorage,
     constants::NETWORK_CHANNEL_SIZE,
@@ -100,7 +100,7 @@ pub fn network_endpoint_config() -> AppConfig {
     let protos = RPC.iter().chain(DIRECT_SEND.iter()).copied();
     AppConfig::p2p(
         protos,
-        diem_channel::Config::new(NETWORK_CHANNEL_SIZE)
+        aptos_channel::Config::new(NETWORK_CHANNEL_SIZE)
             .queue_style(QueueStyle::LIFO)
             .counters(&counters::PENDING_CONSENSUS_NETWORK_EVENTS),
     )

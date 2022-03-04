@@ -1,7 +1,7 @@
-// Copyright (c) The Diem Core Contributors
+// Copyright (c) The Aptos Core Contributors
 // SPDX-License-Identifier: Apache-2.0
 
-use diem_types::{
+use aptos_types::{
     epoch_change::Verifier, epoch_state::EpochState, ledger_info::LedgerInfoWithSignatures,
 };
 use executor_types::ExecutedTrees;
@@ -18,7 +18,7 @@ use crate::error::Error;
 ///    ledger info (`committed_ledger_info`) is in the middle of the epoch, otherwise, it
 ///    corresponds to the next epoch if the highest committed ledger info ends the epoch.
 ///
-/// Note: `committed_ledger_info` is used for helping other Diem nodes synchronize (i.e.,
+/// Note: `committed_ledger_info` is used for helping other Aptos nodes synchronize (i.e.,
 /// it corresponds to the highest version we have a proof for in storage). `synced_trees`
 /// is used locally for retrieving missing chunks for the local storage.
 #[derive(Clone, Debug)]
@@ -82,20 +82,20 @@ pub(crate) mod test_utils {
 
     use futures::channel::mpsc;
 
-    use channel::{diem_channel, message_queues::QueueStyle};
-    use diem_config::{
+    use channel::{aptos_channel, message_queues::QueueStyle};
+    use aptos_config::{
         config::{NodeConfig, RoleType},
         network_id::NetworkId,
     };
-    use diem_infallible::RwLock;
-    use diem_types::{
+    use aptos_infallible::RwLock;
+    use aptos_types::{
         move_resource::MoveStorage,
         on_chain_config::ON_CHAIN_CONFIG_REGISTRY,
         transaction::{Transaction, WriteSetPayload},
         waypoint::Waypoint,
     };
-    use diem_vm::DiemVM;
-    use diemdb::DiemDB;
+    use aptos_vm::AptosVM;
+    use aptosdb::AptosDB;
     use event_notifications::{EventNotificationSender, EventSubscriptionService};
     use executor::chunk_executor::ChunkExecutor;
     use executor_test_helpers::bootstrap_genesis;
@@ -116,12 +116,12 @@ pub(crate) mod test_utils {
     pub(crate) fn create_coordinator_with_config_and_waypoint(
         node_config: NodeConfig,
         waypoint: Waypoint,
-    ) -> StateSyncCoordinator<ExecutorProxy<ChunkExecutor<DiemVM>>, MempoolNotifier> {
+    ) -> StateSyncCoordinator<ExecutorProxy<ChunkExecutor<AptosVM>>, MempoolNotifier> {
         create_state_sync_coordinator_for_tests(node_config, waypoint, false)
     }
 
     pub(crate) fn create_validator_coordinator(
-    ) -> StateSyncCoordinator<ExecutorProxy<ChunkExecutor<DiemVM>>, MempoolNotifier> {
+    ) -> StateSyncCoordinator<ExecutorProxy<ChunkExecutor<AptosVM>>, MempoolNotifier> {
         let mut node_config = NodeConfig::default();
         node_config.base.role = RoleType::Validator;
 
@@ -130,7 +130,7 @@ pub(crate) mod test_utils {
 
     #[cfg(test)]
     pub(crate) fn create_full_node_coordinator(
-    ) -> StateSyncCoordinator<ExecutorProxy<ChunkExecutor<DiemVM>>, MempoolNotifier> {
+    ) -> StateSyncCoordinator<ExecutorProxy<ChunkExecutor<AptosVM>>, MempoolNotifier> {
         let mut node_config = NodeConfig::default();
         node_config.base.role = RoleType::FullNode;
 
@@ -139,7 +139,7 @@ pub(crate) mod test_utils {
 
     #[cfg(test)]
     pub(crate) fn create_read_only_coordinator(
-    ) -> StateSyncCoordinator<ExecutorProxy<ChunkExecutor<DiemVM>>, MempoolNotifier> {
+    ) -> StateSyncCoordinator<ExecutorProxy<ChunkExecutor<AptosVM>>, MempoolNotifier> {
         let mut node_config = NodeConfig::default();
         node_config.base.role = RoleType::Validator;
 
@@ -150,18 +150,18 @@ pub(crate) mod test_utils {
         node_config: NodeConfig,
         waypoint: Waypoint,
         read_only_mode: bool,
-    ) -> StateSyncCoordinator<ExecutorProxy<ChunkExecutor<DiemVM>>, MempoolNotifier> {
+    ) -> StateSyncCoordinator<ExecutorProxy<ChunkExecutor<AptosVM>>, MempoolNotifier> {
         // Generate a genesis change set
         let (genesis, _) = vm_genesis::test_genesis_change_set_and_validators(Some(1));
 
-        // Create test diem database
-        let db_path = diem_temppath::TempPath::new();
+        // Create test aptos database
+        let db_path = aptos_temppath::TempPath::new();
         db_path.create_as_dir().unwrap();
-        let (db, db_rw) = DbReaderWriter::wrap(DiemDB::new_for_test(db_path.path()));
+        let (db, db_rw) = DbReaderWriter::wrap(AptosDB::new_for_test(db_path.path()));
 
         // Bootstrap the genesis transaction
         let genesis_txn = Transaction::GenesisTransaction(WriteSetPayload::Direct(genesis));
-        bootstrap_genesis::<DiemVM>(&db_rw, &genesis_txn).unwrap();
+        bootstrap_genesis::<AptosVM>(&db_rw, &genesis_txn).unwrap();
 
         // Create the event subscription service and notify initial configs
         let storage: Arc<dyn DbReader> = db.clone();
@@ -175,15 +175,15 @@ pub(crate) mod test_utils {
             .unwrap();
 
         // Create executor proxy
-        let chunk_executor = Arc::new(ChunkExecutor::<DiemVM>::new(db_rw).unwrap());
+        let chunk_executor = Arc::new(ChunkExecutor::<AptosVM>::new(db_rw).unwrap());
         let executor_proxy = ExecutorProxy::new(db, chunk_executor, event_subscription_service);
 
         // Get initial state
         let initial_state = executor_proxy.get_local_storage_state().unwrap();
 
         // Setup network senders
-        let (network_reqs_tx, _network_reqs_rx) = diem_channel::new(QueueStyle::FIFO, 8, None);
-        let (connection_reqs_tx, _) = diem_channel::new(QueueStyle::FIFO, 8, None);
+        let (network_reqs_tx, _network_reqs_rx) = aptos_channel::new(QueueStyle::FIFO, 8, None);
+        let (connection_reqs_tx, _) = aptos_channel::new(QueueStyle::FIFO, 8, None);
         let network_sender = StateSyncSender::new(
             PeerManagerRequestSender::new(network_reqs_tx),
             ConnectionRequestSender::new(connection_reqs_tx),

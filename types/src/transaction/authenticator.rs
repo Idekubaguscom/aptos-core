@@ -1,4 +1,4 @@
-// Copyright (c) The Diem Core Contributors
+// Copyright (c) The Aptos Core Contributors
 // SPDX-License-Identifier: Apache-2.0
 
 use crate::{
@@ -6,7 +6,7 @@ use crate::{
     transaction::{RawTransaction, RawTransactionWithData},
 };
 use anyhow::{ensure, Error, Result};
-use diem_crypto::{
+use aptos_crypto::{
     ed25519::{Ed25519PublicKey, Ed25519Signature},
     hash::CryptoHash,
     multi_ed25519::{MultiEd25519PublicKey, MultiEd25519Signature},
@@ -14,7 +14,7 @@ use diem_crypto::{
     validatable::Validatable,
     CryptoMaterialError, HashValue, ValidCryptoMaterial, ValidCryptoMaterialStringExt,
 };
-use diem_crypto_derive::{CryptoHasher, DeserializeKey, SerializeKey};
+use aptos_crypto_derive::{CryptoHasher, DeserializeKey, SerializeKey};
 #[cfg(any(test, feature = "fuzzing"))]
 use proptest_derive::Arbitrary;
 use rand::{rngs::OsRng, Rng};
@@ -34,7 +34,7 @@ pub enum AuthenticationError {
     MaxSignaturesExceeded,
 }
 
-/// Each transaction submitted to the Diem blockchain contains a `TransactionAuthenticator`. During
+/// Each transaction submitted to the Aptos blockchain contains a `TransactionAuthenticator`. During
 /// transaction execution, the executor will check if every `AccountAuthenticator`'s signature on
 /// the transaction hash is well-formed and whether the sha3 hash of the
 /// `AccountAuthenticator`'s `AuthenticationKeyPreimage` matches the `AuthenticationKey` stored
@@ -233,7 +233,7 @@ impl fmt::Display for TransactionAuthenticator {
 /// (1) How to check its signature against a message and public key
 /// (2) How to convert its public key into an `AuthenticationKeyPreimage` structured as
 /// (public_key | signaure_scheme_id).
-/// Each on-chain `DiemAccount` must store an `AuthenticationKey` (computed via a sha3 hash of an
+/// Each on-chain `AptosAccount` must store an `AuthenticationKey` (computed via a sha3 hash of an
 /// `AuthenticationKeyPreimage`).
 
 // TODO: in the future, can tie these to the AccountAuthenticator enum directly with https://github.com/rust-lang/rust/issues/60553

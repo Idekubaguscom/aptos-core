@@ -1,16 +1,16 @@
-// Copyright (c) The Diem Core Contributors
+// Copyright (c) The Aptos Core Contributors
 // SPDX-License-Identifier: Apache-2.0
 
 use crate::tests::{assert_json, find_value, new_test_context, pretty, TestContext};
 
-use diem_api_types::{HashValue, HexEncodedBytes};
-use diem_crypto::{
+use aptos_api_types::{HashValue, HexEncodedBytes};
+use aptos_crypto::{
     hash::CryptoHash,
     multi_ed25519::{MultiEd25519PrivateKey, MultiEd25519PublicKey},
     SigningKey, Uniform,
 };
-use diem_sdk::{transaction_builder::Currency, types::LocalAccount};
-use diem_types::{
+use aptos_sdk::{transaction_builder::Currency, types::LocalAccount};
+use aptos_types::{
     access_path::{AccessPath, Path},
     account_address::AccountAddress,
     account_config::{from_currency_code_string, xus_tag, XUS_NAME},
@@ -32,7 +32,7 @@ use serde_json::json;
 async fn test_deserialize_genesis_transaction() {
     let context = new_test_context();
     let resp = context.get("/transactions/0").await;
-    serde_json::from_value::<diem_api_types::Transaction>(resp).unwrap();
+    serde_json::from_value::<aptos_api_types::Transaction>(resp).unwrap();
 }
 
 #[tokio::test]
@@ -146,7 +146,7 @@ async fn test_get_transactions_output_genesis_transaction() {
         json!({
             "key": "0x00000000000000000000000000000000000000000a550c18",
             "sequence_number": "0",
-            "type": "0x1::DiemAccount::CreateAccountEvent",
+            "type": "0x1::AptosAccount::CreateAccountEvent",
             "data": {
                 "created": "0xa550c18",
                 "role_id": "0"
@@ -186,7 +186,7 @@ async fn test_get_transactions_with_start_version_is_too_large() {
         json!({
           "code": 404,
           "message": "transaction not found by version(1000000)",
-          "diem_ledger_version": ledger_version.to_string()
+          "aptos_ledger_version": ledger_version.to_string()
         }),
     );
 }
@@ -327,7 +327,7 @@ async fn test_get_transactions_output_user_transaction_with_script_function_payl
                 {
                     "key": "0x00000000000000000000000000000000000000000a550c18",
                     "sequence_number": "5",
-                    "type": "0x1::DiemAccount::CreateAccountEvent",
+                    "type": "0x1::AptosAccount::CreateAccountEvent",
                     "data": {
                         "created": account.address().to_hex_literal(),
                         "role_id": "5"
@@ -802,7 +802,7 @@ async fn test_get_transaction_by_hash_not_found() {
         json!({
             "code": 404,
             "message": "transaction not found by hash(0xdadfeddcca7cb6396c735e9094c76c6e4e9cb3e3ef814730693aed59bd87b31d)",
-            "diem_ledger_version": "0"
+            "aptos_ledger_version": "0"
         }),
     )
 }
@@ -837,7 +837,7 @@ async fn test_get_transaction_by_version_not_found() {
         json!({
             "code": 404,
             "message": "transaction not found by version(10000)",
-            "diem_ledger_version": "0"
+            "aptos_ledger_version": "0"
         }),
     )
 }
@@ -881,7 +881,7 @@ async fn test_get_pending_transaction_by_hash() {
         json!({
             "code": 404,
             "message": "transaction not found by hash(0xdadfeddcca7cb6396c735e9094c76c6e4e9cb3e3ef814730693aed59bd87b31d)",
-            "diem_ledger_version": "0"
+            "aptos_ledger_version": "0"
         }),
     )
 }

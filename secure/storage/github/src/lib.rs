@@ -1,4 +1,4 @@
-// Copyright (c) The Diem Core Contributors
+// Copyright (c) The Aptos Core Contributors
 // SPDX-License-Identifier: Apache-2.0
 
 #![forbid(unsafe_code)]
@@ -92,7 +92,7 @@ impl Client {
         let resp = self
             .upgrade_request(ureq::delete(&self.post_url(path)))
             .send_json(
-                json!({ "branch": self.branch.to_string(), "message": "diem-secure", "sha": hash }),
+                json!({ "branch": self.branch.to_string(), "message": "aptos-secure", "sha": hash }),
             );
 
         match resp.status() {
@@ -168,10 +168,10 @@ impl Client {
     pub fn put(&self, path: &str, content: &str) -> Result<(), Error> {
         let json = match self.get_sha(path) {
             Ok(hash) => {
-                json!({ "branch": self.branch.to_string(), "content": content, "message": format!("[diem-management] {}", path), "sha": hash })
+                json!({ "branch": self.branch.to_string(), "content": content, "message": format!("[aptos-management] {}", path), "sha": hash })
             }
             Err(Error::NotFound(_)) => {
-                json!({ "branch": self.branch.to_string(), "content": content, "message": format!("[diem-management] {}", path) })
+                json!({ "branch": self.branch.to_string(), "content": content, "message": format!("[aptos-management] {}", path) })
             }
             Err(e) => return Err(e),
         };

@@ -1,10 +1,10 @@
-// Copyright (c) The Diem Core Contributors
+// Copyright (c) The Aptos Core Contributors
 // SPDX-License-Identifier: Apache-2.0
 
 use crate::keys::ConfigKey;
-use diem_crypto::{ed25519::Ed25519PrivateKey, PrivateKey, Uniform};
-use diem_temppath::TempPath;
-use diem_types::{
+use aptos_crypto::{ed25519::Ed25519PrivateKey, PrivateKey, Uniform};
+use aptos_temppath::TempPath;
+use aptos_types::{
     on_chain_config::VMPublishingOption, transaction::authenticator::AuthenticationKey,
 };
 use rand::rngs::StdRng;

@@ -1,4 +1,4 @@
-// Copyright (c) The Diem Core Contributors
+// Copyright (c) The Aptos Core Contributors
 // SPDX-License-Identifier: Apache-2.0
 
 use crate::{
@@ -12,7 +12,7 @@ use crate::{
     },
 };
 use bcs::test_helpers::assert_canonical_encode_decode;
-use diem_crypto::{
+use aptos_crypto::{
     ed25519::{self, Ed25519PrivateKey, Ed25519Signature},
     PrivateKey, Uniform,
 };
@@ -42,10 +42,10 @@ fn test_invalid_signature() {
 #[test]
 fn test_role_ordering() {
     use GovernanceRole::*;
-    assert!(DiemRoot.priority() > TreasuryCompliance.priority());
-    assert!(DiemRoot.priority() > Validator.priority());
-    assert!(DiemRoot.priority() > ValidatorOperator.priority());
-    assert!(DiemRoot.priority() > DesignatedDealer.priority());
+    assert!(AptosRoot.priority() > TreasuryCompliance.priority());
+    assert!(AptosRoot.priority() > Validator.priority());
+    assert!(AptosRoot.priority() > ValidatorOperator.priority());
+    assert!(AptosRoot.priority() > DesignatedDealer.priority());
 
     assert!(TreasuryCompliance.priority() > Validator.priority());
     assert!(TreasuryCompliance.priority() > ValidatorOperator.priority());

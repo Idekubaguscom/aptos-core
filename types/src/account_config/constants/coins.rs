@@ -1,4 +1,4 @@
-// Copyright (c) The Diem Core Contributors
+// Copyright (c) The Aptos Core Contributors
 // SPDX-License-Identifier: Apache-2.0
 
 use crate::account_config::constants::{from_currency_code_string, CORE_CODE_ADDRESS};
@@ -35,7 +35,7 @@ pub fn xdx_type_tag() -> TypeTag {
     })
 }
 
-/// Return `Some(struct_name)` if `t` is a `StructTag` representing one of the current Diem coin
+/// Return `Some(struct_name)` if `t` is a `StructTag` representing one of the current Aptos coin
 /// types (XDX, XUS), `None` otherwise.
 pub fn coin_name(t: &TypeTag) -> Option<String> {
     match t {

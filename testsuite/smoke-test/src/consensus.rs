@@ -1,14 +1,14 @@
-// Copyright (c) The Diem Core Contributors
+// Copyright (c) The Aptos Core Contributors
 // SPDX-License-Identifier: Apache-2.0
 
 use crate::{
     operational_tooling::launch_swarm_with_op_tool_and_backend,
     test_utils::check_create_mint_transfer,
 };
-use diem_config::config::SecureBackend;
-use diem_sdk::types::on_chain_config::OnChainConsensusConfig;
-use diem_secure_storage::{KVStorage, Storage};
-use diem_types::network_address::NetworkAddress;
+use aptos_config::config::SecureBackend;
+use aptos_sdk::types::on_chain_config::OnChainConsensusConfig;
+use aptos_secure_storage::{KVStorage, Storage};
+use aptos_types::network_address::NetworkAddress;
 use forge::{NodeExt, Swarm};
 use std::{convert::TryInto, str::FromStr};
 
@@ -77,7 +77,7 @@ async fn test_onchain_upgrade(new_onfig: OnChainConsensusConfig) {
         .chain_info()
         .root_account
         .sign_with_transaction_builder(
-            transaction_factory.update_diem_consensus_config(0, bcs::to_bytes(&new_onfig).unwrap()),
+            transaction_factory.update_aptos_consensus_config(0, bcs::to_bytes(&new_onfig).unwrap()),
         );
 
     let client = swarm.validators().next().unwrap().rest_client();

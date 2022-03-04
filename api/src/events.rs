@@ -1,4 +1,4 @@
-// Copyright (c) The Diem Core Contributors
+// Copyright (c) The Aptos Core Contributors
 // SPDX-License-Identifier: Apache-2.0
 
 use crate::{
@@ -10,10 +10,10 @@ use crate::{
     param::{AddressParam, EventKeyParam, MoveIdentifierParam, MoveStructTagParam},
 };
 
-use diem_api_types::{Error, LedgerInfo, Response};
+use aptos_api_types::{Error, LedgerInfo, Response};
 
 use anyhow::Result;
-use diem_types::event::EventKey;
+use aptos_types::event::EventKey;
 use warp::{filters::BoxedFilter, Filter, Rejection, Reply};
 
 // GET /events/<event_key>

@@ -1,11 +1,11 @@
-// Copyright (c) The Diem Core Contributors
+// Copyright (c) The Aptos Core Contributors
 // SPDX-License-Identifier: Apache-2.0
 
 use consensus_types::block::block_test_utils;
 use criterion::{black_box, criterion_group, criterion_main, Criterion};
-use diem_crypto::{ed25519::Ed25519PrivateKey, Uniform};
-use diem_secure_storage::{InMemoryStorage, KVStorage, OnDiskStorage, Storage, VaultStorage};
-use diem_types::validator_signer::ValidatorSigner;
+use aptos_crypto::{ed25519::Ed25519PrivateKey, Uniform};
+use aptos_secure_storage::{InMemoryStorage, KVStorage, OnDiskStorage, Storage, VaultStorage};
+use aptos_types::validator_signer::ValidatorSigner;
 use safety_rules::{test_utils, PersistentSafetyStorage, SafetyRulesManager, TSafetyRules};
 use tempfile::NamedTempFile;
 

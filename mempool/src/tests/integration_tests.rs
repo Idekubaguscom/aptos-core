@@ -1,11 +1,11 @@
-// Copyright (c) The Diem Core Contributors
+// Copyright (c) The Aptos Core Contributors
 // SPDX-License-Identifier: Apache-2.0
 
 use crate::tests::{
     common::TestTransaction,
     test_framework::{test_transaction, MempoolNode, MempoolTestFrameworkBuilder},
 };
-use diem_config::network_id::PeerNetworkId;
+use aptos_config::network_id::PeerNetworkId;
 use netcore::transport::ConnectionOrigin;
 use network::{
     testutils::{

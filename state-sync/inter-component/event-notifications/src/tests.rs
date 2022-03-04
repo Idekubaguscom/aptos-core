@@ -1,4 +1,4 @@
-// Copyright (c) The Diem Core Contributors
+// Copyright (c) The Aptos Core Contributors
 // SPDX-License-Identifier: Apache-2.0
 
 #![forbid(unsafe_code)]
@@ -8,8 +8,8 @@ use crate::{
     ReconfigNotificationListener,
 };
 use claim::{assert_lt, assert_matches, assert_ok};
-use diem_infallible::RwLock;
-use diem_types::{
+use aptos_infallible::RwLock;
+use aptos_types::{
     account_address::AccountAddress,
     contract_event::ContractEvent,
     event::EventKey,
@@ -17,8 +17,8 @@ use diem_types::{
     on_chain_config::{OnChainConfig, ON_CHAIN_CONFIG_REGISTRY},
     transaction::{Transaction, Version, WriteSetPayload},
 };
-use diem_vm::DiemVM;
-use diemdb::DiemDB;
+use aptos_vm::AptosVM;
+use aptosdb::AptosDB;
 use executor_test_helpers::bootstrap_genesis;
 use futures::{FutureExt, StreamExt};
 use move_core_types::language_storage::TypeTag;
@@ -545,14 +545,14 @@ fn create_database() -> Arc<RwLock<DbReaderWriter>> {
     // Generate a genesis change set
     let (genesis, _) = vm_genesis::test_genesis_change_set_and_validators(Some(1));
 
-    // Create test diem database
-    let db_path = diem_temppath::TempPath::new();
+    // Create test aptos database
+    let db_path = aptos_temppath::TempPath::new();
     assert_ok!(db_path.create_as_dir());
-    let (_, db_rw) = DbReaderWriter::wrap(DiemDB::new_for_test(db_path.path()));
+    let (_, db_rw) = DbReaderWriter::wrap(AptosDB::new_for_test(db_path.path()));
 
     // Bootstrap the genesis transaction
     let genesis_txn = Transaction::GenesisTransaction(WriteSetPayload::Direct(genesis));
-    assert_ok!(bootstrap_genesis::<DiemVM>(&db_rw, &genesis_txn));
+    assert_ok!(bootstrap_genesis::<AptosVM>(&db_rw, &genesis_txn));
 
     Arc::new(RwLock::new(db_rw))
 }

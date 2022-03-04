@@ -1,4 +1,4 @@
-// Copyright (c) The Diem Core Contributors
+// Copyright (c) The Aptos Core Contributors
 // SPDX-License-Identifier: Apache-2.0
 
 use crate::error::Error;
@@ -7,9 +7,9 @@ use consensus_notifications::{
     ConsensusSyncNotification,
 };
 use data_streaming_service::data_notification::NotificationId;
-use diem_infallible::Mutex;
-use diem_logger::prelude::*;
-use diem_types::{
+use aptos_infallible::Mutex;
+use aptos_logger::prelude::*;
+use aptos_types::{
     contract_event::ContractEvent,
     ledger_info::LedgerInfoWithSignatures,
     transaction::{Transaction, Version},

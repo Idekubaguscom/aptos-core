@@ -1,10 +1,10 @@
-// Copyright (c) The Diem Core Contributors
+// Copyright (c) The Aptos Core Contributors
 // SPDX-License-Identifier: Apache-2.0
 
 use super::Test;
 use crate::{CoreContext, Result, TestReport};
-use diem_rest_client::{Client as RestClient, FaucetClient};
-use diem_sdk::{
+use aptos_rest_client::{Client as RestClient, FaucetClient};
+use aptos_sdk::{
     move_types::account_address::AccountAddress,
     transaction_builder::{Currency, TransactionFactory},
     types::{chain_id::ChainId, transaction::authenticator::AuthenticationKey, LocalAccount},

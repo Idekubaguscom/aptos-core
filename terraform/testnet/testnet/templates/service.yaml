@@ -14,10 +14,10 @@ metadata:
 spec:
   selector:
     app.kubernetes.io/instance: val0
-    app.kubernetes.io/part-of: diem-validator
+    app.kubernetes.io/part-of: aptos-validator
     app.kubernetes.io/name: haproxy
   ports:
-  - name: diemnet
+  - name: aptosnet
     port: 6182
   type: LoadBalancer
   externalTrafficPolicy: Local
@@ -38,7 +38,7 @@ metadata:
     alb.ingress.kubernetes.io/healthcheck-path: /-/healthy
 spec:
   selector:
-    app.kubernetes.io/part-of: diem-validator
+    app.kubernetes.io/part-of: aptos-validator
     app.kubernetes.io/name: haproxy
   ports:
   - port: 80
@@ -58,7 +58,7 @@ metadata:
     alb.ingress.kubernetes.io/healthcheck-path: /-/healthy
 spec:
   selector:
-    app.kubernetes.io/part-of: diem-fullnode
+    app.kubernetes.io/part-of: aptos-fullnode
     app.kubernetes.io/name: fullnode
   ports:
   - port: 80

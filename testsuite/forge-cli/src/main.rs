@@ -1,8 +1,8 @@
-// Copyright (c) The Diem Core Contributors
+// Copyright (c) The Aptos Core Contributors
 // SPDX-License-Identifier: Apache-2.0
 
-use diem_rest_client::Client as RestClient;
-use diem_sdk::{move_types::account_address::AccountAddress, transaction_builder::Currency};
+use aptos_rest_client::Client as RestClient;
+use aptos_sdk::{move_types::account_address::AccountAddress, transaction_builder::Currency};
 use forge::{ForgeConfig, Options, Result, *};
 use std::{env, num::NonZeroUsize, process, time::Duration};
 use structopt::StructOpt;
@@ -298,7 +298,7 @@ pub fn send_changelog_message(perf_msg: &str, from_commit: &Option<String>, to_c
 
 fn get_changelog(prev_commit: Option<&String>, upstream_commit: &str) -> String {
     let github_client = GitHub::new();
-    let commits = github_client.get_commits("diem/diem", upstream_commit);
+    let commits = github_client.get_commits("aptos/aptos", upstream_commit);
     match commits {
         Err(e) => {
             println!("Failed to get github commits: {:?}", e);
@@ -406,7 +406,7 @@ impl AdminTest for GetMetadata {
     fn run<'t>(&self, ctx: &mut AdminContext<'t>) -> Result<()> {
         let client = ctx.rest_client();
         let runtime = Runtime::new().unwrap();
-        runtime.block_on(client.get_diem_version()).unwrap();
+        runtime.block_on(client.get_aptos_version()).unwrap();
         runtime.block_on(client.get_ledger_information()).unwrap();
 
         Ok(())

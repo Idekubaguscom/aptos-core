@@ -1,12 +1,12 @@
-// Copyright (c) The Diem Core Contributors
+// Copyright (c) The Aptos Core Contributors
 // SPDX-License-Identifier: Apache-2.0
 
 use crate::{
     execution_correctness_manager,
     remote_service::{self, RemoteService},
 };
-use diem_config::config::{ExecutionCorrectnessService, NodeConfig};
-use diem_crypto::ed25519::Ed25519PrivateKey;
+use aptos_config::config::{ExecutionCorrectnessService, NodeConfig};
+use aptos_crypto::ed25519::Ed25519PrivateKey;
 use std::net::SocketAddr;
 
 pub struct Process {

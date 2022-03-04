@@ -1,4 +1,4 @@
-// Copyright (c) The Diem Core Contributors
+// Copyright (c) The Aptos Core Contributors
 // SPDX-License-Identifier: Apache-2.0
 
 use crate::{
@@ -16,8 +16,8 @@ use crate::{
     },
 };
 use async_trait::async_trait;
-use diem_config::network_id::PeerNetworkId;
-use diem_types::PeerId;
+use aptos_config::network_id::PeerNetworkId;
+use aptos_types::PeerId;
 use futures::{stream::FusedStream, Stream};
 use std::{
     collections::hash_map::Entry,

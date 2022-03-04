@@ -1,4 +1,4 @@
-// Copyright (c) The Diem Core Contributors
+// Copyright (c) The Aptos Core Contributors
 // SPDX-License-Identifier: Apache-2.0
 
 use crate::{
@@ -10,10 +10,10 @@ use data_streaming_service::{
     data_stream::DataStreamListener,
     streaming_client::{DataStreamingClient, NotificationFeedback, StreamingServiceClient},
 };
-use diem_config::config::BootstrappingMode;
-use diem_data_client::GlobalDataSummary;
-use diem_logger::*;
-use diem_types::{
+use aptos_config::config::BootstrappingMode;
+use aptos_data_client::GlobalDataSummary;
+use aptos_logger::*;
+use aptos_types::{
     epoch_change::Verifier,
     epoch_state::EpochState,
     ledger_info::LedgerInfoWithSignatures,
@@ -227,7 +227,7 @@ pub struct Bootstrapper<StorageSyncer> {
     // The speculative state tracking the active data stream
     speculative_stream_state: Option<SpeculativeStreamState>,
 
-    // The client through which to stream data from the Diem network
+    // The client through which to stream data from the Aptos network
     streaming_service_client: StreamingServiceClient,
 
     // The interface to read from storage

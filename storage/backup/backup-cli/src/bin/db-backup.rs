@@ -1,4 +1,4 @@
-// Copyright (c) The Diem Core Contributors
+// Copyright (c) The Aptos Core Contributors
 // SPDX-License-Identifier: Apache-2.0
 
 use std::sync::Arc;
@@ -20,11 +20,11 @@ use backup_cli::{
         ConcurrentDownloadsOpt, GlobalBackupOpt,
     },
 };
-use diem_logger::{prelude::*, Level, Logger};
-use diem_secure_push_metrics::MetricsPusher;
+use aptos_logger::{prelude::*, Level, Logger};
+use aptos_secure_push_metrics::MetricsPusher;
 
 #[derive(StructOpt)]
-#[structopt(about = "Diem backup tool.")]
+#[structopt(about = "Aptos backup tool.")]
 enum Command {
     #[structopt(about = "Manually run one shot commands.")]
     OneShot(OneShotCommand),
@@ -34,7 +34,7 @@ enum Command {
 
 #[derive(StructOpt)]
 enum OneShotCommand {
-    #[structopt(about = "Query the backup service builtin in the local Diem node.")]
+    #[structopt(about = "Query the backup service builtin in the local Aptos node.")]
     Query(OneShotQueryType),
     #[structopt(about = "Do a one shot backup.")]
     Backup(OneShotBackupOpt),
@@ -43,7 +43,7 @@ enum OneShotCommand {
 #[derive(StructOpt)]
 enum OneShotQueryType {
     #[structopt(
-        about = "Queries the latest epoch, committed version and synced version of the local Diem \
+        about = "Queries the latest epoch, committed version and synced version of the local Aptos \
         node, via the backup service within it."
     )]
     NodeState(OneShotQueryNodeStateOpt),

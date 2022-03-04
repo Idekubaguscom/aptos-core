@@ -1,8 +1,8 @@
-// Copyright (c) The Diem Core Contributors
+// Copyright (c) The Aptos Core Contributors
 // SPDX-License-Identifier: Apache-2.0
 
 use crate::transport::Transport;
-use diem_types::{
+use aptos_types::{
     network_address::{parse_memory, NetworkAddress, Protocol},
     PeerId,
 };
@@ -101,7 +101,7 @@ impl Stream for Listener {
 #[cfg(test)]
 mod test {
     use crate::transport::{memory::MemoryTransport, Transport};
-    use diem_types::PeerId;
+    use aptos_types::PeerId;
     use futures::{
         executor::block_on,
         future::join,

@@ -1,4 +1,4 @@
-// Copyright (c) The Diem Core Contributors
+// Copyright (c) The Aptos Core Contributors
 // SPDX-License-Identifier: Apache-2.0
 
 use crate::{
@@ -21,7 +21,7 @@ use serde::{Deserialize, Serialize};
 /// This is not how the Account is represented in the VM but it's a convenient representation.
 #[derive(Debug, Serialize, Deserialize)]
 #[cfg_attr(any(test, feature = "fuzzing"), derive(Arbitrary))]
-pub struct DiemAccountResource {
+pub struct AptosAccountResource {
     authentication_key: Vec<u8>,
     withdrawal_capability: Option<WithdrawCapabilityResource>,
     key_rotation_capability: Option<KeyRotationCapabilityResource>,
@@ -30,7 +30,7 @@ pub struct DiemAccountResource {
     sequence_number: u64,
 }
 
-impl DiemAccountResource {
+impl AptosAccountResource {
     /// Constructs an Account resource.
     pub fn new(
         sequence_number: u64,
@@ -40,7 +40,7 @@ impl DiemAccountResource {
         sent_events: EventHandle,
         received_events: EventHandle,
     ) -> Self {
-        DiemAccountResource {
+        AptosAccountResource {
             authentication_key,
             withdrawal_capability,
             key_rotation_capability,
@@ -85,9 +85,9 @@ impl DiemAccountResource {
     }
 }
 
-impl MoveStructType for DiemAccountResource {
+impl MoveStructType for AptosAccountResource {
     const MODULE_NAME: &'static IdentStr = DIEM_ACCOUNT_MODULE_IDENTIFIER;
     const STRUCT_NAME: &'static IdentStr = DIEM_ACCOUNT_MODULE_IDENTIFIER;
 }
 
-impl MoveResource for DiemAccountResource {}
+impl MoveResource for AptosAccountResource {}

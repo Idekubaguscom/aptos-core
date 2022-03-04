@@ -1,4 +1,4 @@
-// Copyright (c) The Diem Core Contributors
+// Copyright (c) The Aptos Core Contributors
 // SPDX-License-Identifier: Apache-2.0
 
 use crate::{
@@ -9,12 +9,12 @@ use crate::{
     network::StateSyncMessage,
     shared_components::test_utils,
 };
-use diem_config::network_id::NetworkId;
-use diem_infallible::Mutex;
-use diem_types::{
+use aptos_config::network_id::NetworkId;
+use aptos_infallible::Mutex;
+use aptos_types::{
     ledger_info::LedgerInfoWithSignatures, transaction::TransactionListWithProof, PeerId,
 };
-use diem_vm::DiemVM;
+use aptos_vm::AptosVM;
 use executor::chunk_executor::ChunkExecutor;
 use futures::executor::block_on;
 use mempool_notifications::MempoolNotifier;
@@ -27,7 +27,7 @@ use proptest::{
 };
 
 static STATE_SYNC_COORDINATOR: Lazy<
-    Mutex<StateSyncCoordinator<ExecutorProxy<ChunkExecutor<DiemVM>>, MempoolNotifier>>,
+    Mutex<StateSyncCoordinator<ExecutorProxy<ChunkExecutor<AptosVM>>, MempoolNotifier>>,
 > = Lazy::new(|| Mutex::new(test_utils::create_validator_coordinator()));
 
 proptest! {

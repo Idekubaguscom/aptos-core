@@ -1,4 +1,4 @@
-// Copyright (c) The Diem Core Contributors
+// Copyright (c) The Aptos Core Contributors
 // SPDX-License-Identifier: Apache-2.0
 
 use crate::types::{
@@ -234,7 +234,7 @@ impl PaymentState {
 
                 PaymentState::RecieverSend
             }
-            // https://dip.diem.com/dip-1/#sinit---rabort-step-9 states that the abort code needs
+            // https://dip.aptos.com/dip-1/#sinit---rabort-step-9 states that the abort code needs
             // to be one of "no-kyc-needed" or "rejected" but "no-kyc-needed" isn't a valid abort
             // code
             (Status::NeedsKycData, _, Status::Abort, _) => PaymentState::RecieverAbort,

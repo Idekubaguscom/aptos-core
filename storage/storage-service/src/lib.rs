@@ -1,4 +1,4 @@
-// Copyright (c) The Diem Core Contributors
+// Copyright (c) The Aptos Core Contributors
 // SPDX-License-Identifier: Apache-2.0
 
 #![forbid(unsafe_code)]
@@ -9,26 +9,26 @@
 //! [`storage-client`](../storage-client/index.html) instead of via
 
 use anyhow::Result;
-use diem_config::config::NodeConfig;
-use diem_logger::prelude::*;
-use diem_secure_net::NetworkServer;
-use diem_types::{account_state_blob::AccountStateBlob, proof::SparseMerkleProof};
-use diemdb::DiemDB;
+use aptos_config::config::NodeConfig;
+use aptos_logger::prelude::*;
+use aptos_secure_net::NetworkServer;
+use aptos_types::{account_state_blob::AccountStateBlob, proof::SparseMerkleProof};
+use aptosdb::AptosDB;
 use std::{
     sync::Arc,
     thread::{self, JoinHandle},
 };
 use storage_interface::{DbReader, DbWriter, Error, StartupInfo};
 
-/// Starts storage service with a given DiemDB
-pub fn start_storage_service_with_db(config: &NodeConfig, diem_db: Arc<DiemDB>) -> JoinHandle<()> {
-    let storage_service = StorageService { db: diem_db };
+/// Starts storage service with a given AptosDB
+pub fn start_storage_service_with_db(config: &NodeConfig, aptos_db: Arc<AptosDB>) -> JoinHandle<()> {
+    let storage_service = StorageService { db: aptos_db };
     storage_service.run(config)
 }
 
 #[derive(Clone)]
 pub struct StorageService {
-    db: Arc<DiemDB>,
+    db: Arc<AptosDB>,
 }
 
 impl StorageService {

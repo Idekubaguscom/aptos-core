@@ -1,4 +1,4 @@
-// Copyright (c) The Diem Core Contributors
+// Copyright (c) The Aptos Core Contributors
 // SPDX-License-Identifier: Apache-2.0
 
 use forge::{forge_main, ForgeConfig, LocalFactory, Options, Result};
@@ -9,7 +9,7 @@ fn main() -> Result<()> {
         // add other tests here
         .with_nft_public_usage_tests(&[&NFTTransaction])
         .with_genesis_modules_bytes(
-            diem_experimental_framework_releases::current_module_blobs().to_vec(),
+            aptos_experimental_framework_releases::current_module_blobs().to_vec(),
         );
 
     let options = Options::from_args();

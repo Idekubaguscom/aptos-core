@@ -1,4 +1,4 @@
-// Copyright (c) The Diem Core Contributors
+// Copyright (c) The Aptos Core Contributors
 // SPDX-License-Identifier: Apache-2.0
 
 use crate::{
@@ -7,8 +7,8 @@ use crate::{
     logging::{LogEntry, LogEvent, LogSchema},
     shared_components::SyncState,
 };
-use diem_logger::prelude::*;
-use diem_types::{
+use aptos_logger::prelude::*;
+use aptos_types::{
     contract_event::ContractEvent, ledger_info::LedgerInfoWithSignatures,
     move_resource::MoveStorage, transaction::TransactionListWithProof,
 };
@@ -216,29 +216,29 @@ impl<C: ChunkExecutorTrait> ExecutorProxyTrait for ExecutorProxy<C> {
 mod tests {
     use super::*;
     use claim::{assert_err, assert_ok};
-    use diem_crypto::{ed25519::*, PrivateKey, Uniform};
-    use diem_infallible::RwLock;
-    use diem_transaction_builder::stdlib::{
+    use aptos_crypto::{ed25519::*, PrivateKey, Uniform};
+    use aptos_infallible::RwLock;
+    use aptos_transaction_builder::stdlib::{
         encode_peer_to_peer_with_metadata_script,
         encode_set_validator_config_and_reconfigure_script,
-        encode_update_diem_consensus_config_script_function, encode_update_diem_version_script,
+        encode_update_aptos_consensus_config_script_function, encode_update_aptos_version_script,
     };
-    use diem_types::{
+    use aptos_types::{
         account_address::AccountAddress,
-        account_config::{diem_root_address, xus_tag},
+        account_config::{aptos_root_address, xus_tag},
         block_metadata::BlockMetadata,
         contract_event::ContractEvent,
         event::EventKey,
         ledger_info::LedgerInfoWithSignatures,
         move_resource::MoveStorage,
         on_chain_config::{
-            ConsensusConfigV1, DiemVersion, OnChainConfig, OnChainConsensusConfig,
+            ConsensusConfigV1, AptosVersion, OnChainConfig, OnChainConsensusConfig,
             ON_CHAIN_CONFIG_REGISTRY,
         },
         transaction::{Transaction, TransactionPayload, WriteSetPayload},
     };
-    use diem_vm::DiemVM;
-    use diemdb::DiemDB;
+    use aptos_vm::AptosVM;
+    use aptosdb::AptosDB;
     use event_notifications::{EventSubscriptionService, ReconfigNotificationListener};
     use executor::{block_executor::BlockExecutor, chunk_executor::ChunkExecutor};
     use executor_test_helpers::{
@@ -262,7 +262,7 @@ mod tests {
         // Create a dummy prologue transaction that will bump the timer, and update the validator set
         let validator_account = validators[0].data.address;
         let dummy_txn = create_dummy_transaction(1, validator_account);
-        let reconfig_txn = create_new_update_diem_version_transaction(0);
+        let reconfig_txn = create_new_update_aptos_version_transaction(0);
 
         // Execute and commit the block
         let block = vec![dummy_txn, reconfig_txn];
@@ -283,10 +283,10 @@ mod tests {
         let (validators, mut block_executor, mut executor_proxy, reconfig_receiver) =
             bootstrap_genesis_and_set_subscription(true);
 
-        // Create a dummy prologue transaction that will bump the timer, and update the Diem version
+        // Create a dummy prologue transaction that will bump the timer, and update the Aptos version
         let validator_account = validators[0].data.address;
         let dummy_txn = create_dummy_transaction(1, validator_account);
-        let reconfig_txn = create_new_update_diem_version_transaction(0);
+        let reconfig_txn = create_new_update_aptos_version_transaction(0);
 
         // Execute and commit the reconfig block
         let block = vec![dummy_txn, reconfig_txn];
@@ -304,10 +304,10 @@ mod tests {
         let (validators, mut block_executor, mut executor_proxy, mut reconfig_receiver) =
             bootstrap_genesis_and_set_subscription(true);
 
-        // Create a dummy prologue transaction that will bump the timer, and update the Diem version
+        // Create a dummy prologue transaction that will bump the timer, and update the Aptos version
         let validator_account = validators[0].data.address;
         let dummy_txn = create_dummy_transaction(1, validator_account);
-        let reconfig_txn = create_new_update_diem_version_transaction(0);
+        let reconfig_txn = create_new_update_aptos_version_transaction(0);
 
         // Give the validator some money so it can send a rotation tx and rotate the validator's consensus key.
         let money_txn = create_transfer_to_validator_transaction(validator_account, 1);
@@ -363,14 +363,14 @@ mod tests {
         // Generate a genesis change set
         let (genesis, _validators) = vm_genesis::test_genesis_change_set_and_validators(Some(1));
 
-        // Create test diem database
-        let db_path = diem_temppath::TempPath::new();
+        // Create test aptos database
+        let db_path = aptos_temppath::TempPath::new();
         assert_ok!(db_path.create_as_dir());
-        let (db, db_rw) = DbReaderWriter::wrap(DiemDB::new_for_test(db_path.path()));
+        let (db, db_rw) = DbReaderWriter::wrap(AptosDB::new_for_test(db_path.path()));
 
         // Boostrap the genesis transaction
         let genesis_txn = Transaction::GenesisTransaction(WriteSetPayload::Direct(genesis));
-        assert_ok!(bootstrap_genesis::<DiemVM>(&db_rw, &genesis_txn));
+        assert_ok!(bootstrap_genesis::<AptosVM>(&db_rw, &genesis_txn));
 
         // Create an event subscriber
         let mut event_subscription_service = EventSubscriptionService::new(
@@ -383,7 +383,7 @@ mod tests {
             .unwrap();
 
         // Create an executor proxy
-        let chunk_executor = Arc::new(ChunkExecutor::<DiemVM>::new(db_rw).unwrap());
+        let chunk_executor = Arc::new(ChunkExecutor::<AptosVM>::new(db_rw).unwrap());
         let mut executor_proxy = ExecutorProxy::new(db, chunk_executor, event_subscription_service);
 
         // Publish a subscribed event
@@ -404,14 +404,14 @@ mod tests {
     }
 
     #[test]
-    fn test_pub_sub_diem_version() {
+    fn test_pub_sub_aptos_version() {
         let (validators, mut block_executor, mut executor_proxy, mut reconfig_receiver) =
             bootstrap_genesis_and_set_subscription(true);
 
-        // Create a dummy prologue transaction that will bump the timer, and update the Diem version
+        // Create a dummy prologue transaction that will bump the timer, and update the Aptos version
         let validator_account = validators[0].data.address;
         let dummy_txn = create_dummy_transaction(1, validator_account);
-        let allowlist_txn = create_new_update_diem_version_transaction(0);
+        let allowlist_txn = create_new_update_aptos_version_transaction(0);
 
         // Execute and commit the reconfig block
         let block = vec![dummy_txn, allowlist_txn];
@@ -422,8 +422,8 @@ mod tests {
 
         // Verify the correct reconfig notification is sent
         let notification = reconfig_receiver.select_next_some().now_or_never().unwrap();
-        let received_config = notification.on_chain_configs.get::<DiemVersion>().unwrap();
-        assert_eq!(received_config, DiemVersion { major: 7 });
+        let received_config = notification.on_chain_configs.get::<AptosVersion>().unwrap();
+        assert_eq!(received_config, AptosVersion { major: 7 });
     }
 
     #[test]
@@ -431,10 +431,10 @@ mod tests {
         let (validators, mut block_executor, mut executor_proxy, _reconfig_receiver) =
             bootstrap_genesis_and_set_subscription(true);
 
-        // Create a dummy prologue transaction that will bump the timer and update the Diem version
+        // Create a dummy prologue transaction that will bump the timer and update the Aptos version
         let validator_account = validators[0].data.address;
         let dummy_txn_1 = create_dummy_transaction(1, validator_account);
-        let reconfig_txn = create_new_update_diem_version_transaction(0);
+        let reconfig_txn = create_new_update_aptos_version_transaction(0);
 
         // Execute and commit the reconfig block
         let block = vec![dummy_txn_1.clone(), reconfig_txn.clone()];
@@ -487,10 +487,10 @@ mod tests {
         let (validators, mut block_executor, executor_proxy, _reconfig_receiver) =
             bootstrap_genesis_and_set_subscription(true);
 
-        // Create a dummy prologue transaction that will bump the timer and update the Diem version
+        // Create a dummy prologue transaction that will bump the timer and update the Aptos version
         let validator_account = validators[0].data.address;
         let dummy_txn = create_dummy_transaction(1, validator_account);
-        let reconfig_txn = create_new_update_diem_version_transaction(0);
+        let reconfig_txn = create_new_update_aptos_version_transaction(0);
 
         // Execute and commit the reconfig block
         let block = vec![dummy_txn, reconfig_txn];
@@ -530,7 +530,7 @@ mod tests {
             .on_chain_configs
             .get::<OnChainConsensusConfig>());
 
-        // Create a dummy prologue transaction that will bump the timer, and update the Diem version
+        // Create a dummy prologue transaction that will bump the timer, and update the Aptos version
         let validator_account = validators[0].data.address;
         let dummy_txn = create_dummy_transaction(1, validator_account);
         let update_txn = create_new_update_consensus_config_transaction(0);
@@ -556,15 +556,15 @@ mod tests {
 
     #[test]
     fn test_missing_on_chain_config() {
-        // Create a test diem database
-        let db_path = diem_temppath::TempPath::new();
+        // Create a test aptos database
+        let db_path = aptos_temppath::TempPath::new();
         db_path.create_as_dir().unwrap();
-        let (db, db_rw) = DbReaderWriter::wrap(DiemDB::new_for_test(db_path.path()));
+        let (db, db_rw) = DbReaderWriter::wrap(AptosDB::new_for_test(db_path.path()));
 
         // Bootstrap the database with regular genesis
         let (genesis, validators) = vm_genesis::test_genesis_change_set_and_validators(Some(1));
         let genesis_txn = Transaction::GenesisTransaction(WriteSetPayload::Direct(genesis));
-        assert_ok!(bootstrap_genesis::<DiemVM>(&db_rw, &genesis_txn));
+        assert_ok!(bootstrap_genesis::<AptosVM>(&db_rw, &genesis_txn));
 
         // Create a reconfig subscriber with a custom config registry (including
         // a TestOnChainConfig that doesn't exist on-chain).
@@ -585,7 +585,7 @@ mod tests {
             .unwrap();
 
         // Create an executor
-        let chunk_executor = Arc::new(ChunkExecutor::<DiemVM>::new(db_rw.clone()).unwrap());
+        let chunk_executor = Arc::new(ChunkExecutor::<AptosVM>::new(db_rw.clone()).unwrap());
         let mut executor_proxy = ExecutorProxy::new(db, chunk_executor, event_subscription_service);
 
         // Verify that the initial configs returned to the subscriber don't contain the unknown on-chain config
@@ -594,16 +594,16 @@ mod tests {
             .now_or_never()
             .unwrap()
             .on_chain_configs;
-        assert_ok!(payload.get::<DiemVersion>());
+        assert_ok!(payload.get::<AptosVersion>());
         assert_err!(payload.get::<TestOnChainConfig>());
 
-        // Create a dummy prologue transaction that will bump the timer, and update the Diem version
+        // Create a dummy prologue transaction that will bump the timer, and update the Aptos version
         let validator_account = validators[0].data.address;
         let dummy_txn = create_dummy_transaction(1, validator_account);
         let allowlist_txn = create_new_update_consensus_config_transaction(0);
 
         // Execute and commit the reconfig block
-        let mut block_executor = Box::new(BlockExecutor::<DiemVM>::new(db_rw));
+        let mut block_executor = Box::new(BlockExecutor::<AptosVM>::new(db_rw));
         let block = vec![dummy_txn, allowlist_txn];
         let (reconfig_events, _) = execute_and_commit_block(&mut block_executor, block, 1);
 
@@ -616,7 +616,7 @@ mod tests {
             .now_or_never()
             .unwrap()
             .on_chain_configs;
-        assert_ok!(payload.get::<DiemVersion>());
+        assert_ok!(payload.get::<AptosVersion>());
         assert_ok!(payload.get::<OnChainConsensusConfig>());
         assert_err!(payload.get::<TestOnChainConfig>());
     }
@@ -627,21 +627,21 @@ mod tests {
         verify_initial_config: bool,
     ) -> (
         Vec<TestValidator>,
-        Box<BlockExecutor<DiemVM>>,
-        ExecutorProxy<ChunkExecutor<DiemVM>>,
+        Box<BlockExecutor<AptosVM>>,
+        ExecutorProxy<ChunkExecutor<AptosVM>>,
         ReconfigNotificationListener,
     ) {
         // Generate a genesis change set
         let (genesis, validators) = vm_genesis::test_genesis_change_set_and_validators(Some(1));
 
-        // Create test diem database
-        let db_path = diem_temppath::TempPath::new();
+        // Create test aptos database
+        let db_path = aptos_temppath::TempPath::new();
         assert_ok!(db_path.create_as_dir());
-        let (db, db_rw) = DbReaderWriter::wrap(DiemDB::new_for_test(db_path.path()));
+        let (db, db_rw) = DbReaderWriter::wrap(AptosDB::new_for_test(db_path.path()));
 
         // Boostrap the genesis transaction
         let genesis_txn = Transaction::GenesisTransaction(WriteSetPayload::Direct(genesis));
-        assert_ok!(bootstrap_genesis::<DiemVM>(&db_rw, &genesis_txn));
+        assert_ok!(bootstrap_genesis::<AptosVM>(&db_rw, &genesis_txn));
 
         // Create event subscription service and initialize configs
         let mut event_subscription_service = EventSubscriptionService::new(
@@ -667,8 +667,8 @@ mod tests {
         }
 
         // Create the executors
-        let block_executor = Box::new(BlockExecutor::<DiemVM>::new(db_rw.clone()));
-        let chunk_executor = Arc::new(ChunkExecutor::<DiemVM>::new(db_rw).unwrap());
+        let block_executor = Box::new(BlockExecutor::<AptosVM>::new(db_rw.clone()));
+        let chunk_executor = Arc::new(ChunkExecutor::<AptosVM>::new(db_rw).unwrap());
         let executor_proxy = ExecutorProxy::new(db, chunk_executor, event_subscription_service);
 
         (
@@ -716,16 +716,16 @@ mod tests {
         ))
     }
 
-    /// Creates a transaction that creates a reconfiguration event by changing the Diem version
-    fn create_new_update_diem_version_transaction(sequence_number: u64) -> Transaction {
+    /// Creates a transaction that creates a reconfiguration event by changing the Aptos version
+    fn create_new_update_aptos_version_transaction(sequence_number: u64) -> Transaction {
         let genesis_key = vm_genesis::GENESIS_KEYPAIR.0.clone();
         get_test_signed_transaction(
-            diem_root_address(),
+            aptos_root_address(),
             sequence_number,
             genesis_key.clone(),
             genesis_key.public_key(),
             Some(TransactionPayload::Script(
-                encode_update_diem_version_script(
+                encode_update_aptos_version_script(
                     0, 7, // version
                 ),
             )),
@@ -735,11 +735,11 @@ mod tests {
     fn create_new_update_consensus_config_transaction(sequence_number: u64) -> Transaction {
         let genesis_key = vm_genesis::GENESIS_KEYPAIR.0.clone();
         get_test_signed_transaction(
-            diem_root_address(),
+            aptos_root_address(),
             sequence_number,
             genesis_key.clone(),
             genesis_key.public_key(),
-            Some(encode_update_diem_consensus_config_script_function(
+            Some(encode_update_aptos_consensus_config_script_function(
                 0,
                 bcs::to_bytes(&OnChainConsensusConfig::V1(ConsensusConfigV1 {
                     two_chain: false,
@@ -756,7 +756,7 @@ mod tests {
     ) -> Transaction {
         let genesis_key = vm_genesis::GENESIS_KEYPAIR.0.clone();
         get_test_signed_transaction(
-            diem_root_address(),
+            aptos_root_address(),
             sequence_number,
             genesis_key.clone(),
             genesis_key.public_key(),
@@ -774,7 +774,7 @@ mod tests {
 
     /// Executes and commits a given block that will cause a reconfiguration event.
     fn execute_and_commit_block(
-        block_executor: &mut Box<BlockExecutor<DiemVM>>,
+        block_executor: &mut Box<BlockExecutor<AptosVM>>,
         block: Vec<Transaction>,
         block_id: u8,
     ) -> (Vec<ContractEvent>, LedgerInfoWithSignatures) {

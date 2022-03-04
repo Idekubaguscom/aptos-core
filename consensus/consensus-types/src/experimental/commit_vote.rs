@@ -1,10 +1,10 @@
-// Copyright (c) The Diem Core Contributors
+// Copyright (c) The Aptos Core Contributors
 // SPDX-License-Identifier: Apache-2.0
 
 use crate::common::{Author, Round};
 use anyhow::Context;
-use diem_crypto::ed25519::Ed25519Signature;
-use diem_types::{
+use aptos_crypto::ed25519::Ed25519Signature;
+use aptos_types::{
     block_info::BlockInfo, ledger_info::LedgerInfo, validator_signer::ValidatorSigner,
     validator_verifier::ValidatorVerifier,
 };

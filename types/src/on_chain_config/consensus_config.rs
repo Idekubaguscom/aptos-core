@@ -1,4 +1,4 @@
-// Copyright (c) The Diem Core Contributors
+// Copyright (c) The Aptos Core Contributors
 // SPDX-License-Identifier: Apache-2.0
 
 use crate::on_chain_config::OnChainConfig;
@@ -80,11 +80,11 @@ pub struct ConsensusConfigV2 {
 }
 
 impl OnChainConfig for OnChainConsensusConfig {
-    const IDENTIFIER: &'static str = "DiemConsensusConfig";
+    const IDENTIFIER: &'static str = "AptosConsensusConfig";
 
     /// The Move resource is
     /// ```ignore
-    /// struct DiemConsensusConfig has copy, drop, store {
+    /// struct AptosConsensusConfig has copy, drop, store {
     ///    config: vector<u8>,
     /// }
     /// ```

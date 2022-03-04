@@ -1,4 +1,4 @@
-// Copyright (c) The Diem Core Contributors
+// Copyright (c) The Aptos Core Contributors
 // SPDX-License-Identifier: Apache-2.0
 
 use crate::{
@@ -12,25 +12,25 @@ use crate::{
     DisconnectReason, ProtocolId,
 };
 use async_trait::async_trait;
-use diem_config::{
+use aptos_config::{
     config::{PeerRole, RoleType},
     network_id::{NetworkContext, NetworkId, PeerNetworkId},
 };
-use diem_types::PeerId;
+use aptos_types::PeerId;
 use futures::StreamExt;
 use netcore::transport::ConnectionOrigin;
 use std::{collections::HashMap, sync::Arc, time::Duration};
 
 /// A sender to a node to mock an inbound network message from [`PeerManager`]
 pub type InboundMessageSender =
-    channel::diem_channel::Sender<(PeerId, ProtocolId), PeerManagerNotification>;
+    channel::aptos_channel::Sender<(PeerId, ProtocolId), PeerManagerNotification>;
 
 /// A sender to a node to mock an inbound connection from [`PeerManager`]
 pub type ConnectionUpdateSender = crate::peer_manager::conn_notifs_channel::Sender;
 
 /// A receiver to get outbound network messages to [`PeerManager`]
 pub type OutboundMessageReceiver =
-    channel::diem_channel::Receiver<(PeerId, ProtocolId), PeerManagerRequest>;
+    channel::aptos_channel::Receiver<(PeerId, ProtocolId), PeerManagerRequest>;
 
 /// A connection handle describing the network for a node.
 ///

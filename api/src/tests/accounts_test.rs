@@ -1,8 +1,8 @@
-// Copyright (c) The Diem Core Contributors
+// Copyright (c) The Aptos Core Contributors
 // SPDX-License-Identifier: Apache-2.0
 
 use crate::tests::{assert_json, find_value, new_test_context};
-use diem_api_types::HexEncodedBytes;
+use aptos_api_types::HexEncodedBytes;
 use serde_json::json;
 
 #[tokio::test]
@@ -28,7 +28,7 @@ async fn test_get_account_resources_by_address_0x0() {
         json!({
             "code": 404,
             "message": "account not found by address(0x0) and ledger version(0)",
-            "diem_ledger_version": info.ledger_version,
+            "aptos_ledger_version": info.ledger_version,
         }),
         resp
     );
@@ -74,12 +74,12 @@ async fn test_account_resources_response() {
     let resp = context.get(&account_resources(address)).await;
 
     let res = find_value(&resp, |v| {
-        v["type"] == "0x1::DiemAccount::Balance<0x1::XDX::XDX>"
+        v["type"] == "0x1::AptosAccount::Balance<0x1::XDX::XDX>"
     });
     assert_json(
         res,
         json!({
-            "type": "0x1::DiemAccount::Balance<0x1::XDX::XDX>",
+            "type": "0x1::AptosAccount::Balance<0x1::XDX::XDX>",
             "data": {
                 "coin": {
                     "value": "0"
@@ -178,23 +178,23 @@ async fn test_get_module_with_script_functions() {
 }
 
 #[tokio::test]
-async fn test_get_module_diem_config() {
+async fn test_get_module_aptos_config() {
     let context = new_test_context();
     let address = "0x1";
 
     let resp = context.get(&account_modules(address)).await;
-    let res = find_value(&resp, |v| v["abi"]["name"] == "DiemConfig");
+    let res = find_value(&resp, |v| v["abi"]["name"] == "AptosConfig");
     assert_json(
         res["abi"].clone(),
         json!({
             "address": "0x1",
-            "name": "DiemConfig",
+            "name": "AptosConfig",
             "friends": [
-                "0x1::DiemConsensusConfig",
-                "0x1::DiemSystem",
-                "0x1::DiemTransactionPublishingOption",
-                "0x1::DiemVMConfig",
-                "0x1::DiemVersion",
+                "0x1::AptosConsensusConfig",
+                "0x1::AptosSystem",
+                "0x1::AptosTransactionPublishingOption",
+                "0x1::AptosVMConfig",
+                "0x1::AptosVersion",
                 "0x1::ParallelExecutionConfig",
                 "0x1::RegisteredCurrencies"
             ],
@@ -260,7 +260,7 @@ async fn test_get_module_diem_config() {
                         "T0"
                     ],
                     "return": [
-                        "0x1::DiemConfig::ModifyConfigCapability<T0>"
+                        "0x1::AptosConfig::ModifyConfigCapability<T0>"
                     ]
                 },
                 {
@@ -303,7 +303,7 @@ async fn test_get_module_diem_config() {
                         }
                     ],
                     "params": [
-                        "&0x1::DiemConfig::ModifyConfigCapability<T0>",
+                        "&0x1::AptosConfig::ModifyConfigCapability<T0>",
                         "T0"
                     ],
                     "return": []
@@ -328,12 +328,12 @@ async fn test_get_module_diem_config() {
                         },
                         {
                             "name": "events",
-                            "type": "0x1::Event::EventHandle<0x1::DiemConfig::NewEpochEvent>"
+                            "type": "0x1::Event::EventHandle<0x1::AptosConfig::NewEpochEvent>"
                         }
                     ]
                 },
                 {
-                    "name": "DiemConfig",
+                    "name": "AptosConfig",
                     "is_native": false,
                     "abilities": [
                         "store",
@@ -417,8 +417,8 @@ async fn test_account_modules_structs() {
 
     let resp = context.get(&account_modules(address)).await;
 
-    let diem_account_module = find_value(&resp, |v| v["abi"]["name"] == "DiemAccount");
-    let balance_struct = find_value(&diem_account_module["abi"]["structs"], |v| {
+    let aptos_account_module = find_value(&resp, |v| v["abi"]["name"] == "AptosAccount");
+    let balance_struct = find_value(&aptos_account_module["abi"]["structs"], |v| {
         v["name"] == "Balance"
     });
     assert_json(
@@ -438,18 +438,18 @@ async fn test_account_modules_structs() {
             "fields": [
                 {
                     "name": "coin",
-                    "type": "0x1::Diem::Diem<T0>"
+                    "type": "0x1::Aptos::Aptos<T0>"
                 }
             ]
         }),
     );
 
-    let diem_module = find_value(&resp, |f| f["abi"]["name"] == "Diem");
-    let diem_struct = find_value(&diem_module["abi"]["structs"], |f| f["name"] == "Diem");
+    let aptos_module = find_value(&resp, |f| f["abi"]["name"] == "Aptos");
+    let aptos_struct = find_value(&aptos_module["abi"]["structs"], |f| f["name"] == "Aptos");
     assert_json(
-        diem_struct,
+        aptos_struct,
         json!({
-            "name": "Diem",
+            "name": "Aptos",
             "is_native": false,
             "abilities": [
                 "store"
@@ -483,7 +483,7 @@ async fn test_get_account_resources_by_ledger_version() {
         ))
         .await;
     let tc_account = find_value(&ledger_version_1_resources, |f| {
-        f["type"] == "0x1::DiemAccount::DiemAccount"
+        f["type"] == "0x1::AptosAccount::AptosAccount"
     });
     assert_eq!(tc_account["data"]["sequence_number"], "1");
 
@@ -494,7 +494,7 @@ async fn test_get_account_resources_by_ledger_version() {
         ))
         .await;
     let tc_account = find_value(&ledger_version_0_resources, |f| {
-        f["type"] == "0x1::DiemAccount::DiemAccount"
+        f["type"] == "0x1::AptosAccount::AptosAccount"
     });
     assert_eq!(tc_account["data"]["sequence_number"], "0");
 }
@@ -514,7 +514,7 @@ async fn test_get_account_resources_by_ledger_version_is_too_large() {
         json!({
             "code": 404,
             "message": "ledger not found by version(1000000000000000000)",
-            "diem_ledger_version": "0"
+            "aptos_ledger_version": "0"
         }),
     );
 }
@@ -588,7 +588,7 @@ async fn test_get_core_account_data_not_found() {
         json!({
             "code": 404,
             "message": "account not found by address(0xf) and ledger version(0)",
-            "diem_ledger_version": "0"
+            "aptos_ledger_version": "0"
         }),
         resp
     );

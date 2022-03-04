@@ -1,4 +1,4 @@
-// Copyright (c) The Diem Core Contributors
+// Copyright (c) The Aptos Core Contributors
 // SPDX-License-Identifier: Apache-2.0
 
 use super::*;
@@ -9,7 +9,7 @@ use crate::storage::{
         test_write_and_read_impl,
     },
 };
-use diem_temppath::TempPath;
+use aptos_temppath::TempPath;
 use futures::Future;
 use proptest::prelude::*;
 use std::str::FromStr;

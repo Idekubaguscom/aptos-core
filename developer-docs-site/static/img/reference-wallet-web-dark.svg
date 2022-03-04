@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <svg width="50px" height="50px" viewBox="0 0 50 50" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
-    <title>Tutorial Icons/Diem Reference Wallet/Web Darkmode</title>
-    <g id="Tutorial-Icons/Diem-Reference-Wallet/Web-Darkmode" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+    <title>Tutorial Icons/Aptos Reference Wallet/Web Darkmode</title>
+    <g id="Tutorial-Icons/Aptos-Reference-Wallet/Web-Darkmode" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
         <g id="Group-13" transform="translate(6.351351, 10.000000)">
             <path d="M5.20427404,5.47309945e-14 L17.8378378,5.47309945e-14 L17.8378378,5.47309945e-14 L17.8378378,5.20427404 L0,5.20427404 C-3.51993027e-16,2.33003285 2.33003285,5.43708056e-14 5.20427404,5.47309945e-14 Z" id="Rectangle" fill="#A3ACB9" transform="translate(8.918919, 2.602137) rotate(-180.000000) translate(-8.918919, -2.602137) "></path>
             <rect id="Rectangle" stroke="#A3ACB9" stroke-width="2" x="0" y="3.16863652e-14" width="37.2972973" height="29.3617021" rx="1"></rect>

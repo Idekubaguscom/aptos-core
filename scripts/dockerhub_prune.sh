@@ -1,9 +1,9 @@
 #!/bin/bash
-# Copyright (c) The Diem Core Contributors
+# Copyright (c) The Aptos Core Contributors
 # SPDX-License-Identifier: Apache-2.0
 
 ######################################################################################################################
-# Takes a slug org/repo ( diem/client ) and deletes all tags with release-* over 90 days and all other              #
+# Takes a slug org/repo ( aptos/client ) and deletes all tags with release-* over 90 days and all other              #
 # over 2 days (assumed to be test images).                                                                           #
 ######################################################################################################################
 
@@ -77,7 +77,7 @@ function del_tag {
 
 
 ######################################################################################################################
-# Takes a slug org/repo ( diem/client ) and deletes all tags with release-* over 180 days and all other
+# Takes a slug org/repo ( aptos/client ) and deletes all tags with release-* over 180 days and all other
 # over 2 days (assumed to be test images).
 ######################################################################################################################
 function prune_repo {
@@ -152,13 +152,13 @@ function prune_repo {
 
 }
 
-prune_repo "diem/client"
-prune_repo "diem/init"
-prune_repo "diem/faucet"
-prune_repo "diem/tools"
-prune_repo "diem/validator"
-prune_repo "diem/validator_tcb"
-prune_repo "diem/forge"
+prune_repo "aptos/client"
+prune_repo "aptos/init"
+prune_repo "aptos/faucet"
+prune_repo "aptos/tools"
+prune_repo "aptos/validator"
+prune_repo "aptos/validator_tcb"
+prune_repo "aptos/forge"
 
 #We currently overwrite, no need to delete.
-#prune_repo "diem/build_environment"
+#prune_repo "aptos/build_environment"

@@ -1,4 +1,4 @@
-// Copyright (c) The Diem Core Contributors
+// Copyright (c) The Aptos Core Contributors
 // SPDX-License-Identifier: Apache-2.0
 
 use crate::{
@@ -6,14 +6,14 @@ use crate::{
     transport::*,
 };
 use bytes::{Bytes, BytesMut};
-use diem_config::{
+use aptos_config::{
     config::{Peer, PeerRole, PeerSet, HANDSHAKE_VERSION},
     network_id::NetworkContext,
 };
-use diem_crypto::{test_utils::TEST_SEED, traits::Uniform, x25519};
-use diem_infallible::RwLock;
-use diem_time_service::MockTimeService;
-use diem_types::{
+use aptos_crypto::{test_utils::TEST_SEED, traits::Uniform, x25519};
+use aptos_infallible::RwLock;
+use aptos_time_service::MockTimeService;
+use aptos_types::{
     chain_id::ChainId,
     network_address::{NetworkAddress, Protocol::*},
     PeerId,
@@ -60,8 +60,8 @@ fn setup<TTransport>(
 ) -> (
     Runtime,
     MockTimeService,
-    (PeerId, DiemNetTransport<TTransport>),
-    (PeerId, DiemNetTransport<TTransport>),
+    (PeerId, AptosNetTransport<TTransport>),
+    (PeerId, AptosNetTransport<TTransport>),
     Arc<RwLock<PeerSet>>,
     ProtocolIdSet,
 )
@@ -103,11 +103,11 @@ where
                 )
             }
             Auth::MaybeMutual => {
-                let listener_peer_id = diem_types::account_address::from_identity_public_key(
+                let listener_peer_id = aptos_types::account_address::from_identity_public_key(
                     listener_key.public_key(),
                 );
                 let dialer_peer_id =
-                    diem_types::account_address::from_identity_public_key(dialer_key.public_key());
+                    aptos_types::account_address::from_identity_public_key(dialer_key.public_key());
                 let trusted_peers = build_trusted_peers(
                     dialer_peer_id,
                     &dialer_key,
@@ -126,11 +126,11 @@ where
                 )
             }
             Auth::ServerOnly => {
-                let listener_peer_id = diem_types::account_address::from_identity_public_key(
+                let listener_peer_id = aptos_types::account_address::from_identity_public_key(
                     listener_key.public_key(),
                 );
                 let dialer_peer_id =
-                    diem_types::account_address::from_identity_public_key(dialer_key.public_key());
+                    aptos_types::account_address::from_identity_public_key(dialer_key.public_key());
                 let trusted_peers = Arc::new(RwLock::new(HashMap::new()));
 
                 (
@@ -146,7 +146,7 @@ where
     let supported_protocols =
         ProtocolIdSet::from_iter([ProtocolId::ConsensusRpcBcs, ProtocolId::DiscoveryDirectSend]);
     let chain_id = ChainId::default();
-    let listener_transport = DiemNetTransport::new(
+    let listener_transport = AptosNetTransport::new(
         base_transport.clone(),
         NetworkContext::mock_with_peer_id(listener_peer_id),
         time_service.clone(),
@@ -158,7 +158,7 @@ where
         false, /* Disable proxy protocol */
     );
 
-    let dialer_transport = DiemNetTransport::new(
+    let dialer_transport = AptosNetTransport::new(
         base_transport,
         NetworkContext::mock_with_peer_id(dialer_peer_id),
         time_service.clone(),
@@ -490,7 +490,7 @@ fn test_transport_maybe_mutual<TTransport>(
 }
 
 ////////////////////////////////////////
-// DiemNetTransport<MemoryTransport> //
+// AptosNetTransport<MemoryTransport> //
 ////////////////////////////////////////
 
 #[test]
@@ -532,7 +532,7 @@ fn test_memory_transport_maybe_mutual() {
 }
 
 /////////////////////////////////////
-// DiemNetTransport<TcpTransport> //
+// AptosNetTransport<TcpTransport> //
 /////////////////////////////////////
 
 #[test]

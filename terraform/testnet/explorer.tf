@@ -4,7 +4,7 @@ module "explorer" {
   # TF module by git ref clones the module into .terraform/
   # It will try to use the locally cloned one despite changes in remote. To update it:
   #   terraform get -update
-  source = "git@github.com:diem/explorer.git//terraform/modules/explorer?ref=main"
+  source = "git@github.com:aptos/explorer.git//terraform/modules/explorer?ref=main"
 
   image_repo = var.explorer_image_repo
   image_tag  = var.explorer_image_tag
@@ -33,6 +33,6 @@ module "explorer" {
   blockchain_restapi_url = "https://api.${local.domain}"
 
   create_service_account      = false
-  service_account_name        = "diem-testnet"
+  service_account_name        = "aptos-testnet"
   service_account_annotations = {}
 }

@@ -1,23 +1,23 @@
 # Substribe to CI changes
-/.github/ @diem/diem-oss-admin-team
+/.github/ @aptos/aptos-oss-admin-team
 
-# Subscribe to diem-core changes
-/config @diem/diem-core
-/consensus @diem/diem-core
-/diem-node @diem/diem-core
-/execution @diem/diem-core
-/mempool @diem/diem-core
-/network @diem/diem-core
-/secure @diem/diem-core
-/state-sync @diem/diem-core
-/storage @diem/diem-core
-/types @diem/diem-core
+# Subscribe to aptos-core changes
+/config @aptos/aptos-core
+/consensus @aptos/aptos-core
+/aptos-node @aptos/aptos-core
+/execution @aptos/aptos-core
+/mempool @aptos/aptos-core
+/network @aptos/aptos-core
+/secure @aptos/aptos-core
+/state-sync @aptos/aptos-core
+/storage @aptos/aptos-core
+/types @aptos/aptos-core
 
-# Subscribe to diem-ecosystem changes
-/api @diem/diem-ecosystem
-/json-rpc @diem/diem-ecosystem
-/sdk @diem/diem-ecosystem
-/shuffle @diem/diem-ecosystem
+# Subscribe to aptos-ecosystem changes
+/api @aptos/aptos-ecosystem
+/json-rpc @aptos/aptos-ecosystem
+/sdk @aptos/aptos-ecosystem
+/shuffle @aptos/aptos-ecosystem
 
 # Subscribe to crypto crate changing PRs
 /crypto @kchalkias @valerini

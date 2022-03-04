@@ -1,4 +1,4 @@
-// Copyright (c) The Diem Core Contributors
+// Copyright (c) The Aptos Core Contributors
 // SPDX-License-Identifier: Apache-2.0
 
 use crate::{
@@ -12,8 +12,8 @@ use crate::{
 use serde::{Deserialize, Serialize};
 use std::fmt;
 
-pub use diem_transaction_builder::{experimental_stdlib, stdlib};
-use diem_types::transaction::{ChangeSet, ModuleBundle, Script, ScriptFunction, WriteSetPayload};
+pub use aptos_transaction_builder::{experimental_stdlib, stdlib};
+use aptos_types::transaction::{ChangeSet, ModuleBundle, Script, ScriptFunction, WriteSetPayload};
 
 pub struct TransactionBuilder {
     sender: Option<AccountAddress>,
@@ -84,7 +84,7 @@ pub struct TransactionFactory {
     gas_currency: Currency,
     transaction_expiration_time: u64,
     chain_id: ChainId,
-    diem_version: u64,
+    aptos_version: u64,
 }
 
 impl TransactionFactory {
@@ -95,7 +95,7 @@ impl TransactionFactory {
             gas_currency: Currency::XUS,
             transaction_expiration_time: 100,
             chain_id,
-            diem_version: 2,
+            aptos_version: 2,
         }
     }
 
@@ -124,8 +124,8 @@ impl TransactionFactory {
         self
     }
 
-    pub fn with_diem_version(mut self, diem_version: u64) -> Self {
-        self.diem_version = diem_version;
+    pub fn with_aptos_version(mut self, aptos_version: u64) -> Self {
+        self.aptos_version = aptos_version;
         self
     }
 
@@ -460,25 +460,25 @@ impl TransactionFactory {
         }
     }
 
-    pub fn update_diem_consensus_config(
+    pub fn update_aptos_consensus_config(
         &self,
         sliding_nonce: u64,
         config: Vec<u8>,
     ) -> TransactionBuilder {
-        self.payload(stdlib::encode_update_diem_consensus_config_script_function(
+        self.payload(stdlib::encode_update_aptos_consensus_config_script_function(
             sliding_nonce,
             config,
         ))
     }
 
-    pub fn update_diem_version(&self, sliding_nonce: u64, major: u64) -> TransactionBuilder {
+    pub fn update_aptos_version(&self, sliding_nonce: u64, major: u64) -> TransactionBuilder {
         if self.is_script_function_enabled() {
-            self.payload(stdlib::encode_update_diem_version_script_function(
+            self.payload(stdlib::encode_update_aptos_version_script_function(
                 sliding_nonce,
                 major,
             ))
         } else {
-            self.script(stdlib::encode_update_diem_version_script(
+            self.script(stdlib::encode_update_aptos_version_script(
                 sliding_nonce,
                 major,
             ))
@@ -578,7 +578,7 @@ impl TransactionFactory {
     }
 
     fn is_script_function_enabled(&self) -> bool {
-        self.diem_version >= 2
+        self.aptos_version >= 2
     }
 }
 

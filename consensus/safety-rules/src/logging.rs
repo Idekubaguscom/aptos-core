@@ -1,10 +1,10 @@
-// Copyright (c) The Diem Core Contributors
+// Copyright (c) The Aptos Core Contributors
 // SPDX-License-Identifier: Apache-2.0
 
 use crate::Error;
 use consensus_types::common::{Author, Round};
-use diem_logger::Schema;
-use diem_types::waypoint::Waypoint;
+use aptos_logger::Schema;
+use aptos_types::waypoint::Waypoint;
 use serde::Serialize;
 
 #[derive(Schema)]

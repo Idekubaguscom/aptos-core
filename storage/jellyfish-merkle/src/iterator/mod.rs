@@ -1,4 +1,4 @@
-// Copyright (c) The Diem Core Contributors
+// Copyright (c) The Aptos Core Contributors
 // SPDX-License-Identifier: Apache-2.0
 
 //! This module implements `JellyfishMerkleIterator`. Initialized with a version and a key, the
@@ -14,8 +14,8 @@ use crate::{
     TreeReader,
 };
 use anyhow::{bail, ensure, format_err, Result};
-use diem_crypto::HashValue;
-use diem_types::{
+use aptos_crypto::HashValue;
+use aptos_types::{
     nibble::{nibble_path::NibblePath, Nibble, ROOT_NIBBLE_HEIGHT},
     transaction::Version,
 };

@@ -1,10 +1,10 @@
-// Copyright (c) The Diem Core Contributors
+// Copyright (c) The Aptos Core Contributors
 // SPDX-License-Identifier: Apache-2.0
 
 #![forbid(unsafe_code)]
 
-use diem_config::config::StorageServiceConfig;
-use diem_types::{
+use aptos_config::config::StorageServiceConfig;
+use aptos_types::{
     account_state_blob::AccountStatesChunkWithProof,
     epoch_change::EpochChangeProof,
     ledger_info::LedgerInfoWithSignatures,
@@ -36,7 +36,7 @@ pub enum StorageServiceError {
     InternalError(String),
 }
 
-/// A single storage service message sent or received over DiemNet.
+/// A single storage service message sent or received over AptosNet.
 #[derive(Clone, Debug, Deserialize, Serialize)]
 // TODO(philiphayes): do something about this without making it ugly :(
 #[allow(clippy::large_enum_variant)]
@@ -585,8 +585,8 @@ where
 mod tests {
     use super::*;
     use claim::{assert_err, assert_ok};
-    use diem_crypto::hash::HashValue;
-    use diem_types::{block_info::BlockInfo, ledger_info::LedgerInfo};
+    use aptos_crypto::hash::HashValue;
+    use aptos_types::{block_info::BlockInfo, ledger_info::LedgerInfo};
     use proptest::prelude::*;
     use std::collections::BTreeMap;
 

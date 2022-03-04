@@ -1,12 +1,12 @@
-// Copyright (c) The Diem Core Contributors
+// Copyright (c) The Aptos Core Contributors
 // SPDX-License-Identifier: Apache-2.0
 
 use anyhow::bail;
-use diem_rest_client::{
-    diem_api_types::{HexEncodedBytes, ScriptPayload, TransactionPayload},
+use aptos_rest_client::{
+    aptos_api_types::{HexEncodedBytes, ScriptPayload, TransactionPayload},
     Transaction,
 };
-use diem_sdk::{
+use aptos_sdk::{
     crypto::{ed25519::Ed25519PrivateKey, PrivateKey, SigningKey, Uniform},
     transaction_builder::Currency,
     types::{
@@ -66,7 +66,7 @@ impl ExternalTransactionSigner {
 
         let unsigned_txn = ctx
             .transaction_factory()
-            .with_diem_version(0) // Force Script not ScriptFunctions
+            .with_aptos_version(0) // Force Script not ScriptFunctions
             .peer_to_peer(Currency::XUS, receiver.address(), amount)
             .sender(sender_address)
             .sequence_number(test_sequence_number)
@@ -110,7 +110,7 @@ impl ExternalTransactionSigner {
                 }) = user_txn.request.payload
                 {
                     let expected_code = match unsigned_txn.clone().into_payload() {
-                        diem_types::transaction::TransactionPayload::Script(script) => {
+                        aptos_types::transaction::TransactionPayload::Script(script) => {
                             HexEncodedBytes::from(script.code().to_vec())
                         }
                         _ => bail!("unexpected transaction payload: {:?}", &unsigned_txn),

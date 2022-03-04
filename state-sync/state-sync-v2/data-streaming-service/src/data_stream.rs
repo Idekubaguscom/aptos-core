@@ -1,4 +1,4 @@
-// Copyright (c) The Diem Core Contributors
+// Copyright (c) The Aptos Core Contributors
 // SPDX-License-Identifier: Apache-2.0
 
 use crate::{
@@ -15,15 +15,15 @@ use crate::{
     stream_engine::{DataStreamEngine, StreamEngine},
     streaming_client::{NotificationFeedback, StreamRequest},
 };
-use channel::{diem_channel, message_queues::QueueStyle};
-use diem_config::config::DataStreamingServiceConfig;
-use diem_data_client::{
-    AdvertisedData, DiemDataClient, GlobalDataSummary, Response, ResponseContext, ResponseError,
+use channel::{aptos_channel, message_queues::QueueStyle};
+use aptos_config::config::DataStreamingServiceConfig;
+use aptos_data_client::{
+    AdvertisedData, AptosDataClient, GlobalDataSummary, Response, ResponseContext, ResponseError,
     ResponsePayload,
 };
-use diem_id_generator::{IdGenerator, U64IdGenerator};
-use diem_infallible::Mutex;
-use diem_logger::prelude::*;
+use aptos_id_generator::{IdGenerator, U64IdGenerator};
+use aptos_infallible::Mutex;
+use aptos_logger::prelude::*;
 use futures::{stream::FusedStream, Stream};
 use std::{
     collections::{BTreeMap, VecDeque},
@@ -41,7 +41,7 @@ pub type PendingClientResponse = Arc<Mutex<Box<data_notification::PendingClientR
 
 /// Each data stream holds the original stream request from the client and tracks
 /// the progress of the data stream to satisfy that request (e.g., the data that
-/// has already been sent along the stream to the client and the in-flight diem
+/// has already been sent along the stream to the client and the in-flight aptos
 /// data client requests that have been sent to the network).
 ///
 /// Note that it is the responsibility of the data stream to send data
@@ -55,8 +55,8 @@ pub struct DataStream<T> {
     // The unique ID for this data stream. This is useful for logging.
     data_stream_id: DataStreamId,
 
-    // The data client through which to fetch data from the Diem network
-    diem_data_client: T,
+    // The data client through which to fetch data from the Aptos network
+    aptos_data_client: T,
 
     // The engine for this data stream
     stream_engine: StreamEngine,
@@ -74,7 +74,7 @@ pub struct DataStream<T> {
     notifications_to_responses: BTreeMap<NotificationId, ResponseContext>,
 
     // The channel on which to send data notifications when they are ready.
-    notification_sender: channel::diem_channel::Sender<(), DataNotification>,
+    notification_sender: channel::aptos_channel::Sender<(), DataNotification>,
 
     // A unique notification ID generator
     notification_id_generator: Arc<U64IdGenerator>,
@@ -88,17 +88,17 @@ pub struct DataStream<T> {
     request_failure_count: u64,
 }
 
-impl<T: DiemDataClient + Send + Clone + 'static> DataStream<T> {
+impl<T: AptosDataClient + Send + Clone + 'static> DataStream<T> {
     pub fn new(
         config: DataStreamingServiceConfig,
         data_stream_id: DataStreamId,
         stream_request: &StreamRequest,
-        diem_data_client: T,
+        aptos_data_client: T,
         notification_id_generator: Arc<U64IdGenerator>,
         advertised_data: &AdvertisedData,
     ) -> Result<(Self, DataStreamListener), Error> {
         // Create a new data stream listener
-        let (notification_sender, notification_receiver) = diem_channel::new(
+        let (notification_sender, notification_receiver) = aptos_channel::new(
             QueueStyle::KLAST,
             config.max_data_stream_channel_sizes as usize,
             None,
@@ -112,7 +112,7 @@ impl<T: DiemDataClient + Send + Clone + 'static> DataStream<T> {
         let data_stream = Self {
             config,
             data_stream_id,
-            diem_data_client,
+            aptos_data_client,
             stream_engine,
             sent_data_requests: None,
             spawned_tasks: vec![],
@@ -156,7 +156,7 @@ impl<T: DiemDataClient + Send + Clone + 'static> DataStream<T> {
             .is_some()
     }
 
-    /// Notifies the Diem data client of a bad client response
+    /// Notifies the Aptos data client of a bad client response
     pub fn handle_notification_feedback(
         &self,
         notification_id: &NotificationId,
@@ -188,7 +188,7 @@ impl<T: DiemDataClient + Send + Clone + 'static> DataStream<T> {
         Ok(())
     }
 
-    /// Creates and sends a batch of diem data client requests to the network
+    /// Creates and sends a batch of aptos data client requests to the network
     fn create_and_send_client_requests(
         &mut self,
         global_data_summary: &GlobalDataSummary,
@@ -245,7 +245,7 @@ impl<T: DiemDataClient + Send + Clone + 'static> DataStream<T> {
         // Send the request to the network
         let join_handle = spawn_request_task(
             data_client_request,
-            self.diem_data_client.clone(),
+            self.aptos_data_client.clone(),
             pending_client_response.clone(),
         );
         self.spawned_tasks.push(join_handle);
@@ -365,7 +365,7 @@ impl<T: DiemDataClient + Send + Clone + 'static> DataStream<T> {
     fn handle_data_client_error(
         &mut self,
         data_client_request: &DataClientRequest,
-        data_client_error: &diem_data_client::Error,
+        data_client_error: &aptos_data_client::Error,
     ) -> Result<(), Error> {
         error!(LogSchema::new(LogEntry::ReceivedDataResponse)
             .stream_id(self.data_stream_id)
@@ -396,7 +396,7 @@ impl<T: DiemDataClient + Send + Clone + 'static> DataStream<T> {
         Ok(())
     }
 
-    /// Notifies the Diem data client of a bad client response
+    /// Notifies the Aptos data client of a bad client response
     fn notify_bad_response(
         &self,
         response_context: &ResponseContext,
@@ -565,12 +565,12 @@ impl<T> Drop for DataStream<T> {
 /// Allows listening to data streams (i.e., streams of data notifications).
 #[derive(Debug)]
 pub struct DataStreamListener {
-    notification_receiver: channel::diem_channel::Receiver<(), DataNotification>,
+    notification_receiver: channel::aptos_channel::Receiver<(), DataNotification>,
 }
 
 impl DataStreamListener {
     pub fn new(
-        notification_receiver: channel::diem_channel::Receiver<(), DataNotification>,
+        notification_receiver: channel::aptos_channel::Receiver<(), DataNotification>,
     ) -> Self {
         Self {
             notification_receiver,
@@ -633,7 +633,7 @@ fn sanity_check_client_response(
 }
 
 /// Transforms the notification feedback into a specific response error that
-/// can be sent to the Diem data client.
+/// can be sent to the Aptos data client.
 fn extract_response_error(notification_feedback: &NotificationFeedback) -> ResponseError {
     match notification_feedback {
         NotificationFeedback::InvalidPayloadData => ResponseError::InvalidData,
@@ -648,9 +648,9 @@ fn extract_response_error(notification_feedback: &NotificationFeedback) -> Respo
     }
 }
 
-fn spawn_request_task<T: DiemDataClient + Send + Clone + 'static>(
+fn spawn_request_task<T: AptosDataClient + Send + Clone + 'static>(
     data_client_request: DataClientRequest,
-    diem_data_client: T,
+    aptos_data_client: T,
     pending_response: PendingClientResponse,
 ) -> JoinHandle<()> {
     // Update the requests sent counter
@@ -670,19 +670,19 @@ fn spawn_request_task<T: DiemDataClient + Send + Clone + 'static>(
         // Fetch the client response
         let client_response = match data_client_request {
             DataClientRequest::AccountsWithProof(request) => {
-                get_account_states_with_proof(diem_data_client, request).await
+                get_account_states_with_proof(aptos_data_client, request).await
             }
             DataClientRequest::EpochEndingLedgerInfos(request) => {
-                get_epoch_ending_ledger_infos(diem_data_client, request).await
+                get_epoch_ending_ledger_infos(aptos_data_client, request).await
             }
             DataClientRequest::NumberOfAccounts(request) => {
-                get_number_of_account_states(diem_data_client, request).await
+                get_number_of_account_states(aptos_data_client, request).await
             }
             DataClientRequest::TransactionOutputsWithProof(request) => {
-                get_transaction_outputs_with_proof(diem_data_client, request).await
+                get_transaction_outputs_with_proof(aptos_data_client, request).await
             }
             DataClientRequest::TransactionsWithProof(request) => {
-                get_transactions_with_proof(diem_data_client, request).await
+                get_transactions_with_proof(aptos_data_client, request).await
             }
         };
 
@@ -704,11 +704,11 @@ fn spawn_request_task<T: DiemDataClient + Send + Clone + 'static>(
     })
 }
 
-async fn get_account_states_with_proof<T: DiemDataClient + Send + Clone + 'static>(
-    diem_data_client: T,
+async fn get_account_states_with_proof<T: AptosDataClient + Send + Clone + 'static>(
+    aptos_data_client: T,
     request: AccountsWithProofRequest,
-) -> Result<Response<ResponsePayload>, diem_data_client::Error> {
-    let client_response = diem_data_client.get_account_states_with_proof(
+) -> Result<Response<ResponsePayload>, aptos_data_client::Error> {
+    let client_response = aptos_data_client.get_account_states_with_proof(
         request.version,
         request.start_index,
         request.end_index,
@@ -718,32 +718,32 @@ async fn get_account_states_with_proof<T: DiemDataClient + Send + Clone + 'stati
         .map(|response| response.map(ResponsePayload::from))
 }
 
-async fn get_epoch_ending_ledger_infos<T: DiemDataClient + Send + Clone + 'static>(
-    diem_data_client: T,
+async fn get_epoch_ending_ledger_infos<T: AptosDataClient + Send + Clone + 'static>(
+    aptos_data_client: T,
     request: EpochEndingLedgerInfosRequest,
-) -> Result<Response<ResponsePayload>, diem_data_client::Error> {
+) -> Result<Response<ResponsePayload>, aptos_data_client::Error> {
     let client_response =
-        diem_data_client.get_epoch_ending_ledger_infos(request.start_epoch, request.end_epoch);
+        aptos_data_client.get_epoch_ending_ledger_infos(request.start_epoch, request.end_epoch);
     client_response
         .await
         .map(|response| response.map(ResponsePayload::from))
 }
 
-async fn get_number_of_account_states<T: DiemDataClient + Send + Clone + 'static>(
-    diem_data_client: T,
+async fn get_number_of_account_states<T: AptosDataClient + Send + Clone + 'static>(
+    aptos_data_client: T,
     request: NumberOfAccountsRequest,
-) -> Result<Response<ResponsePayload>, diem_data_client::Error> {
-    let client_response = diem_data_client.get_number_of_account_states(request.version);
+) -> Result<Response<ResponsePayload>, aptos_data_client::Error> {
+    let client_response = aptos_data_client.get_number_of_account_states(request.version);
     client_response
         .await
         .map(|response| response.map(ResponsePayload::from))
 }
 
-async fn get_transaction_outputs_with_proof<T: DiemDataClient + Send + Clone + 'static>(
-    diem_data_client: T,
+async fn get_transaction_outputs_with_proof<T: AptosDataClient + Send + Clone + 'static>(
+    aptos_data_client: T,
     request: TransactionOutputsWithProofRequest,
-) -> Result<Response<ResponsePayload>, diem_data_client::Error> {
-    let client_response = diem_data_client.get_transaction_outputs_with_proof(
+) -> Result<Response<ResponsePayload>, aptos_data_client::Error> {
+    let client_response = aptos_data_client.get_transaction_outputs_with_proof(
         request.proof_version,
         request.start_version,
         request.end_version,
@@ -753,11 +753,11 @@ async fn get_transaction_outputs_with_proof<T: DiemDataClient + Send + Clone + '
         .map(|response| response.map(ResponsePayload::from))
 }
 
-async fn get_transactions_with_proof<T: DiemDataClient + Send + Clone + 'static>(
-    diem_data_client: T,
+async fn get_transactions_with_proof<T: AptosDataClient + Send + Clone + 'static>(
+    aptos_data_client: T,
     request: TransactionsWithProofRequest,
-) -> Result<Response<ResponsePayload>, diem_data_client::Error> {
-    let client_response = diem_data_client.get_transactions_with_proof(
+) -> Result<Response<ResponsePayload>, aptos_data_client::Error> {
+    let client_response = aptos_data_client.get_transactions_with_proof(
         request.proof_version,
         request.start_version,
         request.end_version,

@@ -1,4 +1,4 @@
-// Copyright (c) The Diem Core Contributors
+// Copyright (c) The Aptos Core Contributors
 // SPDX-License-Identifier: Apache-2.0
 
 use crate::{
@@ -9,11 +9,11 @@ use crate::{
     },
     ProofRead,
 };
-use diem_crypto::{
+use aptos_crypto::{
     hash::{CryptoHash, SPARSE_MERKLE_PLACEHOLDER_HASH},
     HashValue,
 };
-use diem_types::proof::{SparseMerkleLeafNode, SparseMerkleProof};
+use aptos_types::proof::{SparseMerkleLeafNode, SparseMerkleProof};
 use std::cmp::Ordering;
 
 type Result<T> = std::result::Result<T, UpdateError>;

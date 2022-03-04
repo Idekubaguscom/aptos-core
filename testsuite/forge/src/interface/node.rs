@@ -1,12 +1,12 @@
-// Copyright (c) The Diem Core Contributors
+// Copyright (c) The Aptos Core Contributors
 // SPDX-License-Identifier: Apache-2.0
 
 use crate::{Result, Version};
 use anyhow::anyhow;
 use debug_interface::AsyncNodeDebugClient;
-use diem_config::{config::NodeConfig, network_id::NetworkId};
-use diem_rest_client::Client as RestClient;
-use diem_sdk::types::PeerId;
+use aptos_config::{config::NodeConfig, network_id::NetworkId};
+use aptos_rest_client::Client as RestClient;
+use aptos_sdk::types::PeerId;
 use std::{
     collections::HashMap,
     time::{Duration, Instant},
@@ -185,7 +185,7 @@ pub trait NodeExt: Node {
         if let Some(direction) = direction {
             map.insert("direction".to_string(), direction.to_string());
         }
-        self.get_metric_with_fields("diem_connections", map).await
+        self.get_metric_with_fields("aptos_connections", map).await
     }
 
     async fn liveness_check(&self, seconds: u64) -> Result<()> {

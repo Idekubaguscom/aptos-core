@@ -1,4 +1,4 @@
-// Copyright (c) The Diem Core Contributors
+// Copyright (c) The Aptos Core Contributors
 // SPDX-License-Identifier: Apache-2.0
 
 use crate::tests::{assert_json, new_test_context};
@@ -18,7 +18,7 @@ async fn test_get_events() {
         json!({
           "key": "0x00000000000000000000000000000000000000000a550c18",
           "sequence_number": "0",
-          "type": "0x1::DiemAccount::CreateAccountEvent",
+          "type": "0x1::AptosAccount::CreateAccountEvent",
           "data": {
             "created": "0xa550c18",
             "role_id": "0"
@@ -40,7 +40,7 @@ async fn test_get_events_filter_by_start_sequence_number() {
         json!({
           "key": "0x00000000000000000000000000000000000000000a550c18",
           "sequence_number": "1",
-          "type": "0x1::DiemAccount::CreateAccountEvent",
+          "type": "0x1::AptosAccount::CreateAccountEvent",
           "data": {
             "created": "0xb1e55ed",
             "role_id": "1"
@@ -83,7 +83,7 @@ async fn test_get_events_by_invalid_key() {
 async fn test_get_events_by_account_event_handle() {
     let context = new_test_context();
     let resp = context
-        .get("/accounts/0xa550c18/events/0x1::DiemAccount::AccountOperationsCapability/creation_events")
+        .get("/accounts/0xa550c18/events/0x1::AptosAccount::AccountOperationsCapability/creation_events")
         .await;
 
     assert_json(
@@ -91,7 +91,7 @@ async fn test_get_events_by_account_event_handle() {
         json!({
           "key": "0x00000000000000000000000000000000000000000a550c18",
           "sequence_number": "0",
-          "type": "0x1::DiemAccount::CreateAccountEvent",
+          "type": "0x1::AptosAccount::CreateAccountEvent",
           "data": {
             "created": "0xa550c18",
             "role_id": "0"
@@ -105,15 +105,15 @@ async fn test_get_events_by_invalid_account_event_handle_struct_address() {
     let context = new_test_context();
     let resp = context
         .expect_status_code(404)
-        .get("/accounts/0xa550c18/events/0x9::DiemAccount::AccountOperationsCapability/creation_events")
+        .get("/accounts/0xa550c18/events/0x9::AptosAccount::AccountOperationsCapability/creation_events")
         .await;
 
     assert_json(
         resp,
         json!({
           "code": 404,
-          "message": "resource not found by address(0xa550c18), struct tag(0x9::DiemAccount::AccountOperationsCapability) and ledger version(0)",
-          "diem_ledger_version": "0"
+          "message": "resource not found by address(0xa550c18), struct tag(0x9::AptosAccount::AccountOperationsCapability) and ledger version(0)",
+          "aptos_ledger_version": "0"
         }),
     );
 }
@@ -133,7 +133,7 @@ async fn test_get_events_by_invalid_account_event_handle_struct_module() {
         json!({
           "code": 404,
           "message": "resource not found by address(0xa550c18), struct tag(0x1::NotFound::AccountOperationsCapability) and ledger version(0)",
-          "diem_ledger_version": "0"
+          "aptos_ledger_version": "0"
         }),
     );
 }
@@ -143,15 +143,15 @@ async fn test_get_events_by_invalid_account_event_handle_struct_name() {
     let context = new_test_context();
     let resp = context
         .expect_status_code(404)
-        .get("/accounts/0xa550c18/events/0x1::DiemAccount::NotFound/creation_events")
+        .get("/accounts/0xa550c18/events/0x1::AptosAccount::NotFound/creation_events")
         .await;
 
     assert_json(
         resp,
         json!({
           "code": 404,
-          "message": "resource not found by address(0xa550c18), struct tag(0x1::DiemAccount::NotFound) and ledger version(0)",
-          "diem_ledger_version": "0"
+          "message": "resource not found by address(0xa550c18), struct tag(0x1::AptosAccount::NotFound) and ledger version(0)",
+          "aptos_ledger_version": "0"
         }),
     );
 }
@@ -161,15 +161,15 @@ async fn test_get_events_by_invalid_account_event_handle_field_name() {
     let context = new_test_context();
     let resp = context
         .expect_status_code(404)
-        .get("/accounts/0xa550c18/events/0x1::DiemAccount::AccountOperationsCapability/not_found")
+        .get("/accounts/0xa550c18/events/0x1::AptosAccount::AccountOperationsCapability/not_found")
         .await;
 
     assert_json(
         resp,
         json!({
           "code": 404,
-          "message": "resource not found by address(0xa550c18), struct tag(0x1::DiemAccount::AccountOperationsCapability), field name(not_found) and ledger version(0)",
-          "diem_ledger_version": "0"
+          "message": "resource not found by address(0xa550c18), struct tag(0x1::AptosAccount::AccountOperationsCapability), field name(not_found) and ledger version(0)",
+          "aptos_ledger_version": "0"
         }),
     );
 }
@@ -180,7 +180,7 @@ async fn test_get_events_by_invalid_account_event_handle_field_type() {
 
     let resp = context
         .expect_status_code(400)
-        .get("/accounts/0xa550c18/events/0x1::DiemAccount::AccountOperationsCapability/limits_cap")
+        .get("/accounts/0xa550c18/events/0x1::AptosAccount::AccountOperationsCapability/limits_cap")
         .await;
     assert_json(
         resp,
@@ -200,7 +200,7 @@ async fn test_get_events_by_struct_type_has_generic_type_parameter() {
     // Instead of creating the example, we just look up an event handle that does not exist.
     let path = format!(
         "/accounts/0x1/events/{}/coin",
-        utf8_percent_encode("0x1::DiemAccount::Balance<0x1::ABC::ABC>", NON_ALPHANUMERIC)
+        utf8_percent_encode("0x1::AptosAccount::Balance<0x1::ABC::ABC>", NON_ALPHANUMERIC)
             .to_string()
     );
     let resp = context.expect_status_code(404).get(path.as_str()).await;
@@ -209,8 +209,8 @@ async fn test_get_events_by_struct_type_has_generic_type_parameter() {
         resp,
         json!({
           "code": 404,
-          "message": "resource not found by address(0x1), struct tag(0x1::DiemAccount::Balance<0x1::ABC::ABC>) and ledger version(0)",
-          "diem_ledger_version": "0"
+          "message": "resource not found by address(0x1), struct tag(0x1::AptosAccount::Balance<0x1::ABC::ABC>) and ledger version(0)",
+          "aptos_ledger_version": "0"
         }),
     );
 }

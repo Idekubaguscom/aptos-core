@@ -1,18 +1,18 @@
-// Copyright (c) The Diem Core Contributors
+// Copyright (c) The Aptos Core Contributors
 // SPDX-License-Identifier: Apache-2.0
 
 use crate::{
     transaction_executor::TransactionExecutor, transaction_generator::TransactionGenerator,
     TransactionCommitter,
 };
-use diem_config::{config::RocksdbConfig, utils::get_genesis_txn};
-use diem_jellyfish_merkle::metrics::{
+use aptos_config::{config::RocksdbConfig, utils::get_genesis_txn};
+use aptos_jellyfish_merkle::metrics::{
     DIEM_JELLYFISH_INTERNAL_ENCODED_BYTES, DIEM_JELLYFISH_LEAF_ENCODED_BYTES,
     DIEM_JELLYFISH_STORAGE_READS,
 };
-use diem_vm::DiemVM;
-use diemdb::{
-    metrics::DIEM_STORAGE_ROCKSDB_PROPERTIES, schema::JELLYFISH_MERKLE_NODE_CF_NAME, DiemDB,
+use aptos_vm::AptosVM;
+use aptosdb::{
+    metrics::DIEM_STORAGE_ROCKSDB_PROPERTIES, schema::JELLYFISH_MERKLE_NODE_CF_NAME, AptosDB,
 };
 use executor::{
     block_executor::BlockExecutor,
@@ -36,15 +36,15 @@ pub fn run(
     println!("Initializing...");
 
     if db_dir.as_ref().exists() {
-        fs::remove_dir_all(db_dir.as_ref().join("diemdb")).unwrap_or(());
+        fs::remove_dir_all(db_dir.as_ref().join("aptosdb")).unwrap_or(());
     }
     // create if not exists
     fs::create_dir_all(db_dir.as_ref()).unwrap();
 
-    let (config, genesis_key) = diem_genesis_tool::test_config();
+    let (config, genesis_key) = aptos_genesis_tool::test_config();
     // Create executor.
     let (db, db_rw) = DbReaderWriter::wrap(
-        DiemDB::open(
+        AptosDB::open(
             &db_dir,
             false,        /* readonly */
             prune_window, /* pruner */
@@ -55,8 +55,8 @@ pub fn run(
     );
 
     // Bootstrap db with genesis
-    let waypoint = generate_waypoint::<DiemVM>(&db_rw, get_genesis_txn(&config).unwrap()).unwrap();
-    maybe_bootstrap::<DiemVM>(&db_rw, get_genesis_txn(&config).unwrap(), waypoint).unwrap();
+    let waypoint = generate_waypoint::<AptosVM>(&db_rw, get_genesis_txn(&config).unwrap()).unwrap();
+    maybe_bootstrap::<AptosVM>(&db_rw, get_genesis_txn(&config).unwrap(), waypoint).unwrap();
 
     let executor = Arc::new(BlockExecutor::new(db_rw));
     let executor_2 = executor.clone();
@@ -114,18 +114,18 @@ pub fn run(
     let db_size = DIEM_STORAGE_ROCKSDB_PROPERTIES
         .with_label_values(&[
             JELLYFISH_MERKLE_NODE_CF_NAME,
-            "diem_rocksdb_live_sst_files_size_bytes",
+            "aptos_rocksdb_live_sst_files_size_bytes",
         ])
         .get();
     let data_size = DIEM_STORAGE_ROCKSDB_PROPERTIES
-        .with_label_values(&[JELLYFISH_MERKLE_NODE_CF_NAME, "diem_rocksdb_cf_size_bytes"])
+        .with_label_values(&[JELLYFISH_MERKLE_NODE_CF_NAME, "aptos_rocksdb_cf_size_bytes"])
         .get();
     let reads = DIEM_JELLYFISH_STORAGE_READS.get();
     let leaf_bytes = DIEM_JELLYFISH_LEAF_ENCODED_BYTES.get();
     let internal_bytes = DIEM_JELLYFISH_INTERNAL_ENCODED_BYTES.get();
     println!("=============FINISHED DB CREATION =============");
     println!(
-        "created a DiemDB til version {} with {} accounts.",
+        "created a AptosDB til version {} with {} accounts.",
         final_version, num_accounts,
     );
     println!("DB dir: {}", db_dir.as_ref().display());

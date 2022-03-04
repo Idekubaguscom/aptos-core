@@ -1,15 +1,15 @@
-// Copyright (c) The Diem Core Contributors
+// Copyright (c) The Aptos Core Contributors
 // SPDX-License-Identifier: Apache-2.0
 
 #[cfg(test)]
 mod mock_vm_test;
 
-use diem_crypto::{ed25519::Ed25519PrivateKey, PrivateKey, Uniform};
-use diem_state_view::StateView;
-use diem_types::{
+use aptos_crypto::{ed25519::Ed25519PrivateKey, PrivateKey, Uniform};
+use aptos_state_view::StateView;
+use aptos_types::{
     access_path::AccessPath,
     account_address::AccountAddress,
-    account_config::{diem_root_address, validator_set_address, XUS_NAME},
+    account_config::{aptos_root_address, validator_set_address, XUS_NAME},
     chain_id::ChainId,
     contract_event::ContractEvent,
     event::EventKey,
@@ -24,7 +24,7 @@ use diem_types::{
     vm_status::{KeptVMStatus, StatusCode, VMStatus},
     write_set::{WriteOp, WriteSet, WriteSetMut},
 };
-use diem_vm::VMExecutor;
+use aptos_vm::VMExecutor;
 use move_core_types::{language_storage::TypeTag, move_resource::MoveResource};
 use once_cell::sync::Lazy;
 use std::collections::HashMap;
@@ -46,7 +46,7 @@ enum MockVMTransaction {
 pub static KEEP_STATUS: Lazy<TransactionStatus> =
     Lazy::new(|| TransactionStatus::Keep(KeptVMStatus::Executed));
 
-// We use 10 as the assertion error code for insufficient balance within the Diem coin contract.
+// We use 10 as the assertion error code for insufficient balance within the Aptos coin contract.
 pub static DISCARD_STATUS: Lazy<TransactionStatus> =
     Lazy::new(|| TransactionStatus::Discard(StatusCode::INSUFFICIENT_BALANCE_FOR_TRANSACTION_FEE));
 
@@ -146,7 +146,7 @@ impl VMExecutor for MockVM {
                 }
                 MockVMTransaction::Reconfiguration => {
                     read_balance_from_storage(state_view, &balance_ap(validator_set_address()));
-                    read_balance_from_storage(state_view, &balance_ap(diem_root_address()));
+                    read_balance_from_storage(state_view, &balance_ap(aptos_root_address()));
                     outputs.push(TransactionOutput::new(
                         // WriteSet cannot be empty so use genesis writeset only for testing.
                         gen_genesis_writeset(),

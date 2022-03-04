@@ -1,7 +1,7 @@
-// Copyright (c) The Diem Core Contributors
+// Copyright (c) The Aptos Core Contributors
 // SPDX-License-Identifier: Apache-2.0
 use crate::transaction::authenticator::AuthenticationKey;
-use diem_crypto::{
+use aptos_crypto::{
     ed25519::Ed25519PublicKey,
     hash::{CryptoHasher, HashValue},
     x25519,
@@ -17,7 +17,7 @@ pub fn from_public_key(public_key: &Ed25519PublicKey) -> AccountAddress {
 // from consensus key which is of type Ed25519PublicKey. Since AccountAddress does
 // not mean anything in a setting without remote authentication, we use the network
 // public key to generate a peer_id for the peer.
-// See this issue for potential improvements: https://github.com/diem/diem/issues/3960
+// See this issue for potential improvements: https://github.com/aptos/aptos/issues/3960
 pub fn from_identity_public_key(identity_public_key: x25519::PublicKey) -> AccountAddress {
     let mut array = [0u8; AccountAddress::LENGTH];
     let pubkey_slice = identity_public_key.as_slice();
@@ -31,7 +31,7 @@ pub fn from_identity_public_key(identity_public_key: x25519::PublicKey) -> Accou
 // with the imported `AccountAddress` from move-core-types. It needs to have the same name since
 // the hash salt is calculated using the name of the type.
 mod hasher {
-    #[derive(serde::Deserialize, diem_crypto_derive::CryptoHasher)]
+    #[derive(serde::Deserialize, aptos_crypto_derive::CryptoHasher)]
     struct AccountAddress;
 }
 
@@ -50,7 +50,7 @@ impl HashAccountAddress for AccountAddress {
 #[cfg(test)]
 mod test {
     use super::{AccountAddress, HashAccountAddress};
-    use diem_crypto::hash::HashValue;
+    use aptos_crypto::hash::HashValue;
     use hex::FromHex;
 
     #[test]

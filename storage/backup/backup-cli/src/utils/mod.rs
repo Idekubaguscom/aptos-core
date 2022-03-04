@@ -1,4 +1,4 @@
-// Copyright (c) The Diem Core Contributors
+// Copyright (c) The Aptos Core Contributors
 // SPDX-License-Identifier: Apache-2.0
 
 pub mod backup_service_client;
@@ -11,12 +11,12 @@ pub(crate) mod stream;
 pub mod test_utils;
 
 use anyhow::{anyhow, Result};
-use diem_config::config::RocksdbConfig;
-use diem_crypto::HashValue;
-use diem_infallible::duration_since_epoch;
-use diem_jellyfish_merkle::{restore::JellyfishMerkleRestore, NodeBatch, TreeWriter};
-use diem_types::{account_state_blob::AccountStateBlob, transaction::Version, waypoint::Waypoint};
-use diemdb::{backup::restore_handler::RestoreHandler, DiemDB, GetRestoreHandler};
+use aptos_config::config::RocksdbConfig;
+use aptos_crypto::HashValue;
+use aptos_infallible::duration_since_epoch;
+use aptos_jellyfish_merkle::{restore::JellyfishMerkleRestore, NodeBatch, TreeWriter};
+use aptos_types::{account_state_blob::AccountStateBlob, transaction::Version, waypoint::Waypoint};
+use aptosdb::{backup::restore_handler::RestoreHandler, AptosDB, GetRestoreHandler};
 use std::{
     collections::HashMap,
     convert::TryFrom,
@@ -167,7 +167,7 @@ impl TryFrom<GlobalRestoreOpt> for GlobalRestoreOptions {
         let target_version = opt.target_version.unwrap_or(Version::max_value());
         let concurrent_downloads = opt.concurernt_downloads.get();
         let run_mode = if let Some(db_dir) = &opt.db_dir {
-            let restore_handler = Arc::new(DiemDB::open(
+            let restore_handler = Arc::new(AptosDB::open(
                 db_dir,
                 false, /* read_only */
                 None,  /* pruner */

@@ -1,13 +1,13 @@
-// Copyright (c) The Diem Core Contributors
+// Copyright (c) The Aptos Core Contributors
 // SPDX-License-Identifier: Apache-2.0
 
 use crate::error::Error;
-use diem_crypto::{
+use aptos_crypto::{
     ed25519::{Ed25519PrivateKey, Ed25519PublicKey},
     x25519,
 };
-use diem_secure_storage::{CryptoStorage, KVStorage, Storage};
-use diem_types::{
+use aptos_secure_storage::{CryptoStorage, KVStorage, Storage};
+use aptos_types::{
     account_address::AccountAddress,
     transaction::{RawTransaction, SignedTransaction, Transaction},
     waypoint::Waypoint,

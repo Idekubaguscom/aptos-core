@@ -1,7 +1,7 @@
-// Copyright (c) The Diem Core Contributors
+// Copyright (c) The Aptos Core Contributors
 // SPDX-License-Identifier: Apache-2.0
 
-use diem_metrics::{
+use aptos_metrics::{
     register_histogram, register_int_counter_vec, register_int_gauge_vec, DurationHistogram,
     IntCounterVec, IntGaugeVec,
 };
@@ -20,7 +20,7 @@ pub static EVENT_PROCESSING_LOOP_BUSY_DURATION_S: Lazy<DurationHistogram> = Lazy
 
 pub static DISCOVERY_COUNTS: Lazy<IntCounterVec> = Lazy::new(|| {
     register_int_counter_vec!(
-        "diem_simple_onchain_discovery_counts",
+        "aptos_simple_onchain_discovery_counts",
         "Histogram of busy time of spent in event processing loop",
         &["role_type", "network_id", "peer_id", "metric"]
     )
@@ -29,7 +29,7 @@ pub static DISCOVERY_COUNTS: Lazy<IntCounterVec> = Lazy::new(|| {
 
 pub static NETWORK_KEY_MISMATCH: Lazy<IntGaugeVec> = Lazy::new(|| {
     register_int_gauge_vec!(
-        "diem_network_key_mismatch",
+        "aptos_network_key_mismatch",
         "Gauge of whether the network key mismatches onchain state",
         &["role_type", "network_id", "peer_id"]
     )

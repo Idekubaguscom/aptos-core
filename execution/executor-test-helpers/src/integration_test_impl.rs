@@ -1,15 +1,15 @@
-// Copyright (c) The Diem Core Contributors
+// Copyright (c) The Aptos Core Contributors
 // SPDX-License-Identifier: Apache-2.0
 
 use crate::{
     bootstrap_genesis, gen_block_id, gen_ledger_info_with_sigs, get_test_signed_transaction,
 };
 use anyhow::{anyhow, ensure, Result};
-use diem_crypto::{ed25519::Ed25519PrivateKey, PrivateKey, Uniform};
-use diem_transaction_builder::stdlib::{
+use aptos_crypto::{ed25519::Ed25519PrivateKey, PrivateKey, Uniform};
+use aptos_transaction_builder::stdlib::{
     encode_create_parent_vasp_account_script, encode_peer_to_peer_with_metadata_script,
 };
-use diem_types::{
+use aptos_types::{
     account_config::{
         from_currency_code_string, testnet_dd_account_address, treasury_compliance_account_address,
         xus_tag, XUS_NAME,
@@ -24,25 +24,25 @@ use diem_types::{
     trusted_state::{TrustedState, TrustedStateChange},
     waypoint::Waypoint,
 };
-use diem_vm::DiemVM;
-use diemdb::DiemDB;
+use aptos_vm::AptosVM;
+use aptosdb::AptosDB;
 use executor::block_executor::BlockExecutor;
 use executor_types::BlockExecutorTrait;
 use rand::SeedableRng;
 use std::{convert::TryFrom, sync::Arc};
 use storage_interface::{DbReaderWriter, Order};
 
-pub fn test_execution_with_storage_impl() -> Arc<DiemDB> {
+pub fn test_execution_with_storage_impl() -> Arc<AptosDB> {
     let (genesis, validators) = vm_genesis::test_genesis_change_set_and_validators(Some(1));
     let genesis_txn = Transaction::GenesisTransaction(WriteSetPayload::Direct(genesis));
     let genesis_key = &vm_genesis::GENESIS_KEYPAIR.0;
 
-    let path = diem_temppath::TempPath::new();
+    let path = aptos_temppath::TempPath::new();
     path.create_as_dir().unwrap();
-    let (diem_db, db, executor, waypoint) = create_db_and_executor(path.path(), &genesis_txn);
+    let (aptos_db, db, executor, waypoint) = create_db_and_executor(path.path(), &genesis_txn);
 
     let parent_block_id = executor.committed_block_id();
-    let signer = diem_types::validator_signer::ValidatorSigner::new(
+    let signer = aptos_types::validator_signer::ValidatorSigner::new(
         validators[0].data.address,
         validators[0].key.clone(),
     );
@@ -506,15 +506,15 @@ pub fn test_execution_with_storage_impl() -> Arc<DiemDB> {
     assert_eq!(account3_received_events_batch2.len(), 7);
     assert_eq!(account3_received_events_batch2[0].1.sequence_number(), 6);
 
-    diem_db
+    aptos_db
 }
 
 pub fn create_db_and_executor<P: AsRef<std::path::Path>>(
     path: P,
     genesis: &Transaction,
-) -> (Arc<DiemDB>, DbReaderWriter, BlockExecutor<DiemVM>, Waypoint) {
-    let (db, dbrw) = DbReaderWriter::wrap(DiemDB::new_for_test(&path));
-    let waypoint = bootstrap_genesis::<DiemVM>(&dbrw, genesis).unwrap();
+) -> (Arc<AptosDB>, DbReaderWriter, BlockExecutor<AptosVM>, Waypoint) {
+    let (db, dbrw) = DbReaderWriter::wrap(AptosDB::new_for_test(&path));
+    let waypoint = bootstrap_genesis::<AptosVM>(&dbrw, genesis).unwrap();
     let executor = BlockExecutor::new(dbrw.clone());
 
     (db, dbrw, executor, waypoint)

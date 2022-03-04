@@ -1,11 +1,11 @@
-// Copyright (c) The Diem Core Contributors
+// Copyright (c) The Aptos Core Contributors
 // SPDX-License-Identifier: Apache-2.0
 
 use crate::{common::Author, quorum_cert::QuorumCert};
 use anyhow::{ensure, Context};
-use diem_crypto::ed25519::Ed25519Signature;
-use diem_crypto_derive::{BCSCryptoHash, CryptoHasher};
-use diem_types::{
+use aptos_crypto::ed25519::Ed25519Signature;
+use aptos_crypto_derive::{BCSCryptoHash, CryptoHasher};
+use aptos_types::{
     block_info::Round, validator_signer::ValidatorSigner, validator_verifier::ValidatorVerifier,
 };
 use serde::{Deserialize, Serialize};
@@ -15,7 +15,7 @@ use std::{
 };
 
 /// This structure contains all the information necessary to construct a signature
-/// on the equivalent of a DiemBFT v4 timeout message.
+/// on the equivalent of a AptosBFT v4 timeout message.
 #[derive(Clone, Debug, Deserialize, Eq, PartialEq, Serialize)]
 pub struct TwoChainTimeout {
     /// Epoch number corresponds to the set of validators that are active for this round.
@@ -95,7 +95,7 @@ pub struct TimeoutSigningRepr {
 }
 
 /// TimeoutCertificate is a proof that 2f+1 participants in epoch i
-/// have voted in round r and we can now move to round r+1. DiemBFT v4 requires signature to sign on
+/// have voted in round r and we can now move to round r+1. AptosBFT v4 requires signature to sign on
 /// the TimeoutSigningRepr and carry the TimeoutWithHighestQC with highest quorum cert among 2f+1.
 #[derive(Debug, Clone, Serialize, Deserialize, Eq, PartialEq)]
 pub struct TwoChainTimeoutCertificate {
@@ -198,8 +198,8 @@ impl TwoChainTimeoutCertificate {
 #[test]
 fn test_2chain_timeout_certificate() {
     use crate::vote_data::VoteData;
-    use diem_crypto::hash::CryptoHash;
-    use diem_types::{
+    use aptos_crypto::hash::CryptoHash;
+    use aptos_types::{
         block_info::BlockInfo,
         ledger_info::{LedgerInfo, LedgerInfoWithSignatures},
         validator_verifier::random_validator_verifier,

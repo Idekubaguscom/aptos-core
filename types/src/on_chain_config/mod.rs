@@ -1,4 +1,4 @@
-// Copyright (c) The Diem Core Contributors
+// Copyright (c) The Aptos Core Contributors
 // SPDX-License-Identifier: Apache-2.0
 
 use crate::{
@@ -18,7 +18,7 @@ use serde::{de::DeserializeOwned, Deserialize, Serialize};
 use std::{collections::HashMap, fmt, sync::Arc};
 
 mod consensus_config;
-mod diem_version;
+mod aptos_version;
 mod parallel_execution_config;
 mod registered_currencies;
 mod validator_set;
@@ -27,8 +27,8 @@ mod vm_publishing_option;
 
 pub use self::{
     consensus_config::{ConsensusConfigV1, ConsensusConfigV2, OnChainConsensusConfig},
-    diem_version::{
-        DiemVersion, DIEM_MAX_KNOWN_VERSION, DIEM_VERSION_2, DIEM_VERSION_3, DIEM_VERSION_4,
+    aptos_version::{
+        AptosVersion, DIEM_MAX_KNOWN_VERSION, DIEM_VERSION_2, DIEM_VERSION_3, DIEM_VERSION_4,
     },
     parallel_execution_config::{ParallelExecutionConfig, ReadWriteSetAnalysis},
     registered_currencies::RegisteredCurrencies,
@@ -70,7 +70,7 @@ impl fmt::Display for ConfigID {
 pub const ON_CHAIN_CONFIG_REGISTRY: &[ConfigID] = &[
     VMConfig::CONFIG_ID,
     VMPublishingOption::CONFIG_ID,
-    DiemVersion::CONFIG_ID,
+    AptosVersion::CONFIG_ID,
     ValidatorSet::CONFIG_ID,
     RegisteredCurrencies::CONFIG_ID,
     OnChainConsensusConfig::CONFIG_ID,
@@ -127,7 +127,7 @@ pub trait ConfigStorage {
 /// Trait to be implemented by a Rust struct representation of an on-chain config
 /// that is stored in storage as a serialized byte array
 pub trait OnChainConfig: Send + Sync + DeserializeOwned {
-    // diem_root_address
+    // aptos_root_address
     const ADDRESS: &'static str = CONFIG_ADDRESS_STR;
     const IDENTIFIER: &'static str;
     const CONFIG_ID: ConfigID = ConfigID(Self::ADDRESS, Self::IDENTIFIER);
@@ -247,13 +247,13 @@ impl Default for ConfigurationResource {
         Self {
             epoch: 0,
             last_reconfiguration_time: 0,
-            events: EventHandle::new_from_address(&crate::account_config::diem_root_address(), 16),
+            events: EventHandle::new_from_address(&crate::account_config::aptos_root_address(), 16),
         }
     }
 }
 
 impl MoveStructType for ConfigurationResource {
-    const MODULE_NAME: &'static IdentStr = ident_str!("DiemConfig");
+    const MODULE_NAME: &'static IdentStr = ident_str!("AptosConfig");
     const STRUCT_NAME: &'static IdentStr = ident_str!("Configuration");
 }
 

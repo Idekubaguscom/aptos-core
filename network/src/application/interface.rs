@@ -1,4 +1,4 @@
-// Copyright (c) The Diem Core Contributors
+// Copyright (c) The Aptos Core Contributors
 // SPDX-License-Identifier: Apache-2.0
 
 use crate::{
@@ -10,8 +10,8 @@ use crate::{
     protocols::network::{ApplicationNetworkSender, Message, RpcError},
 };
 use async_trait::async_trait;
-use diem_config::network_id::{NetworkId, PeerNetworkId};
-use diem_types::PeerId;
+use aptos_config::network_id::{NetworkId, PeerNetworkId};
+use aptos_types::PeerId;
 use itertools::Itertools;
 use std::{collections::HashMap, fmt::Debug, hash::Hash, marker::PhantomData, time::Duration};
 

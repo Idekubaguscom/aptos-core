@@ -1,4 +1,4 @@
-// Copyright (c) The Diem Core Contributors
+// Copyright (c) The Aptos Core Contributors
 // SPDX-License-Identifier: Apache-2.0
 
 use std::sync::Arc;
@@ -8,8 +8,8 @@ use consensus_types::{
     executed_block::ExecutedBlock,
     quorum_cert::QuorumCert,
 };
-use diem_crypto::HashValue;
-use diem_types::{ledger_info::LedgerInfo, validator_verifier::random_validator_verifier};
+use aptos_crypto::HashValue;
+use aptos_types::{ledger_info::LedgerInfo, validator_verifier::random_validator_verifier};
 use executor_types::{Error, StateComputeResult};
 
 use crate::{

@@ -1,8 +1,8 @@
-// Copyright (c) The Diem Core Contributors
+// Copyright (c) The Aptos Core Contributors
 // SPDX-License-Identifier: Apache-2.0
 
 use crate::on_chain_config::OnChainConfig;
-use diem_crypto::HashValue;
+use aptos_crypto::HashValue;
 use serde::{Deserialize, Serialize};
 
 /// Defines and holds the publishing policies for the VM. There are three possible configurations:
@@ -49,5 +49,5 @@ impl VMPublishingOption {
 }
 
 impl OnChainConfig for VMPublishingOption {
-    const IDENTIFIER: &'static str = "DiemTransactionPublishingOption";
+    const IDENTIFIER: &'static str = "AptosTransactionPublishingOption";
 }

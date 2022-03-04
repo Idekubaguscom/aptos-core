@@ -1,7 +1,7 @@
-// Copyright (c) The Diem Core Contributors
+// Copyright (c) The Aptos Core Contributors
 // SPDX-License-Identifier: Apache-2.0
 
-//! Implementation of the unary RPC protocol as per [DiemNet wire protocol v1].
+//! Implementation of the unary RPC protocol as per [AptosNet wire protocol v1].
 //!
 //! ## Design:
 //!
@@ -40,7 +40,7 @@
 //! We limit the number of pending inbound and outbound RPC tasks to ensure that
 //! resource usage is bounded.
 //!
-//! [DiemNet wire protocol v1]: https://github.com/diem/diem/blob/main/specifications/network/messaging-v1.md
+//! [AptosNet wire protocol v1]: https://github.com/aptos/aptos/blob/main/specifications/network/messaging-v1.md
 //! [`Peer`]: crate::peer::Peer
 
 use crate::{
@@ -59,12 +59,12 @@ use crate::{
 };
 use anyhow::anyhow;
 use bytes::Bytes;
-use channel::diem_channel;
-use diem_config::network_id::NetworkContext;
-use diem_id_generator::{IdGenerator, U32IdGenerator};
-use diem_logger::prelude::*;
-use diem_time_service::{timeout, TimeService, TimeServiceTrait};
-use diem_types::PeerId;
+use channel::aptos_channel;
+use aptos_config::network_id::NetworkContext;
+use aptos_id_generator::{IdGenerator, U32IdGenerator};
+use aptos_logger::prelude::*;
+use aptos_time_service::{timeout, TimeService, TimeServiceTrait};
+use aptos_types::PeerId;
 use error::RpcError;
 use futures::{
     channel::oneshot,
@@ -205,7 +205,7 @@ impl InboundRpcs {
     /// Handle a new inbound `RpcRequest` message off the wire.
     pub fn handle_inbound_request(
         &mut self,
-        peer_notifs_tx: &mut diem_channel::Sender<ProtocolId, PeerNotification>,
+        peer_notifs_tx: &mut aptos_channel::Sender<ProtocolId, PeerNotification>,
         request: RpcRequest,
     ) -> Result<(), RpcError> {
         let network_context = &self.network_context;

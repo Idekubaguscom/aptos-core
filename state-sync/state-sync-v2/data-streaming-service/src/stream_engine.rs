@@ -1,4 +1,4 @@
-// Copyright (c) The Diem Core Contributors
+// Copyright (c) The Aptos Core Contributors
 // SPDX-License-Identifier: Apache-2.0
 
 use crate::{
@@ -17,10 +17,10 @@ use crate::{
         Epoch, GetAllAccountsRequest, GetAllEpochEndingLedgerInfosRequest, StreamRequest,
     },
 };
-use diem_data_client::{AdvertisedData, GlobalDataSummary, ResponsePayload};
-use diem_id_generator::{IdGenerator, U64IdGenerator};
-use diem_logger::prelude::*;
-use diem_types::{ledger_info::LedgerInfoWithSignatures, transaction::Version};
+use aptos_data_client::{AdvertisedData, GlobalDataSummary, ResponsePayload};
+use aptos_id_generator::{IdGenerator, U64IdGenerator};
+use aptos_logger::prelude::*;
+use aptos_types::{ledger_info::LedgerInfoWithSignatures, transaction::Version};
 use enum_dispatch::enum_dispatch;
 use std::{cmp, sync::Arc};
 
@@ -55,7 +55,7 @@ macro_rules! invalid_stream_request {
 #[enum_dispatch]
 pub trait DataStreamEngine {
     /// Creates a batch of data client requests (up to `max_number_of_requests`)
-    /// that can be sent to the diem data client to progress the stream.
+    /// that can be sent to the aptos data client to progress the stream.
     fn create_data_client_requests(
         &mut self,
         max_number_of_requests: u64,
@@ -214,7 +214,7 @@ impl DataStreamEngine for AccountsStreamEngine {
             Ok(client_requests)
         } else {
             info!(
-                (LogSchema::new(LogEntry::DiemDataClient)
+                (LogSchema::new(LogEntry::AptosDataClient)
                     .event(LogEvent::Pending)
                     .message(&format!(
                         "Requested the number of accounts at version: {:?}",
@@ -545,7 +545,7 @@ impl DataStreamEngine for ContinuousTransactionStreamEngine {
             if target_ledger_info.ledger_info().epoch() > next_request_epoch {
                 // There was an epoch change. Request an epoch ending ledger info.
                 info!(
-                    (LogSchema::new(LogEntry::DiemDataClient)
+                    (LogSchema::new(LogEntry::AptosDataClient)
                         .event(LogEvent::Pending)
                         .message(&format!(
                             "Requested an epoch ending ledger info for epoch: {:?}",

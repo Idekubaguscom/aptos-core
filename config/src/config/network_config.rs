@@ -1,4 +1,4 @@
-// Copyright (c) The Diem Core Contributors
+// Copyright (c) The Aptos Core Contributors
 // SPDX-License-Identifier: Apache-2.0
 
 use crate::{
@@ -7,9 +7,9 @@ use crate::{
     network_id::NetworkId,
     utils,
 };
-use diem_crypto::{x25519, Uniform};
-use diem_secure_storage::{CryptoStorage, KVStorage, Storage};
-use diem_types::{
+use aptos_crypto::{x25519, Uniform};
+use aptos_secure_storage::{CryptoStorage, KVStorage, Storage};
+use aptos_types::{
     network_address::NetworkAddress, transaction::authenticator::AuthenticationKey, PeerId,
 };
 use rand::{
@@ -226,12 +226,12 @@ impl NetworkConfig {
                 let mut rng = StdRng::from_seed(OsRng.gen());
                 let key = x25519::PrivateKey::generate(&mut rng);
                 let peer_id =
-                    diem_types::account_address::from_identity_public_key(key.public_key());
+                    aptos_types::account_address::from_identity_public_key(key.public_key());
                 self.identity = Identity::from_config(key, peer_id);
             }
             Identity::FromConfig(config) => {
                 let peer_id =
-                    diem_types::account_address::from_identity_public_key(config.key.public_key());
+                    aptos_types::account_address::from_identity_public_key(config.key.public_key());
                 if config.peer_id == PeerId::ZERO {
                     config.peer_id = peer_id;
                 }
@@ -257,7 +257,7 @@ impl NetworkConfig {
 
     fn verify_address(peer_id: &PeerId, addr: &NetworkAddress) -> Result<(), Error> {
         crate::config::invariant(
-            addr.is_diemnet_addr(),
+            addr.is_aptosnet_addr(),
             format!(
                 "Unexpected seed peer address format: peer_id: {}, addr: '{}'",
                 peer_id.short_str(),
@@ -279,7 +279,7 @@ impl NetworkConfig {
                 Self::verify_address(peer_id, addr)?;
             }
 
-            // Require there to be a pubkey somewhere, either in the address (assumed by `is_diemnet_addr`)
+            // Require there to be a pubkey somewhere, either in the address (assumed by `is_aptosnet_addr`)
             crate::config::invariant(
                 !seed.keys.is_empty() || !seed.addresses.is_empty(),
                 format!("Seed peer {} has no pubkeys", peer_id.short_str()),

@@ -1,10 +1,10 @@
-// Copyright (c) The Diem Core Contributors
+// Copyright (c) The Aptos Core Contributors
 // SPDX-License-Identifier: Apache-2.0
 
-use diem_config::config::{Identity, NodeConfig, SecureBackend};
-use diem_crypto::ed25519::Ed25519PublicKey;
-use diem_rest_client::Client as RestClient;
-use diem_sdk::{
+use aptos_config::config::{Identity, NodeConfig, SecureBackend};
+use aptos_crypto::ed25519::Ed25519PublicKey;
+use aptos_rest_client::Client as RestClient;
+use aptos_sdk::{
     transaction_builder::{Currency, TransactionFactory},
     types::{transaction::SignedTransaction, LocalAccount},
 };
@@ -70,14 +70,14 @@ pub async fn transfer_and_reconfig(
     for _ in 0..num_transfers {
         // Reconfigurations have a 20% chance of being executed
         if random::<u16>() % 5 == 0 {
-            let diem_version = client.get_diem_version().await.unwrap();
-            let current_version = *diem_version.into_inner().payload.major.inner();
+            let aptos_version = client.get_aptos_version().await.unwrap();
+            let current_version = *aptos_version.into_inner().payload.major.inner();
             let txn = root_account.sign_with_transaction_builder(
-                transaction_factory.update_diem_version(0, current_version + 1),
+                transaction_factory.update_aptos_version(0, current_version + 1),
             );
             client.submit_and_wait(&txn).await.unwrap();
 
-            println!("Changing diem version to {}", current_version + 1,);
+            println!("Changing aptos version to {}", current_version + 1,);
         }
 
         transfer_coins(client, transaction_factory, sender, receiver, 1).await;
@@ -99,16 +99,16 @@ pub async fn assert_balance(client: &RestClient, account: &LocalAccount, balance
 }
 
 /// This module provides useful functions for operating, handling and managing
-/// DiemSwarm instances. It is particularly useful for working with tests that
+/// AptosSwarm instances. It is particularly useful for working with tests that
 /// require a SmokeTestEnvironment, as it provides a generic interface across
-/// DiemSwarms, regardless of if the swarm is a validator swarm, validator full
+/// AptosSwarms, regardless of if the swarm is a validator swarm, validator full
 /// node swarm, or a public full node swarm.
-pub mod diem_swarm_utils {
+pub mod aptos_swarm_utils {
     use crate::test_utils::fetch_backend_storage;
-    use diem_config::config::{NodeConfig, OnDiskStorageConfig, SecureBackend, WaypointConfig};
-    use diem_global_constants::{DIEM_ROOT_KEY, TREASURY_COMPLIANCE_KEY};
-    use diem_secure_storage::{CryptoStorage, KVStorage, OnDiskStorage, Storage};
-    use diem_types::waypoint::Waypoint;
+    use aptos_config::config::{NodeConfig, OnDiskStorageConfig, SecureBackend, WaypointConfig};
+    use aptos_global_constants::{DIEM_ROOT_KEY, TREASURY_COMPLIANCE_KEY};
+    use aptos_secure_storage::{CryptoStorage, KVStorage, OnDiskStorage, Storage};
+    use aptos_types::waypoint::Waypoint;
     use forge::{LocalNode, LocalSwarm, Swarm};
 
     /// Loads the nodes's storage backend identified by the node index in the given swarm.
@@ -143,10 +143,10 @@ pub mod diem_swarm_utils {
         let f = |backend: &SecureBackend| {
             let mut storage: Storage = backend.into();
             storage
-                .set(diem_global_constants::WAYPOINT, waypoint)
+                .set(aptos_global_constants::WAYPOINT, waypoint)
                 .expect("Unable to write waypoint");
             storage
-                .set(diem_global_constants::GENESIS_WAYPOINT, waypoint)
+                .set(aptos_global_constants::GENESIS_WAYPOINT, waypoint)
                 .expect("Unable to write waypoint");
         };
         let backend = &node_config.consensus.safety_rules.backend;

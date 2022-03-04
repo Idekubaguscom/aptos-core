@@ -1,4 +1,4 @@
-// Copyright (c) The Diem Core Contributors
+// Copyright (c) The Aptos Core Contributors
 // SPDX-License-Identifier: Apache-2.0
 
 use crate::{
@@ -8,7 +8,7 @@ use crate::{
     twins::twins_node::SMRNode,
 };
 use consensus_types::{block::Block, common::Round};
-use diem_config::config::ConsensusProposerType::{FixedProposer, RotatingProposer, RoundProposer};
+use aptos_config::config::ConsensusProposerType::{FixedProposer, RotatingProposer, RoundProposer};
 use futures::StreamExt;
 use std::collections::HashMap;
 
@@ -73,7 +73,7 @@ fn basic_start_test() {
 ///
 /// Run the test:
 /// cargo xtest -p consensus drop_config_test -- --nocapture
-#[ignore] // TODO: https://github.com/diem/diem/issues/8767
+#[ignore] // TODO: https://github.com/aptos/aptos/issues/8767
 fn drop_config_test() {
     let mut runtime = consensus_runtime();
     let mut playground = NetworkPlayground::new(runtime.handle().clone());
@@ -255,7 +255,7 @@ fn twins_proposer_test() {
 }
 
 #[test]
-#[ignore] // TODO: https://github.com/diem/diem/issues/6615
+#[ignore] // TODO: https://github.com/aptos/aptos/issues/6615
 /// This test checks that when a node and its twin are both leaders
 /// for a round, only one of the two proposals gets committed
 ///

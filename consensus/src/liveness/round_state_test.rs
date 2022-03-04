@@ -1,4 +1,4 @@
-// Copyright (c) The Diem Core Contributors
+// Copyright (c) The Aptos Core Contributors
 // SPDX-License-Identifier: Apache-2.0
 
 use crate::{
@@ -12,8 +12,8 @@ use consensus_types::{
     common::Round, quorum_cert::QuorumCert, sync_info::SyncInfo, timeout::Timeout,
     timeout_certificate::TimeoutCertificate, vote_data::VoteData,
 };
-use diem_crypto::HashValue;
-use diem_types::{
+use aptos_crypto::HashValue;
+use aptos_types::{
     block_info::BlockInfo,
     ledger_info::{LedgerInfo, LedgerInfoWithSignatures},
 };

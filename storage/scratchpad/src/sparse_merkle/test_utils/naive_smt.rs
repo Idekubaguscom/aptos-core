@@ -1,13 +1,13 @@
-// Copyright (c) The Diem Core Contributors
+// Copyright (c) The Aptos Core Contributors
 // SPDX-License-Identifier: Apache-2.0
 
 use crate::sparse_merkle::utils::partition;
 use bitvec::prelude::*;
-use diem_crypto::{
+use aptos_crypto::{
     hash::{CryptoHash, SPARSE_MERKLE_PLACEHOLDER_HASH},
     HashValue,
 };
-use diem_types::proof::{SparseMerkleInternalNode, SparseMerkleLeafNode, SparseMerkleProof};
+use aptos_types::proof::{SparseMerkleInternalNode, SparseMerkleLeafNode, SparseMerkleProof};
 use std::collections::{BTreeMap, HashMap};
 
 type Cache = HashMap<BitVec<Msb0, u8>, HashValue>;

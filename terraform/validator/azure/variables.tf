@@ -20,11 +20,11 @@ variable "zone_resource_group" {
 
 variable "record_name" {
   description = "DNS record name to use (<workspace> is replaced with the TF workspace name)"
-  default     = "<workspace>.diem"
+  default     = "<workspace>.aptos"
 }
 
 variable "helm_chart" {
-  description = "Path to diem-validator Helm chart file"
+  description = "Path to aptos-validator Helm chart file"
   default     = "../helm"
 }
 

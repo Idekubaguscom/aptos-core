@@ -1,4 +1,4 @@
-// Copyright (c) The Diem Core Contributors
+// Copyright (c) The Aptos Core Contributors
 // SPDX-License-Identifier: Apache-2.0
 
 use futures::channel::{mpsc::SendError, oneshot::Canceled};
@@ -9,10 +9,10 @@ use thiserror::Error;
 pub enum Error {
     #[error("The requested data is unavailable and cannot be found in the network! Error: {0}")]
     DataIsUnavailable(String),
-    #[error("Error returned by the diem data client: {0}")]
-    DiemDataClientError(String),
-    #[error("The response from the diem data client is invalid! Error: {0}")]
-    DiemDataClientResponseIsInvalid(String),
+    #[error("Error returned by the aptos data client: {0}")]
+    AptosDataClientError(String),
+    #[error("The response from the aptos data client is invalid! Error: {0}")]
+    AptosDataClientResponseIsInvalid(String),
     #[error("An integer overflow has occurred: {0}")]
     IntegerOverflow(String),
     #[error("No data to fetch: {0}")]
@@ -28,8 +28,8 @@ impl Error {
     pub fn get_label(&self) -> &'static str {
         match self {
             Self::DataIsUnavailable(_) => "data_is_unavailable",
-            Self::DiemDataClientError(_) => "diem_data_client_error",
-            Self::DiemDataClientResponseIsInvalid(_) => "diem_data_client_response_is_invalid",
+            Self::AptosDataClientError(_) => "aptos_data_client_error",
+            Self::AptosDataClientResponseIsInvalid(_) => "aptos_data_client_response_is_invalid",
             Self::IntegerOverflow(_) => "integer_overflow",
             Self::NoDataToFetch(_) => "no_data_to_fetch",
             Self::UnexpectedErrorEncountered(_) => "unexpected_error_encountered",
@@ -38,9 +38,9 @@ impl Error {
     }
 }
 
-impl From<diem_data_client::Error> for Error {
-    fn from(error: diem_data_client::Error) -> Self {
-        Error::DiemDataClientError(error.to_string())
+impl From<aptos_data_client::Error> for Error {
+    fn from(error: aptos_data_client::Error) -> Self {
+        Error::AptosDataClientError(error.to_string())
     }
 }
 

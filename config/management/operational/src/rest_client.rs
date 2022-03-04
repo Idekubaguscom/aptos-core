@@ -1,10 +1,10 @@
-// Copyright (c) The Diem Core Contributors
+// Copyright (c) The Aptos Core Contributors
 // SPDX-License-Identifier: Apache-2.0
 
 use crate::{TransactionContext, TransactionStatus};
-use diem_management::error::Error;
-use diem_rest_client::Client;
-use diem_types::{
+use aptos_management::error::Error;
+use aptos_rest_client::Client;
+use aptos_types::{
     account_address::AccountAddress, account_config, account_config::AccountResource,
     account_state::AccountState, account_state_blob::AccountStateBlob,
     transaction::SignedTransaction, validator_config::ValidatorConfigResource,
@@ -61,7 +61,7 @@ impl RestClient {
     }
 
     /// This method returns all validator infos currently registered in the validator set of the
-    /// Diem blockchain. If account is specified, only a single validator info is returned: the
+    /// Aptos blockchain. If account is specified, only a single validator info is returned: the
     /// one that matches the given account.
     pub async fn validator_set(
         &self,

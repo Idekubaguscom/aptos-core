@@ -1,9 +1,9 @@
-// Copyright (c) The Diem Core Contributors
+// Copyright (c) The Aptos Core Contributors
 // SPDX-License-Identifier: Apache-2.0
 
 use crate::{block::Block, common::Author, sync_info::SyncInfo};
 use anyhow::{anyhow, ensure, format_err, Context, Result};
-use diem_types::validator_verifier::ValidatorVerifier;
+use aptos_types::validator_verifier::ValidatorVerifier;
 use serde::{Deserialize, Serialize};
 use short_hex_str::AsShortHexStr;
 use std::fmt;

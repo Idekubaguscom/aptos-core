@@ -1,4 +1,4 @@
-// Copyright (c) The Diem Core Contributors
+// Copyright (c) The Aptos Core Contributors
 // SPDX-License-Identifier: Apache-2.0
 
 use crate::{
@@ -11,7 +11,7 @@ use crate::{
         ordering_state_computer::OrderingStateComputer,
     },
     liveness::{
-        leader_reputation::{ActiveInactiveHeuristic, DiemDBBackend, LeaderReputation},
+        leader_reputation::{ActiveInactiveHeuristic, AptosDBBackend, LeaderReputation},
         proposal_generator::ProposalGenerator,
         proposer_election::ProposerElection,
         rotating_proposer_election::{choose_leader, RotatingProposer},
@@ -28,16 +28,16 @@ use crate::{
     util::time_service::TimeService,
 };
 use anyhow::{bail, ensure, Context};
-use channel::{diem_channel, message_queues::QueueStyle};
+use channel::{aptos_channel, message_queues::QueueStyle};
 use consensus_types::{
     common::{Author, Round},
     epoch_retrieval::EpochRetrievalRequest,
 };
-use diem_config::config::{ConsensusConfig, ConsensusProposerType, NodeConfig};
-use diem_infallible::{duration_since_epoch, Mutex};
-use diem_logger::prelude::*;
-use diem_metrics::monitor;
-use diem_types::{
+use aptos_config::config::{ConsensusConfig, ConsensusProposerType, NodeConfig};
+use aptos_infallible::{duration_since_epoch, Mutex};
+use aptos_logger::prelude::*;
+use aptos_metrics::monitor;
+use aptos_types::{
     account_address::AccountAddress,
     epoch_change::EpochChangeProof,
     epoch_state::EpochState,
@@ -91,11 +91,11 @@ pub struct EpochManager {
     safety_rules_manager: SafetyRulesManager,
     reconfig_events: ReconfigNotificationListener,
     // channels to buffer manager
-    buffer_manager_msg_tx: Option<diem_channel::Sender<AccountAddress, VerifiedEvent>>,
+    buffer_manager_msg_tx: Option<aptos_channel::Sender<AccountAddress, VerifiedEvent>>,
     buffer_manager_reset_tx: Option<UnboundedSender<ResetRequest>>,
     // channels to round manager
     round_manager_tx: Option<
-        diem_channel::Sender<(Author, Discriminant<VerifiedEvent>), (Author, VerifiedEvent)>,
+        aptos_channel::Sender<(Author, Discriminant<VerifiedEvent>), (Author, VerifiedEvent)>,
     >,
     epoch_state: Option<EpochState>,
 }
@@ -184,7 +184,7 @@ impl EpochManager {
                 ))
             }
             ConsensusProposerType::LeaderReputation(heuristic_config) => {
-                let backend = Box::new(DiemDBBackend::new(proposers.len(), self.storage.diem_db()));
+                let backend = Box::new(AptosDBBackend::new(proposers.len(), self.storage.aptos_db()));
                 let heuristic = Box::new(ActiveInactiveHeuristic::new(
                     self.author,
                     heuristic_config.active_weights,
@@ -221,7 +221,7 @@ impl EpochManager {
         );
         let proof = self
             .storage
-            .diem_db()
+            .aptos_db()
             .get_epoch_ending_ledger_infos(request.start_epoch, request.end_epoch)
             .map_err(DbError::from)
             .context("[EpochManager] Failed to get epoch proof")?;
@@ -296,7 +296,7 @@ impl EpochManager {
     }
 
     /// this function spawns the phases and a buffer manager
-    /// it sets `self.commit_msg_tx` to a new diem_channel::Sender and returns an OrderingStateComputer
+    /// it sets `self.commit_msg_tx` to a new aptos_channel::Sender and returns an OrderingStateComputer
     fn spawn_decoupled_execution(
         &mut self,
         safety_rules_container: Arc<Mutex<MetricsSafetyRules>>,
@@ -312,7 +312,7 @@ impl EpochManager {
         let (block_tx, block_rx) = unbounded::<OrderedBlocks>();
         let (reset_tx, reset_rx) = unbounded::<ResetRequest>();
 
-        let (commit_msg_tx, commit_msg_rx) = diem_channel::new::<AccountAddress, VerifiedEvent>(
+        let (commit_msg_tx, commit_msg_rx) = aptos_channel::new::<AccountAddress, VerifiedEvent>(
             QueueStyle::FIFO,
             self.config.channel_size,
             Some(&counters::BUFFER_MANAGER_MSGS),
@@ -458,7 +458,7 @@ impl EpochManager {
         );
 
         round_manager.init(last_vote).await;
-        let (round_manager_tx, round_manager_rx) = diem_channel::new(
+        let (round_manager_tx, round_manager_rx) = aptos_channel::new(
             QueueStyle::LIFO,
             1,
             Some(&counters::ROUND_MANAGER_CHANNEL_MSGS),

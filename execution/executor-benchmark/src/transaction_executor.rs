@@ -1,9 +1,9 @@
-// Copyright (c) The Diem Core Contributors
+// Copyright (c) The Aptos Core Contributors
 // SPDX-License-Identifier: Apache-2.0
 
-use diem_crypto::hash::HashValue;
-use diem_types::transaction::{Transaction, Version};
-use diem_vm::DiemVM;
+use aptos_crypto::hash::HashValue;
+use aptos_types::transaction::{Transaction, Version};
+use aptos_vm::AptosVM;
 use executor::block_executor::BlockExecutor;
 use executor_types::BlockExecutorTrait;
 use std::{
@@ -12,7 +12,7 @@ use std::{
 };
 
 pub struct TransactionExecutor {
-    executor: Arc<BlockExecutor<DiemVM>>,
+    executor: Arc<BlockExecutor<AptosVM>>,
     parent_block_id: HashValue,
     start_time: Instant,
     version: Version,
@@ -23,7 +23,7 @@ pub struct TransactionExecutor {
 
 impl TransactionExecutor {
     pub fn new(
-        executor: Arc<BlockExecutor<DiemVM>>,
+        executor: Arc<BlockExecutor<AptosVM>>,
         parent_block_id: HashValue,
         version: Version,
         commit_sender: Option<

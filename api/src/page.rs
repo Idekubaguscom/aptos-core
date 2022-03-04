@@ -1,9 +1,9 @@
-// Copyright (c) The Diem Core Contributors
+// Copyright (c) The Aptos Core Contributors
 // SPDX-License-Identifier: Apache-2.0
 
 use crate::param::{Param, TransactionVersionParam};
 
-use diem_api_types::{Error, TransactionId};
+use aptos_api_types::{Error, TransactionId};
 
 use anyhow::Result;
 use serde::Deserialize;

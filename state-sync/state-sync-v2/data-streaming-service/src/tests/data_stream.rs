@@ -1,4 +1,4 @@
-// Copyright (c) The Diem Core Contributors
+// Copyright (c) The Aptos Core Contributors
 // SPDX-License-Identifier: Apache-2.0
 
 use crate::{
@@ -13,20 +13,20 @@ use crate::{
     tests::utils::{
         create_data_client_response, create_ledger_info, create_random_u64,
         create_transaction_list_with_proof, get_data_notification, initialize_logger,
-        MockDiemDataClient, NoopResponseCallback, MAX_ADVERTISED_ACCOUNTS,
+        MockAptosDataClient, NoopResponseCallback, MAX_ADVERTISED_ACCOUNTS,
         MAX_ADVERTISED_EPOCH_END, MAX_ADVERTISED_TRANSACTION_OUTPUT, MAX_NOTIFICATION_TIMEOUT_SECS,
         MIN_ADVERTISED_ACCOUNTS, MIN_ADVERTISED_EPOCH_END, MIN_ADVERTISED_TRANSACTION_OUTPUT,
     },
 };
 use claim::{assert_err, assert_ge, assert_none, assert_ok};
-use diem_config::config::DataStreamingServiceConfig;
-use diem_data_client::{
+use aptos_config::config::DataStreamingServiceConfig;
+use aptos_data_client::{
     AdvertisedData, GlobalDataSummary, OptimalChunkSizes, Response, ResponseContext,
     ResponsePayload,
 };
-use diem_id_generator::U64IdGenerator;
-use diem_infallible::Mutex;
-use diem_types::{ledger_info::LedgerInfoWithSignatures, transaction::Version};
+use aptos_id_generator::U64IdGenerator;
+use aptos_infallible::Mutex;
+use aptos_types::{ledger_info::LedgerInfoWithSignatures, transaction::Version};
 use futures::{FutureExt, StreamExt};
 use std::{sync::Arc, time::Duration};
 use storage_service_types::CompleteDataRange;
@@ -188,7 +188,7 @@ async fn test_stream_data_error() {
     });
     let pending_response = PendingClientResponse {
         client_request: client_request.clone(),
-        client_response: Some(Err(diem_data_client::Error::DataIsUnavailable(
+        client_response: Some(Err(aptos_data_client::Error::DataIsUnavailable(
             "Missing data!".into(),
         ))),
     };
@@ -310,7 +310,7 @@ async fn test_stream_out_of_order_responses() {
 fn create_account_stream(
     streaming_service_config: DataStreamingServiceConfig,
     version: Version,
-) -> (DataStream<MockDiemDataClient>, DataStreamListener) {
+) -> (DataStream<MockAptosDataClient>, DataStreamListener) {
     // Create an account stream request
     let stream_request = StreamRequest::GetAllAccounts(GetAllAccountsRequest {
         version,
@@ -323,7 +323,7 @@ fn create_account_stream(
 fn create_epoch_ending_stream(
     streaming_service_config: DataStreamingServiceConfig,
     start_epoch: u64,
-) -> (DataStream<MockDiemDataClient>, DataStreamListener) {
+) -> (DataStream<MockAptosDataClient>, DataStreamListener) {
     // Create an epoch ending stream request
     let stream_request =
         StreamRequest::GetAllEpochEndingLedgerInfos(GetAllEpochEndingLedgerInfosRequest {
@@ -337,7 +337,7 @@ fn create_transaction_stream(
     streaming_service_config: DataStreamingServiceConfig,
     start_version: Version,
     end_version: Version,
-) -> (DataStream<MockDiemDataClient>, DataStreamListener) {
+) -> (DataStream<MockAptosDataClient>, DataStreamListener) {
     // Create a transaction output stream
     let stream_request = StreamRequest::GetAllTransactions(GetAllTransactionsRequest {
         start_version,
@@ -351,7 +351,7 @@ fn create_transaction_stream(
 fn create_data_stream(
     streaming_service_config: DataStreamingServiceConfig,
     stream_request: StreamRequest,
-) -> (DataStream<MockDiemDataClient>, DataStreamListener) {
+) -> (DataStream<MockAptosDataClient>, DataStreamListener) {
     initialize_logger();
 
     // Create an advertised data
@@ -375,8 +375,8 @@ fn create_data_stream(
         .unwrap()],
     };
 
-    // Create a diem data client mock and notification generator
-    let diem_data_client = MockDiemDataClient::new();
+    // Create a aptos data client mock and notification generator
+    let aptos_data_client = MockAptosDataClient::new();
     let notification_generator = Arc::new(U64IdGenerator::new());
 
     // Return the data stream and listener pair
@@ -384,7 +384,7 @@ fn create_data_stream(
         streaming_service_config,
         create_random_u64(10000),
         &stream_request,
-        diem_data_client,
+        aptos_data_client,
         notification_generator,
         &advertised_data,
     )
@@ -409,7 +409,7 @@ fn create_optimal_chunk_sizes(chunk_sizes: u64) -> OptimalChunkSizes {
 /// Sets the client response at the index in the pending queue to contain an
 /// epoch ending data response.
 fn set_epoch_ending_response_in_queue(
-    data_stream: &mut DataStream<MockDiemDataClient>,
+    data_stream: &mut DataStream<MockAptosDataClient>,
     index: usize,
 ) {
     // Set the response at the specified index
@@ -427,7 +427,7 @@ fn set_epoch_ending_response_in_queue(
 
 /// Sets the client response at the head of the pending queue to contain an
 /// transaction response.
-fn set_transaction_response_at_queue_head(data_stream: &mut DataStream<MockDiemDataClient>) {
+fn set_transaction_response_at_queue_head(data_stream: &mut DataStream<MockAptosDataClient>) {
     // Set the response at the specified index
     let (sent_requests, _) = data_stream.get_sent_requests_and_notifications();
     if !sent_requests.as_mut().unwrap().is_empty() {
@@ -442,7 +442,7 @@ fn set_transaction_response_at_queue_head(data_stream: &mut DataStream<MockDiemD
 /// Clears the pending queue of the given data stream and inserts a single
 /// response into the head of the queue.
 fn insert_response_into_pending_queue(
-    data_stream: &mut DataStream<MockDiemDataClient>,
+    data_stream: &mut DataStream<MockAptosDataClient>,
     pending_response: PendingClientResponse,
 ) {
     // Clear the queue
@@ -457,7 +457,7 @@ fn insert_response_into_pending_queue(
 /// Verifies that a client request was resubmitted (i.e., pushed to the head of the
 /// sent request queue)
 fn verify_client_request_resubmitted(
-    data_stream: &mut DataStream<MockDiemDataClient>,
+    data_stream: &mut DataStream<MockAptosDataClient>,
     client_request: DataClientRequest,
 ) {
     let (sent_requests, _) = data_stream.get_sent_requests_and_notifications();

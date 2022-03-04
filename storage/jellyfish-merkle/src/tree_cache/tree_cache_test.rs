@@ -1,10 +1,10 @@
-// Copyright (c) The Diem Core Contributors
+// Copyright (c) The Aptos Core Contributors
 // SPDX-License-Identifier: Apache-2.0
 
 use super::*;
 use crate::{mock_tree_store::MockTreeStore, node_type::Node, test_helper::ValueBlob, NodeKey};
-use diem_crypto::HashValue;
-use diem_types::nibble::nibble_path::NibblePath;
+use aptos_crypto::HashValue;
+use aptos_types::nibble::nibble_path::NibblePath;
 
 fn random_leaf_with_key(next_version: Version) -> (Node<ValueBlob>, NodeKey) {
     let address = HashValue::random();

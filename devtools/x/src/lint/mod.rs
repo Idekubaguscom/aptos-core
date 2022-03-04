@@ -1,4 +1,4 @@
-// Copyright (c) The Diem Core Contributors
+// Copyright (c) The Aptos Core Contributors
 // SPDX-License-Identifier: Apache-2.0
 
 use crate::context::XContext;
@@ -39,7 +39,7 @@ pub fn run(args: Args, xctx: XContext) -> crate::Result<()> {
         &guppy::PublishedPackagesDontDependOnUnpublishedPackages::new(xctx.core()),
         &guppy::OnlyPublishToCratesIo,
         &guppy::CratesInCratesDirectory,
-        &guppy::MoveCratesDontDependOnDiemCrates::new(&workspace_config.move_to_diem_deps),
+        &guppy::MoveCratesDontDependOnAptosCrates::new(&workspace_config.move_to_aptos_deps),
         &workspace_classify::DefaultOrTestOnly::new(
             xctx.core().package_graph()?,
             &workspace_config.test_only,

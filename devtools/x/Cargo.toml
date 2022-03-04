@@ -1,8 +1,8 @@
 [package]
 name = "x"
 version = "0.1.0"
-authors = ["Diem Association <opensource@diem.com>"]
-description = "Diem extended cargo tasks"
+authors = ["Aptos Association <opensource@aptos.com>"]
+description = "Aptos extended cargo tasks"
 edition = "2018"
 publish = false
 license = "Apache-2.0"

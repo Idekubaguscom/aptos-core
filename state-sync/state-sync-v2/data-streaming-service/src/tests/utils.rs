@@ -1,15 +1,15 @@
-// Copyright (c) The Diem Core Contributors
+// Copyright (c) The Aptos Core Contributors
 // SPDX-License-Identifier: Apache-2.0
 
 use crate::{data_notification::DataNotification, data_stream::DataStreamListener, error::Error};
 use async_trait::async_trait;
-use diem_crypto::{ed25519::Ed25519PrivateKey, HashValue, PrivateKey, SigningKey, Uniform};
-use diem_data_client::{
-    AdvertisedData, DiemDataClient, GlobalDataSummary, OptimalChunkSizes, Response,
+use aptos_crypto::{ed25519::Ed25519PrivateKey, HashValue, PrivateKey, SigningKey, Uniform};
+use aptos_data_client::{
+    AdvertisedData, AptosDataClient, GlobalDataSummary, OptimalChunkSizes, Response,
     ResponseCallback, ResponseContext, ResponseError,
 };
-use diem_logger::Level;
-use diem_types::{
+use aptos_logger::Level;
+use aptos_types::{
     account_address::AccountAddress,
     account_state_blob::AccountStatesChunkWithProof,
     block_info::BlockInfo,
@@ -51,14 +51,14 @@ pub const MAX_ADVERTISED_TRANSACTION_OUTPUT: u64 = 10000;
 /// Test timeout constant
 pub const MAX_NOTIFICATION_TIMEOUT_SECS: u64 = 10;
 
-/// A simple mock of the Diem Data Client
+/// A simple mock of the Aptos Data Client
 #[derive(Clone, Debug)]
-pub struct MockDiemDataClient {
+pub struct MockAptosDataClient {
     pub epoch_ending_ledger_infos: HashMap<Epoch, LedgerInfoWithSignatures>,
     pub synced_ledger_infos: Vec<LedgerInfoWithSignatures>,
 }
 
-impl MockDiemDataClient {
+impl MockAptosDataClient {
     pub fn new() -> Self {
         let epoch_ending_ledger_infos = create_epoch_ending_ledger_infos();
         let synced_ledger_infos = create_synced_ledger_infos(&epoch_ending_ledger_infos);
@@ -76,7 +76,7 @@ impl MockDiemDataClient {
 }
 
 #[async_trait]
-impl DiemDataClient for MockDiemDataClient {
+impl AptosDataClient for MockAptosDataClient {
     fn get_global_data_summary(&self) -> GlobalDataSummary {
         // Create a random set of optimal chunk sizes to emulate changing environments
         let optimal_chunk_sizes = OptimalChunkSizes {
@@ -121,7 +121,7 @@ impl DiemDataClient for MockDiemDataClient {
         _version: Version,
         start_index: u64,
         end_index: u64,
-    ) -> Result<Response<AccountStatesChunkWithProof>, diem_data_client::Error> {
+    ) -> Result<Response<AccountStatesChunkWithProof>, aptos_data_client::Error> {
         self.emulate_network_latencies();
 
         // Create epoch ending ledger infos according to the requested epochs
@@ -146,7 +146,7 @@ impl DiemDataClient for MockDiemDataClient {
         &self,
         start_epoch: Epoch,
         end_epoch: Epoch,
-    ) -> Result<Response<Vec<LedgerInfoWithSignatures>>, diem_data_client::Error> {
+    ) -> Result<Response<Vec<LedgerInfoWithSignatures>>, aptos_data_client::Error> {
         self.emulate_network_latencies();
 
         // Fetch the epoch ending ledger infos according to the requested epochs
@@ -161,7 +161,7 @@ impl DiemDataClient for MockDiemDataClient {
     async fn get_number_of_account_states(
         &self,
         _version: Version,
-    ) -> Result<Response<u64>, diem_data_client::Error> {
+    ) -> Result<Response<u64>, aptos_data_client::Error> {
         Ok(create_data_client_response(TOTAL_NUM_ACCOUNTS))
     }
 
@@ -170,7 +170,7 @@ impl DiemDataClient for MockDiemDataClient {
         _proof_version: Version,
         start_version: Version,
         end_version: Version,
-    ) -> Result<Response<TransactionOutputListWithProof>, diem_data_client::Error> {
+    ) -> Result<Response<TransactionOutputListWithProof>, aptos_data_client::Error> {
         self.emulate_network_latencies();
 
         // Create the requested transactions and transaction outputs
@@ -192,7 +192,7 @@ impl DiemDataClient for MockDiemDataClient {
         start_version: Version,
         end_version: Version,
         include_events: bool,
-    ) -> Result<Response<TransactionListWithProof>, diem_data_client::Error> {
+    ) -> Result<Response<TransactionListWithProof>, aptos_data_client::Error> {
         self.emulate_network_latencies();
 
         let transaction_list_with_proof =
@@ -365,9 +365,9 @@ fn create_range_random_u64(min_value: u64, max_value: u64) -> u64 {
     rng.gen_range(min_value..max_value)
 }
 
-/// Initializes the Diem logger for tests
+/// Initializes the Aptos logger for tests
 pub fn initialize_logger() {
-    diem_logger::DiemLogger::builder()
+    aptos_logger::AptosLogger::builder()
         .is_async(false)
         .level(Level::Info)
         .build();

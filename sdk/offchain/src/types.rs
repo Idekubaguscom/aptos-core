@@ -1,4 +1,4 @@
-// Copyright (c) The Diem Core Contributors
+// Copyright (c) The Aptos Core Contributors
 // SPDX-License-Identifier: Apache-2.0
 
 use serde::{
@@ -127,7 +127,7 @@ pub enum OffChainErrorType {
     Protocol,
 }
 
-// https://dip.diem.com/dip-1/#list-of-error-codes
+// https://dip.aptos.com/dip-1/#list-of-error-codes
 #[derive(Debug, PartialEq, Eq, Deserialize, Serialize)]
 #[serde(rename_all = "snake_case")]
 pub enum ErrorCode {
@@ -138,7 +138,7 @@ pub enum ErrorCode {
     /// * `X-REQUEST-SENDER-ADDRESS` header value is not the request sender’s address in the
     ///    command object. All command objects should have a field that is the request sender’s
     ///    address.
-    /// * Could not find Diem's onchain account by the `X-REQUEST-SENDER-ADDRESS` header value.
+    /// * Could not find Aptos's onchain account by the `X-REQUEST-SENDER-ADDRESS` header value.
     /// * Could not find the compliance key of the onchain account found by the
     ///   `X-REQUEST-SENDER-ADDRESS` header value.
     /// * The compliance key found from the onchain account by `X-REQUEST-SENDER-ADDRESS` is not a
@@ -185,7 +185,7 @@ pub enum ErrorCode {
     /// * Invalid / unknown enum field values.
     /// * UUID field value does not match UUID format.
     /// * Payment actor address is not a valid DIP-5 account identifier.
-    /// * Currency field value is not a valid Diem currency code for the connected network.
+    /// * Currency field value is not a valid Aptos currency code for the connected network.
     InvalidFieldValue,
 
     /// The HTTP request sender is not the right actor to send the payment object. For example, if
@@ -218,7 +218,7 @@ pub enum ErrorCode {
     /// * Failed to acquire lock for the command object by the reference_id.
     Conflict,
 
-    /// Field payment.action.currency value is a valid Diem currency code, but it is not supported
+    /// Field payment.action.currency value is a valid Aptos currency code, but it is not supported
     /// or acceptable by the receiver VASP.
     UnsupportedCurrency,
 
@@ -299,7 +299,7 @@ pub struct PaymentActorObject {
     /// time, and therefore VASPs should not rely on them remaining stable across time or different
     /// VASP addresses. The addresses are encoded using bech32. The bech32 address encodes both the
     /// address of the VASP as well as the specific user's subaddress. They should be no longer
-    /// than 80 characters. Mandatory and immutable. For Diem addresses, refer to the "account
+    /// than 80 characters. Mandatory and immutable. For Aptos addresses, refer to the "account
     /// identifier" section in DIP-5 for format.
     pub address: Box<str>,
 
@@ -365,13 +365,13 @@ pub enum ActionType {
 #[derive(Clone, Debug, PartialEq, Deserialize, Serialize)]
 pub struct PaymentActionObject {
     /// Amount of the transfer. Base units are the same as for on-chain transactions for this
-    /// currency. For example, if DiemUSD is represented on-chain where “1” equals 1e-6 dollars,
+    /// currency. For example, if AptosUSD is represented on-chain where “1” equals 1e-6 dollars,
     /// then “1” equals the same amount here. For any currency, the on-chain mapping must be used
     /// for amounts.
     pub amount: u64,
 
     /// One of the supported on-chain currency types - ex. XUS, etc.
-    // TODO Should be an enum per https://dip.diem.com/dip-1/#paymentactionobject
+    // TODO Should be an enum per https://dip.aptos.com/dip-1/#paymentactionobject
     pub currency: String,
 
     /// Populated in the request. This value indicates the requested action to perform, and the

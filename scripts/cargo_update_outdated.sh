@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# Copyright (c) The Diem Core Contributors
+# Copyright (c) The Aptos Core Contributors
 # SPDX-License-Identifier: Apache-2.0
 
 # This script modifies local cargo files to reflect compatibility (semver)
@@ -9,8 +9,8 @@
 
 # It requires cargo-edit and cargo-outdated
 # Example usage:
-# diem$ ./scripts/cargo_update_outdated.sh
-# diem$ git commit --all -m "Update dependencies"
+# aptos$ ./scripts/cargo_update_outdated.sh
+# aptos$ git commit --all -m "Update dependencies"
 set -e
 
 # check install for outdated & edit

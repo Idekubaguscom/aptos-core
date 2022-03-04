@@ -1,8 +1,8 @@
-// Copyright (c) The Diem Core Contributors
+// Copyright (c) The Aptos Core Contributors
 // SPDX-License-Identifier: Apache-2.0
 
 use crate::Error;
-use diem_logger::Schema;
+use aptos_logger::Schema;
 use serde::Serialize;
 use storage_service_types::StorageServiceRequest;
 

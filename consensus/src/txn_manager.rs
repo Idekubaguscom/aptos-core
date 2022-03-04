@@ -1,13 +1,13 @@
-// Copyright (c) The Diem Core Contributors
+// Copyright (c) The Aptos Core Contributors
 // SPDX-License-Identifier: Apache-2.0
 
 use crate::{error::MempoolError, state_replication::TxnManager};
 use anyhow::{format_err, Result};
 use consensus_types::{block::Block, common::Payload};
-use diem_logger::prelude::*;
-use diem_mempool::{ConsensusRequest, ConsensusResponse, TransactionSummary};
-use diem_metrics::monitor;
-use diem_types::transaction::TransactionStatus;
+use aptos_logger::prelude::*;
+use aptos_mempool::{ConsensusRequest, ConsensusResponse, TransactionSummary};
+use aptos_metrics::monitor;
+use aptos_types::transaction::TransactionStatus;
 use executor_types::StateComputeResult;
 use fail::fail_point;
 use futures::{

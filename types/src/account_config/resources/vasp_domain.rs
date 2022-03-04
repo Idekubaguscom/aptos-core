@@ -1,8 +1,8 @@
-// Copyright (c) The Diem Core Contributors
+// Copyright (c) The Aptos Core Contributors
 // SPDX-License-Identifier: Apache-2.0
 
 use crate::{
-    account_address::AccountAddress, diem_id_identifier::DiemIdVaspDomainIdentifier,
+    account_address::AccountAddress, aptos_id_identifier::AptosIdVaspDomainIdentifier,
     event::EventHandle,
 };
 use anyhow::Result;
@@ -26,7 +26,7 @@ impl VASPDomains {
         &self.domains
     }
 
-    pub fn get_domains_list(&self) -> Vec<DiemIdVaspDomainIdentifier> {
+    pub fn get_domains_list(&self) -> Vec<AptosIdVaspDomainIdentifier> {
         self.domains
             .iter()
             .map(|vasp_domain| vasp_domain.domain().clone())
@@ -43,11 +43,11 @@ impl MoveResource for VASPDomains {}
 
 #[derive(Clone, Debug, PartialEq, Eq, Serialize, Deserialize)]
 pub struct VASPDomain {
-    pub domain: DiemIdVaspDomainIdentifier,
+    pub domain: AptosIdVaspDomainIdentifier,
 }
 
 impl VASPDomain {
-    pub fn domain(&self) -> &DiemIdVaspDomainIdentifier {
+    pub fn domain(&self) -> &AptosIdVaspDomainIdentifier {
         &self.domain
     }
 }

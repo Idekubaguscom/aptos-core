@@ -1,4 +1,4 @@
-// Copyright (c) The Diem Core Contributors
+// Copyright (c) The Aptos Core Contributors
 // SPDX-License-Identifier: Apache-2.0
 
 use crate::{prelude::*, LintContext};
@@ -244,7 +244,7 @@ impl<'cfg> LintEngine<'cfg> {
         // TODO: make global exclusions configurable
         Ok(tracked_files
             .iter()
-            .filter(|f| !f.starts_with("testsuite/diem-fuzzer/artifacts/")))
+            .filter(|f| !f.starts_with("testsuite/aptos-fuzzer/artifacts/")))
     }
 }
 

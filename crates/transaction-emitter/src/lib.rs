@@ -1,10 +1,10 @@
-// Copyright (c) The Diem Core Contributors
+// Copyright (c) The Aptos Core Contributors
 // SPDX-License-Identifier: Apache-2.0
 
 use anyhow::{format_err, Context, Result};
-use diem_logger::*;
-use diem_rest_client::{views::AmountView, Client as RestClient, PendingTransaction, Response};
-use diem_sdk::{
+use aptos_logger::*;
+use aptos_rest_client::{views::AmountView, Client as RestClient, PendingTransaction, Response};
+use aptos_sdk::{
     move_types::account_address::AccountAddress,
     transaction_builder::{Currency, TransactionFactory},
     types::{
@@ -40,8 +40,8 @@ pub mod cluster;
 pub mod instance;
 
 use atomic_histogram::*;
-use diem_crypto::ed25519::Ed25519PrivateKey;
-use diem_sdk::types::AccountKey;
+use aptos_crypto::ed25519::Ed25519PrivateKey;
+use aptos_sdk::types::AccountKey;
 use rand::rngs::StdRng;
 
 /// Max transactions per account in mempool
@@ -496,7 +496,7 @@ impl<'t, 'd> TxnEmitter<'t, 'd> {
         tokio::time::sleep(Duration::from_secs(10)).await;
 
         let seed_rngs = gen_rng_for_reusable_account(actual_num_seed_accounts);
-        // For each seed account, create a future and transfer diem from that seed account to new accounts
+        // For each seed account, create a future and transfer aptos from that seed account to new accounts
         let account_futures = seed_accounts
             .into_iter()
             .enumerate()
@@ -778,12 +778,12 @@ pub async fn query_sequence_numbers(
     )
 }
 
-/// Create `num_new_accounts` by transferring diem from `source_account`. Return Vec of created
+/// Create `num_new_accounts` by transferring aptos from `source_account`. Return Vec of created
 /// accounts
 async fn create_new_accounts<R>(
     mut source_account: LocalAccount,
     num_new_accounts: usize,
-    diem_per_new_account: u64,
+    aptos_per_new_account: u64,
     max_num_accounts_per_batch: u64,
     client: RestClient,
     txn_factory: &TransactionFactory,
@@ -814,7 +814,7 @@ where
                             Currency::XUS,
                             account.authentication_key(),
                             false,
-                            diem_per_new_account,
+                            aptos_per_new_account,
                         ),
                     )
                 })
@@ -829,11 +829,11 @@ where
     Ok(accounts)
 }
 
-/// Mint `diem_per_new_account` from `minting_account` to each account in `accounts`.
+/// Mint `aptos_per_new_account` from `minting_account` to each account in `accounts`.
 async fn mint_to_new_accounts<R>(
     minting_account: &mut LocalAccount,
     accounts: &[LocalAccount],
-    diem_per_new_account: u64,
+    aptos_per_new_account: u64,
     max_num_accounts_per_batch: u64,
     client: RestClient,
     txn_factory: &TransactionFactory,
@@ -858,7 +858,7 @@ where
                 gen_transfer_txn_request(
                     minting_account,
                     &account.address(),
-                    diem_per_new_account,
+                    aptos_per_new_account,
                     txn_factory,
                     0,
                 )

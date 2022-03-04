@@ -1,4 +1,4 @@
-// Copyright (c) The Diem Core Contributors
+// Copyright (c) The Aptos Core Contributors
 // SPDX-License-Identifier: Apache-2.0
 
 #![forbid(unsafe_code)]
@@ -12,8 +12,8 @@ pub mod block_info;
 pub mod block_metadata;
 pub mod chain_id;
 pub mod contract_event;
-pub mod diem_id_identifier;
-pub mod diem_timestamp;
+pub mod aptos_id_identifier;
+pub mod aptos_timestamp;
 pub mod epoch_change;
 pub mod epoch_state;
 pub mod event;

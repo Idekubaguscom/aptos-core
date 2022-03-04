@@ -1,4 +1,4 @@
-// Copyright (c) The Diem Core Contributors
+// Copyright (c) The Aptos Core Contributors
 // SPDX-License-Identifier: Apache-2.0
 
 use crate::utils;
@@ -8,7 +8,7 @@ use std::{
     path::PathBuf,
 };
 
-/// Port selected RocksDB options for tuning underlying rocksdb instance of DiemDB.
+/// Port selected RocksDB options for tuning underlying rocksdb instance of AptosDB.
 /// see https://github.com/facebook/rocksdb/blob/master/include/rocksdb/options.h
 /// for detailed explanations.
 #[derive(Copy, Clone, Debug, Deserialize, PartialEq, Serialize)]
@@ -71,7 +71,7 @@ impl Default for StorageConfig {
             // conservatively safe minimal prune window. It'll take a few Gigabytes of disk space
             // depending on the size of an average account blob.
             prune_window: Some(1_000_000),
-            data_dir: PathBuf::from("/opt/diem/data"),
+            data_dir: PathBuf::from("/opt/aptos/data"),
             // Default read/write/connection timeout, in milliseconds
             timeout_ms: 30_000,
             rocksdb_config: RocksdbConfig::default(),

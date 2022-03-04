@@ -1,17 +1,17 @@
-// Copyright (c) The Diem Core Contributors
+// Copyright (c) The Aptos Core Contributors
 // SPDX-License-Identifier: Apache-2.0
 
 #![forbid(unsafe_code)]
 
 use anyhow::Result;
-use diem_config::config::RocksdbConfig;
+use aptos_config::config::RocksdbConfig;
 use diem_framework_releases::name_for_script;
-use diem_logger::info;
-use diemdb::DiemDB;
+use aptos_logger::info;
+use aptosdb::AptosDB;
 use std::path::PathBuf;
 use storage_interface::DbReader;
 
-use diem_types::{
+use aptos_types::{
     account_address::AccountAddress, account_config::AccountResource, account_state::AccountState,
 };
 use std::convert::TryFrom;
@@ -42,7 +42,7 @@ enum Command {
 }
 
 /// Print out latest information stored in the DB.
-fn print_head(db: &DiemDB) -> Result<()> {
+fn print_head(db: &AptosDB) -> Result<()> {
     let si = db
         .get_startup_info()
         .expect("Can't get startup info")
@@ -70,7 +70,7 @@ fn print_head(db: &DiemDB) -> Result<()> {
     Ok(())
 }
 
-fn print_txn(db: &DiemDB, version: u64) {
+fn print_txn(db: &AptosDB, version: u64) {
     let tx_list = db
         .get_transactions(version, 1, version, false)
         .expect("Unable to load latest TXN");
@@ -82,7 +82,7 @@ fn print_txn(db: &DiemDB, version: u64) {
     );
 }
 
-fn print_account(db: &DiemDB, addr: AccountAddress) {
+fn print_account(db: &AptosDB, addr: AccountAddress) {
     let maybe_blob = db
         .get_latest_account_state(addr)
         .expect("Unable to read AccountState");
@@ -103,7 +103,7 @@ fn print_account(db: &DiemDB, addr: AccountAddress) {
     }
 }
 
-fn list_txns(db: &DiemDB) {
+fn list_txns(db: &AptosDB) {
     let version = db
         .get_latest_version()
         .expect("Unable to get latest version");
@@ -122,7 +122,7 @@ fn list_txns(db: &DiemDB) {
     }
 }
 
-fn list_accounts(db: &DiemDB) {
+fn list_accounts(db: &AptosDB) {
     let version = db
         .get_latest_version()
         .expect("Unable to get latest version");
@@ -153,7 +153,7 @@ fn list_accounts(db: &DiemDB) {
 }
 
 fn main() {
-    ::diem_logger::DiemLogger::builder().build();
+    ::aptos_logger::AptosLogger::builder().build();
 
     let opt = Opt::from_args();
 
@@ -167,14 +167,14 @@ fn main() {
     let log_dir = tempfile::tempdir().expect("Unable to get temp dir");
     info!("Opening DB at: {:?}, log at {:?}", p, log_dir.path());
 
-    let db = DiemDB::open(
+    let db = AptosDB::open(
         p,
         true, /* readonly */
         None, /* pruner */
         RocksdbConfig::default(),
         true, /* account_count_migration, ignored anyway */
     )
-    .expect("Unable to open DiemDB");
+    .expect("Unable to open AptosDB");
     info!("DB opened successfully.");
 
     if let Some(cmd) = opt.cmd {

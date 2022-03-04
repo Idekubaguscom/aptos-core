@@ -1,0 +1,15 @@
+[package]
+name = "aptos-retrier"
+version = "0.1.0"
+authors = ["Aptos Association <opensource@aptos.com>"]
+description = "Aptos implementation for retries of operations"
+repository = "https://github.com/aptos/aptos"
+homepage = "https://aptos.com"
+license = "Apache-2.0"
+publish = false
+edition = "2018"
+
+[dependencies]
+aptos-workspace-hack = { version = "0.1", path = "../aptos-workspace-hack" }
+tokio = { version = "1.8.1", features = ["time"] }
+aptos-logger = { path = "../../crates/aptos-logger"}

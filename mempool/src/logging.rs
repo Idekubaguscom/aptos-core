@@ -1,11 +1,11 @@
-// Copyright (c) The Diem Core Contributors
+// Copyright (c) The Aptos Core Contributors
 // SPDX-License-Identifier: Apache-2.0
 
 use crate::shared_mempool::types::{BatchId, ConsensusRequest};
 use anyhow::Error;
-use diem_config::network_id::{NetworkId, PeerNetworkId};
-use diem_logger::Schema;
-use diem_types::{account_address::AccountAddress, on_chain_config::OnChainConfigPayload};
+use aptos_config::network_id::{NetworkId, PeerNetworkId};
+use aptos_logger::Schema;
+use aptos_types::{account_address::AccountAddress, on_chain_config::OnChainConfigPayload};
 use mempool_notifications::MempoolCommitNotification;
 use serde::Serialize;
 use std::{fmt, time::SystemTime};

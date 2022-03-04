@@ -1,15 +1,15 @@
-// Copyright (c) The Diem Core Contributors
+// Copyright (c) The Aptos Core Contributors
 // SPDX-License-Identifier: Apache-2.0
 
 mod handlers;
 
 use crate::handlers::get_routes;
-use diem_logger::prelude::*;
-use diemdb::DiemDB;
+use aptos_logger::prelude::*;
+use aptosdb::AptosDB;
 use std::{net::SocketAddr, sync::Arc};
 use tokio::runtime::{Builder, Runtime};
 
-pub fn start_backup_service(address: SocketAddr, db: Arc<DiemDB>) -> Runtime {
+pub fn start_backup_service(address: SocketAddr, db: Arc<AptosDB>) -> Runtime {
     let backup_handler = db.get_backup_handler();
     let routes = get_routes(backup_handler);
 
@@ -36,9 +36,9 @@ pub fn start_backup_service(address: SocketAddr, db: Arc<DiemDB>) -> Runtime {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use diem_config::utils::get_available_port;
-    use diem_crypto::hash::HashValue;
-    use diem_temppath::TempPath;
+    use aptos_config::utils::get_available_port;
+    use aptos_crypto::hash::HashValue;
+    use aptos_temppath::TempPath;
     use reqwest::blocking::get;
     use std::net::{IpAddr, Ipv4Addr};
 
@@ -50,7 +50,7 @@ mod tests {
     #[test]
     fn routing_and_error_codes() {
         let tmpdir = TempPath::new();
-        let db = Arc::new(DiemDB::new_for_test(&tmpdir));
+        let db = Arc::new(AptosDB::new_for_test(&tmpdir));
         let port = get_available_port();
         let _rt = start_backup_service(SocketAddr::new(IpAddr::V4(Ipv4Addr::LOCALHOST), port), db);
 

@@ -1,4 +1,4 @@
-// Copyright (c) The Diem Core Contributors
+// Copyright (c) The Aptos Core Contributors
 // SPDX-License-Identifier: Apache-2.0
 
 use crate::{
@@ -19,9 +19,9 @@ use crate::{
     },
 };
 use anyhow::{anyhow, ensure, Result};
-use diem_logger::prelude::*;
-use diem_types::transaction::Version;
-use diemdb::backup::backup_handler::DbState;
+use aptos_logger::prelude::*;
+use aptos_types::transaction::Version;
+use aptosdb::backup::backup_handler::DbState;
 use futures::{stream, Future, StreamExt};
 use std::{fmt::Debug, sync::Arc};
 use structopt::StructOpt;
@@ -96,7 +96,7 @@ impl BackupCoordinator {
         }
     }
     pub async fn run(&self) -> Result<()> {
-        // Connect to both the local Diem node and the backup storage.
+        // Connect to both the local Aptos node and the backup storage.
         let backup_state = metadata::cache::sync_and_load(
             &self.metadata_cache_opt,
             Arc::clone(&self.storage),
@@ -174,7 +174,7 @@ impl BackupCoordinator {
                 }
             }
             Err(e) => warn!(
-                "Failed pulling DbState from local Diem node: {}. Will keep trying.",
+                "Failed pulling DbState from local Aptos node: {}. Will keep trying.",
                 e
             ),
         };
@@ -360,7 +360,7 @@ fn get_next_snapshot(last_in_backup: Option<u64>, db_state: DbState, interval: u
 #[cfg(test)]
 mod tests {
     use crate::coordinators::backup::{get_batch_range, get_next_snapshot};
-    use diemdb::backup::backup_handler::DbState;
+    use aptosdb::backup::backup_handler::DbState;
 
     #[test]
     fn test_get_batch_range() {

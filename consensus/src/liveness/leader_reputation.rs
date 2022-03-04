@@ -1,4 +1,4 @@
-// Copyright (c) The Diem Core Contributors
+// Copyright (c) The Aptos Core Contributors
 // SPDX-License-Identifier: Apache-2.0
 
 use crate::{
@@ -9,10 +9,10 @@ use consensus_types::{
     block::Block,
     common::{Author, Round},
 };
-use diem_crypto::HashValue;
-use diem_infallible::Mutex;
-use diem_logger::prelude::*;
-use diem_types::block_metadata::{new_block_event_key, NewBlockEvent};
+use aptos_crypto::HashValue;
+use aptos_infallible::Mutex;
+use aptos_logger::prelude::*;
+use aptos_types::block_metadata::{new_block_event_key, NewBlockEvent};
 use std::{
     cmp::Ordering,
     collections::{HashMap, HashSet},
@@ -27,17 +27,17 @@ pub trait MetadataBackend: Send + Sync {
     fn get_block_metadata(&self, target_round: Round) -> Vec<NewBlockEvent>;
 }
 
-pub struct DiemDBBackend {
+pub struct AptosDBBackend {
     window_size: usize,
-    diem_db: Arc<dyn DbReader>,
+    aptos_db: Arc<dyn DbReader>,
     window: Mutex<Vec<(u64, NewBlockEvent)>>,
 }
 
-impl DiemDBBackend {
-    pub fn new(window_size: usize, diem_db: Arc<dyn DbReader>) -> Self {
+impl AptosDBBackend {
+    pub fn new(window_size: usize, aptos_db: Arc<dyn DbReader>) -> Self {
         Self {
             window_size,
-            diem_db,
+            aptos_db,
             window: Mutex::new(vec![]),
         }
     }
@@ -45,7 +45,7 @@ impl DiemDBBackend {
     fn refresh_window(&self, target_round: Round) -> anyhow::Result<()> {
         // assumes target round is not too far from latest commit
         let buffer = 10;
-        let events = self.diem_db.get_events(
+        let events = self.aptos_db.get_events(
             &new_block_event_key(),
             u64::max_value(),
             Order::Descending,
@@ -63,7 +63,7 @@ impl DiemDBBackend {
     }
 }
 
-impl MetadataBackend for DiemDBBackend {
+impl MetadataBackend for AptosDBBackend {
     // assume the target_round only increases
     fn get_block_metadata(&self, target_round: Round) -> Vec<NewBlockEvent> {
         let (known_version, known_round) = self
@@ -73,7 +73,7 @@ impl MetadataBackend for DiemDBBackend {
             .map(|(v, e)| (*v, e.round()))
             .unwrap_or((0, 0));
         if !(known_round == target_round
-            || known_version == self.diem_db.get_latest_version().unwrap_or(0))
+            || known_version == self.aptos_db.get_latest_version().unwrap_or(0))
         {
             if let Err(e) = self.refresh_window(target_round) {
                 error!(

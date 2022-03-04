@@ -1,4 +1,4 @@
-// Copyright (c) The Diem Core Contributors
+// Copyright (c) The Aptos Core Contributors
 // SPDX-License-Identifier: Apache-2.0
 
 use anyhow::Result;
@@ -8,9 +8,9 @@ use backup_cli::{
     storage::StorageOpt,
     utils::{ConcurrentDownloadsOpt, RocksdbOpt, TrustedWaypointOpt},
 };
-use diem_logger::{prelude::*, Level, Logger};
-use diem_types::transaction::Version;
-use diemdb::{DiemDB, GetRestoreHandler};
+use aptos_logger::{prelude::*, Level, Logger};
+use aptos_types::transaction::Version;
+use aptosdb::{AptosDB, GetRestoreHandler};
 use std::{path::PathBuf, sync::Arc};
 use structopt::StructOpt;
 
@@ -53,7 +53,7 @@ async fn main_impl() -> Result<()> {
     Logger::new().level(Level::Info).read_env().init();
 
     let opt = Opt::from_args();
-    let restore_handler = Arc::new(DiemDB::open(
+    let restore_handler = Arc::new(AptosDB::open(
         opt.db_dir,
         false, /* read_only */
         None,  /* pruner */

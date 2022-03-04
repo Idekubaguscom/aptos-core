@@ -1,4 +1,4 @@
-// Copyright (c) The Diem Core Contributors
+// Copyright (c) The Aptos Core Contributors
 // SPDX-License-Identifier: Apache-2.0
 
 use crate::{
@@ -12,9 +12,9 @@ use consensus_types::{
     block::Block, quorum_cert::QuorumCert, timeout_2chain::TwoChainTimeoutCertificate,
     timeout_certificate::TimeoutCertificate, vote::Vote,
 };
-use diem_crypto::HashValue;
-use diem_infallible::Mutex;
-use diem_types::{
+use aptos_crypto::HashValue;
+use aptos_infallible::Mutex;
+use aptos_types::{
     epoch_change::EpochChangeProof,
     ledger_info::{LedgerInfo, LedgerInfoWithSignatures},
     on_chain_config::ValidatorSet,
@@ -244,7 +244,7 @@ impl PersistentLivenessStorage for MockStorage {
         Ok(EpochChangeProof::new(vec![lis], false))
     }
 
-    fn diem_db(&self) -> Arc<dyn DbReader> {
+    fn aptos_db(&self) -> Arc<dyn DbReader> {
         unimplemented!()
     }
 }
@@ -316,7 +316,7 @@ impl PersistentLivenessStorage for EmptyStorage {
         Ok(EpochChangeProof::new(vec![], false))
     }
 
-    fn diem_db(&self) -> Arc<dyn DbReader> {
+    fn aptos_db(&self) -> Arc<dyn DbReader> {
         unimplemented!()
     }
 }

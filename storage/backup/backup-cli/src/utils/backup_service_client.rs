@@ -1,11 +1,11 @@
-// Copyright (c) The Diem Core Contributors
+// Copyright (c) The Aptos Core Contributors
 // SPDX-License-Identifier: Apache-2.0
 
 use crate::utils::error_notes::ErrorNotes;
 use anyhow::Result;
-use diem_crypto::HashValue;
-use diem_types::transaction::Version;
-use diemdb::backup::backup_handler::DbState;
+use aptos_crypto::HashValue;
+use aptos_types::transaction::Version;
+use aptosdb::backup::backup_handler::DbState;
 use futures::TryStreamExt;
 use structopt::StructOpt;
 use tokio::io::{AsyncRead, AsyncReadExt};

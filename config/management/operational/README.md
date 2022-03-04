@@ -1,7 +1,7 @@
-# Diem Operational Tool
+# Aptos Operational Tool
 
-The `diem-operational-tool` provides a tool for operators to perform maintenance functions
-on the Diem blockchain post-genesis.  The functionality of the tool is
+The `aptos-operational-tool` provides a tool for operators to perform maintenance functions
+on the Aptos blockchain post-genesis.  The functionality of the tool is
 dictated by the organization of nodes within the system:
 
 * Validator owners (OW) that have accounts on the blockchain. These accounts contain

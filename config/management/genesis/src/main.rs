@@ -1,8 +1,8 @@
-// Copyright (c) The Diem Core Contributors
+// Copyright (c) The Aptos Core Contributors
 // SPDX-License-Identifier: Apache-2.0
 
 #![forbid(unsafe_code)]
-use diem_genesis_tool::command::Command;
+use aptos_genesis_tool::command::Command;
 use structopt::StructOpt;
 
 fn main() {

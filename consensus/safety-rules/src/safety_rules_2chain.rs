@@ -1,4 +1,4 @@
-// Copyright (c) The Diem Core Contributors
+// Copyright (c) The Aptos Core Contributors
 // SPDX-License-Identifier: Apache-2.0
 
 use crate::{error::Error, safety_rules::next_round, SafetyRules};
@@ -9,8 +9,8 @@ use consensus_types::{
     vote::Vote,
     vote_proposal::MaybeSignedVoteProposal,
 };
-use diem_crypto::{ed25519::Ed25519Signature, hash::CryptoHash, HashValue};
-use diem_types::{block_info::BlockInfo, ledger_info::LedgerInfo};
+use aptos_crypto::{ed25519::Ed25519Signature, hash::CryptoHash, HashValue};
+use aptos_types::{block_info::BlockInfo, ledger_info::LedgerInfo};
 
 /// 2-chain safety rules implementation
 impl SafetyRules {

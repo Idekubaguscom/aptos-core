@@ -1,8 +1,8 @@
-// Copyright (c) The Diem Core Contributors
+// Copyright (c) The Aptos Core Contributors
 // SPDX-License-Identifier: Apache-2.0
 
 use crate::config::Error;
-use diem_secure_storage::{
+use aptos_secure_storage::{
     GitHubStorage, InMemoryStorage, Namespaced, OnDiskStorage, Storage, VaultStorage,
 };
 use serde::{Deserialize, Serialize};
@@ -140,7 +140,7 @@ impl Default for OnDiskStorageConfig {
         Self {
             namespace: None,
             path: PathBuf::from("secure_storage.json"),
-            data_dir: PathBuf::from("/opt/diem/data"),
+            data_dir: PathBuf::from("/opt/aptos/data"),
         }
     }
 }
@@ -317,7 +317,7 @@ vault:
 
     #[test]
     fn test_token_reading() {
-        let temppath = diem_temppath::TempPath::new();
+        let temppath = aptos_temppath::TempPath::new();
         temppath.create_as_file().unwrap();
         let mut file = File::create(temppath.path()).unwrap();
         file.write_all(b"disk_token").unwrap();

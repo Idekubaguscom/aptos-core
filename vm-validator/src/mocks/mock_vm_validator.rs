@@ -1,16 +1,16 @@
-// Copyright (c) The Diem Core Contributors
+// Copyright (c) The Aptos Core Contributors
 // SPDX-License-Identifier: Apache-2.0
 
 use crate::vm_validator::TransactionValidation;
 use anyhow::Result;
-use diem_state_view::StateView;
-use diem_types::{
+use aptos_state_view::StateView;
+use aptos_types::{
     account_address::AccountAddress,
     on_chain_config::OnChainConfigPayload,
     transaction::{GovernanceRole, SignedTransaction, VMValidatorResult},
     vm_status::StatusCode,
 };
-use diem_vm::VMValidator;
+use aptos_vm::VMValidator;
 
 pub const ACCOUNT_DNE_TEST_ADD: AccountAddress =
     AccountAddress::new([0_u8; AccountAddress::LENGTH]);

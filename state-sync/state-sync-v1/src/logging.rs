@@ -1,13 +1,13 @@
-// Copyright (c) The Diem Core Contributors
+// Copyright (c) The Aptos Core Contributors
 // SPDX-License-Identifier: Apache-2.0
 
 use crate::{
     chunk_request::GetChunkRequest, chunk_response::GetChunkResponse, error::Error,
     request_manager::ChunkRequestInfo,
 };
-use diem_config::network_id::{NetworkId, PeerNetworkId};
-use diem_logger::Schema;
-use diem_types::{
+use aptos_config::network_id::{NetworkId, PeerNetworkId};
+use aptos_logger::Schema;
+use aptos_types::{
     contract_event::ContractEvent, ledger_info::LedgerInfoWithSignatures, waypoint::Waypoint,
 };
 use serde::Serialize;

@@ -1,8 +1,8 @@
-// Copyright (c) The Diem Core Contributors
+// Copyright (c) The Aptos Core Contributors
 // SPDX-License-Identifier: Apache-2.0
 
 use crate::counters;
-use diem_infallible::duration_since_epoch;
+use aptos_infallible::duration_since_epoch;
 use std::time::Duration;
 
 pub struct BlockStage;

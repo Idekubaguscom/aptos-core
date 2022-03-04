@@ -1,10 +1,10 @@
 [package]
 name = "channel"
 version = "0.1.0"
-authors = ["Diem Association <opensource@diem.com>"]
-description = "Diem channel"
-repository = "https://github.com/diem/diem"
-homepage = "https://diem.com"
+authors = ["Aptos Association <opensource@aptos.com>"]
+description = "Aptos channel"
+repository = "https://github.com/aptos/aptos"
+homepage = "https://aptos.com"
 license = "Apache-2.0"
 publish = false
 edition = "2018"
@@ -12,10 +12,10 @@ edition = "2018"
 [dependencies]
 anyhow = "1.0.52"
 futures = "0.3.12"
-diem-metrics = { path = "../../crates/diem-metrics" }
-diem-infallible = { path = "../../crates/diem-infallible" }
-diem-workspace-hack = { version = "0.1", path = "../diem-workspace-hack" }
+aptos-metrics = { path = "../../crates/aptos-metrics" }
+aptos-infallible = { path = "../../crates/aptos-infallible" }
+aptos-workspace-hack = { version = "0.1", path = "../aptos-workspace-hack" }
 
 [dev-dependencies]
-diem-types = { path = "../../types"  }
+aptos-types = { path = "../../types"  }
 tokio = { version = "1.8.1", features = ["full"] }

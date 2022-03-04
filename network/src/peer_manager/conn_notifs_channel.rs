@@ -1,4 +1,4 @@
-// Copyright (c) The Diem Core Contributors
+// Copyright (c) The Aptos Core Contributors
 // SPDX-License-Identifier: Apache-2.0
 
 //! `conn_notifs_channel` is a channel which delivers to the receiver only the last of N
@@ -9,21 +9,21 @@
 //! and `conn_notifs_channel::Sender` which behave similarly to existing mpsc data structures.
 
 use crate::peer_manager::ConnectionNotification;
-use channel::{diem_channel, message_queues::QueueStyle};
-use diem_types::PeerId;
+use channel::{aptos_channel, message_queues::QueueStyle};
+use aptos_types::PeerId;
 
-pub type Sender = diem_channel::Sender<PeerId, ConnectionNotification>;
-pub type Receiver = diem_channel::Receiver<PeerId, ConnectionNotification>;
+pub type Sender = aptos_channel::Sender<PeerId, ConnectionNotification>;
+pub type Receiver = aptos_channel::Receiver<PeerId, ConnectionNotification>;
 
 pub fn new() -> (Sender, Receiver) {
-    diem_channel::new(QueueStyle::LIFO, 1, None)
+    aptos_channel::new(QueueStyle::LIFO, 1, None)
 }
 
 #[cfg(test)]
 mod test {
     use super::*;
     use crate::{peer::DisconnectReason, transport::ConnectionMetadata};
-    use diem_config::network_id::NetworkContext;
+    use aptos_config::network_id::NetworkContext;
     use futures::{executor::block_on, future::FutureExt, stream::StreamExt};
 
     fn send_new_peer(sender: &mut Sender, connection: ConnectionMetadata) {

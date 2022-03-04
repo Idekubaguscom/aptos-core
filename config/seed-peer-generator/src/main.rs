@@ -1,9 +1,9 @@
-// Copyright (c) The Diem Core Contributors
+// Copyright (c) The Aptos Core Contributors
 // SPDX-License-Identifier: Apache-2.0
 
 #![forbid(unsafe_code)]
 
-use diem_config::config::{PersistableConfig, RoleType};
+use aptos_config::config::{PersistableConfig, RoleType};
 use std::path::PathBuf;
 use structopt::StructOpt;
 

@@ -1,13 +1,13 @@
-// Copyright (c) The Diem Core Contributors
+// Copyright (c) The Aptos Core Contributors
 // SPDX-License-Identifier: Apache-2.0
 
 use crate::{block::Block, vote_data::VoteData};
-use diem_crypto::{
+use aptos_crypto::{
     ed25519::Ed25519Signature,
     hash::{TransactionAccumulatorHasher, ACCUMULATOR_PLACEHOLDER_HASH},
 };
-use diem_crypto_derive::{BCSCryptoHash, CryptoHasher};
-use diem_types::{
+use aptos_crypto_derive::{BCSCryptoHash, CryptoHasher};
+use aptos_types::{
     epoch_state::EpochState,
     proof::{accumulator::InMemoryAccumulator, AccumulatorExtensionProof},
 };
@@ -119,7 +119,7 @@ pub struct MaybeSignedVoteProposal {
     /// The vote proposal to be signed.
     pub vote_proposal: VoteProposal,
 
-    /// The signature of this proposal's hash from Diem Execution Correctness service. It is
+    /// The signature of this proposal's hash from Aptos Execution Correctness service. It is
     /// an `Option` because the LEC can be configured to not sign the vote hash.
     pub signature: Option<Ed25519Signature>,
 }

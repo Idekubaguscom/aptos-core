@@ -1,10 +1,10 @@
 [package]
-name = "diem-transaction-builder"
+name = "aptos-transaction-builder"
 version = "0.0.3"
-authors = ["Diem Association <opensource@diem.com>"]
+authors = ["Aptos Association <opensource@aptos.com>"]
 description = "Generated transaction builders"
-repository = "https://github.com/diem/diem"
-homepage = "https://diem.com"
+repository = "https://github.com/aptos/aptos"
+homepage = "https://aptos.com"
 license = "Apache-2.0"
 publish = ["crates-io"]
 edition = "2018"
@@ -16,11 +16,11 @@ once_cell = "1.7.2"
 serde = { version = "1.0.124", features = ["derive"] }
 
 move-core-types = { git = "https://github.com/diem/move", rev = "98ed299a7e3a9223019c9bdf4dd92fea9faef860", version = "0.0.3" }
-diem-types = { path = "../../types", version = "0.0.3" }
+aptos-types = { path = "../../types", version = "0.0.3" }
 
 proptest = { version = "1.0.0", optional = true }
 proptest-derive = { version = "0.3.0", optional = true }
-diem-workspace-hack = { version = "0.1", path = "../../crates/diem-workspace-hack" }
+aptos-workspace-hack = { version = "0.1", path = "../../crates/aptos-workspace-hack" }
 
 [dev-dependencies]
 proptest = "1.0.0"

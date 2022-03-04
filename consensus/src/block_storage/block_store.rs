@@ -1,4 +1,4 @@
-// Copyright (c) The Diem Core Contributors
+// Copyright (c) The Aptos Core Contributors
 // SPDX-License-Identifier: Apache-2.0
 
 use crate::{
@@ -21,10 +21,10 @@ use consensus_types::{
     sync_info::SyncInfo, timeout_2chain::TwoChainTimeoutCertificate,
     timeout_certificate::TimeoutCertificate,
 };
-use diem_crypto::{hash::ACCUMULATOR_PLACEHOLDER_HASH, HashValue};
-use diem_infallible::RwLock;
-use diem_logger::prelude::*;
-use diem_types::{ledger_info::LedgerInfoWithSignatures, transaction::TransactionStatus};
+use aptos_crypto::{hash::ACCUMULATOR_PLACEHOLDER_HASH, HashValue};
+use aptos_infallible::RwLock;
+use aptos_logger::prelude::*;
+use aptos_types::{ledger_info::LedgerInfoWithSignatures, transaction::TransactionStatus};
 use executor_types::{Error, StateComputeResult};
 use futures::executor::block_on;
 #[cfg(test)]

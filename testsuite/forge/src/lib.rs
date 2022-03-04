@@ -1,7 +1,7 @@
-// Copyright (c) The Diem Core Contributors
+// Copyright (c) The Aptos Core Contributors
 // SPDX-License-Identifier: Apache-2.0
 
-//! Forge is a framework for writing and running end-to-end tests in Diem
+//! Forge is a framework for writing and running end-to-end tests in Aptos
 
 pub use anyhow::Result;
 

@@ -1,4 +1,4 @@
-// Copyright (c) The Diem Core Contributors
+// Copyright (c) The Aptos Core Contributors
 // SPDX-License-Identifier: Apache-2.0
 
 use crate::account_address::AccountAddress;
@@ -49,6 +49,6 @@ impl NewBlockEvent {
 }
 
 impl MoveStructType for NewBlockEvent {
-    const MODULE_NAME: &'static IdentStr = ident_str!("DiemBlock");
+    const MODULE_NAME: &'static IdentStr = ident_str!("AptosBlock");
     const STRUCT_NAME: &'static IdentStr = ident_str!("NewBlockEvent");
 }

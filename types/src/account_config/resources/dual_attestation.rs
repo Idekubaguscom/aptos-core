@@ -1,4 +1,4 @@
-// Copyright (c) The Diem Core Contributors
+// Copyright (c) The Aptos Core Contributors
 // SPDX-License-Identifier: Apache-2.0
 
 use crate::{event::EventHandle, on_chain_config::OnChainConfig};
@@ -52,7 +52,7 @@ impl MoveStructType for Credential {
 
 impl MoveResource for Credential {}
 
-/// Defines the dual attest limit in microDiem XDX
+/// Defines the dual attest limit in microAptos XDX
 #[derive(Clone, Debug, Deserialize, PartialEq, Serialize)]
 pub struct Limit {
     pub micro_xdx_limit: u64,

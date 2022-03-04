@@ -1,4 +1,4 @@
-// Copyright (c) The Diem Core Contributors
+// Copyright (c) The Aptos Core Contributors
 // SPDX-License-Identifier: Apache-2.0
 
 use crate::{Error, LedgerInfo};
@@ -7,9 +7,9 @@ use anyhow::Result;
 use serde::Serialize;
 use warp::http::header::{HeaderValue, CONTENT_TYPE};
 
-pub const X_DIEM_CHAIN_ID: &str = "X-Diem-Chain-Id";
-pub const X_DIEM_LEDGER_VERSION: &str = "X-Diem-Ledger-Version";
-pub const X_DIEM_LEDGER_TIMESTAMP: &str = "X-Diem-Ledger-TimestampUsec";
+pub const X_DIEM_CHAIN_ID: &str = "X-Aptos-Chain-Id";
+pub const X_DIEM_LEDGER_VERSION: &str = "X-Aptos-Ledger-Version";
+pub const X_DIEM_LEDGER_TIMESTAMP: &str = "X-Aptos-Ledger-TimestampUsec";
 
 pub struct Response {
     pub ledger_info: LedgerInfo,

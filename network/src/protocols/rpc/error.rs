@@ -1,11 +1,11 @@
-// Copyright (c) The Diem Core Contributors
+// Copyright (c) The Aptos Core Contributors
 // SPDX-License-Identifier: Apache-2.0
 
 //! Rpc protocol errors
 
 use crate::peer_manager::PeerManagerError;
 use anyhow::anyhow;
-use diem_types::PeerId;
+use aptos_types::PeerId;
 use futures::channel::{mpsc, oneshot};
 use std::io;
 use thiserror::Error;

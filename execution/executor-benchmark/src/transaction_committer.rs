@@ -1,15 +1,15 @@
-// Copyright (c) The Diem Core Contributors
+// Copyright (c) The Aptos Core Contributors
 // SPDX-License-Identifier: Apache-2.0
 
-use diem_crypto::hash::HashValue;
-use diem_logger::prelude::*;
-use diem_types::{
+use aptos_crypto::hash::HashValue;
+use aptos_logger::prelude::*;
+use aptos_types::{
     block_info::BlockInfo,
     ledger_info::{LedgerInfo, LedgerInfoWithSignatures},
     transaction::Version,
 };
-use diem_vm::DiemVM;
-use diemdb::metrics::DIEM_STORAGE_API_LATENCY_SECONDS;
+use aptos_vm::AptosVM;
+use aptosdb::metrics::DIEM_STORAGE_API_LATENCY_SECONDS;
 use executor::{
     block_executor::BlockExecutor,
     metrics::{
@@ -44,14 +44,14 @@ pub(crate) fn gen_li_with_sigs(
 }
 
 pub struct TransactionCommitter {
-    executor: Arc<BlockExecutor<DiemVM>>,
+    executor: Arc<BlockExecutor<AptosVM>>,
     version: Version,
     block_receiver: mpsc::Receiver<(HashValue, HashValue, Instant, Instant, Duration, usize)>,
 }
 
 impl TransactionCommitter {
     pub fn new(
-        executor: Arc<BlockExecutor<DiemVM>>,
+        executor: Arc<BlockExecutor<AptosVM>>,
         version: Version,
         block_receiver: mpsc::Receiver<(HashValue, HashValue, Instant, Instant, Duration, usize)>,
     ) -> Self {

@@ -1,4 +1,4 @@
-// Copyright (c) The Diem Core Contributors
+// Copyright (c) The Aptos Core Contributors
 // SPDX-License-Identifier: Apache-2.0
 use crate::{
     peer::DisconnectReason,
@@ -9,8 +9,8 @@ use crate::{
     },
     transport::{Connection, ConnectionMetadata},
 };
-use diem_config::network_id::NetworkContext;
-use diem_types::{network_address::NetworkAddress, PeerId};
+use aptos_config::network_id::NetworkContext;
+use aptos_types::{network_address::NetworkAddress, PeerId};
 use futures::channel::oneshot;
 use serde::Serialize;
 use std::fmt;

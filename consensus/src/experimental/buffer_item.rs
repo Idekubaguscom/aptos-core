@@ -1,4 +1,4 @@
-// Copyright (c) The Diem Core Contributors
+// Copyright (c) The Aptos Core Contributors
 // SPDX-License-Identifier: Apache-2.0
 
 use std::collections::BTreeMap;
@@ -9,9 +9,9 @@ use itertools::zip_eq;
 use consensus_types::{
     common::Author, executed_block::ExecutedBlock, experimental::commit_vote::CommitVote,
 };
-use diem_crypto::ed25519::Ed25519Signature;
-use diem_logger::prelude::*;
-use diem_types::{
+use aptos_crypto::ed25519::Ed25519Signature;
+use aptos_logger::prelude::*;
+use aptos_types::{
     account_address::AccountAddress,
     block_info::BlockInfo,
     ledger_info::{LedgerInfo, LedgerInfoWithSignatures},
@@ -19,7 +19,7 @@ use diem_types::{
 };
 
 use crate::{experimental::hashable::Hashable, state_replication::StateComputerCommitCallBackType};
-use diem_crypto::HashValue;
+use aptos_crypto::HashValue;
 
 fn generate_commit_proof(
     commit_info: &BlockInfo,

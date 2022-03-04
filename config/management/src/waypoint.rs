@@ -1,9 +1,9 @@
-// Copyright (c) The Diem Core Contributors
+// Copyright (c) The Aptos Core Contributors
 // SPDX-License-Identifier: Apache-2.0
 
 use crate::{config::ConfigPath, error::Error, secure_backend::ValidatorBackend};
-use diem_global_constants::{GENESIS_WAYPOINT, WAYPOINT};
-use diem_types::waypoint::Waypoint;
+use aptos_global_constants::{GENESIS_WAYPOINT, WAYPOINT};
+use aptos_types::waypoint::Waypoint;
 use structopt::StructOpt;
 
 #[derive(Debug, StructOpt)]

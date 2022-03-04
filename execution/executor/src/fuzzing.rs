@@ -1,18 +1,18 @@
-// Copyright (c) The Diem Core Contributors
+// Copyright (c) The Aptos Core Contributors
 // SPDX-License-Identifier: Apache-2.0
 
 use crate::{block_executor::BlockExecutor, chunk_executor::ChunkExecutor};
 use anyhow::Result;
-use diem_crypto::{hash::SPARSE_MERKLE_PLACEHOLDER_HASH, HashValue};
-use diem_state_view::StateView;
-use diem_types::{
+use aptos_crypto::{hash::SPARSE_MERKLE_PLACEHOLDER_HASH, HashValue};
+use aptos_state_view::StateView;
+use aptos_types::{
     ledger_info::LedgerInfoWithSignatures,
     transaction::{
         Transaction, TransactionListWithProof, TransactionOutput, TransactionToCommit, Version,
     },
     vm_status::VMStatus,
 };
-use diem_vm::VMExecutor;
+use aptos_vm::VMExecutor;
 use executor_types::{BlockExecutorTrait, ChunkExecutorTrait};
 use storage_interface::{DbReader, DbReaderWriter, DbWriter, StartupInfo};
 

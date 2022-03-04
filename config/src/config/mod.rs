@@ -1,9 +1,9 @@
-// Copyright (c) The Diem Core Contributors
+// Copyright (c) The Aptos Core Contributors
 // SPDX-License-Identifier: Apache-2.0
 
 use crate::network_id::NetworkId;
-use diem_secure_storage::{KVStorage, Storage};
-use diem_types::{waypoint::Waypoint, PeerId};
+use aptos_secure_storage::{KVStorage, Storage};
+use aptos_types::{waypoint::Waypoint, PeerId};
 use rand::{rngs::StdRng, SeedableRng};
 use serde::{de::DeserializeOwned, Deserialize, Serialize};
 use std::{
@@ -100,7 +100,7 @@ pub struct BaseConfig {
 impl Default for BaseConfig {
     fn default() -> BaseConfig {
         BaseConfig {
-            data_dir: PathBuf::from("/opt/diem/data"),
+            data_dir: PathBuf::from("/opt/aptos/data"),
             role: RoleType::Validator,
             waypoint: WaypointConfig::None,
         }
@@ -139,7 +139,7 @@ impl WaypointConfig {
             WaypointConfig::FromStorage(backend) => {
                 let storage: Storage = backend.into();
                 let waypoint = storage
-                    .get::<Waypoint>(diem_global_constants::WAYPOINT)
+                    .get::<Waypoint>(aptos_global_constants::WAYPOINT)
                     .expect("Unable to read waypoint")
                     .value;
                 Some(waypoint)
@@ -154,7 +154,7 @@ impl WaypointConfig {
             WaypointConfig::FromStorage(backend) => {
                 let storage: Storage = backend.into();
                 storage
-                    .get::<Waypoint>(diem_global_constants::GENESIS_WAYPOINT)
+                    .get::<Waypoint>(aptos_global_constants::GENESIS_WAYPOINT)
                     .expect("Unable to read waypoint")
                     .value
             }

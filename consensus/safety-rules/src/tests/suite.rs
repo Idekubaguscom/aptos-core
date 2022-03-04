@@ -1,4 +1,4 @@
-// Copyright (c) The Diem Core Contributors
+// Copyright (c) The Aptos Core Contributors
 // SPDX-License-Identifier: Apache-2.0
 
 use crate::{test_utils, test_utils::make_timeout_cert, Error, SafetyRules, TSafetyRules};
@@ -10,13 +10,13 @@ use consensus_types::{
     timeout_2chain::{TwoChainTimeout, TwoChainTimeoutCertificate},
     vote_proposal::MaybeSignedVoteProposal,
 };
-use diem_crypto::{
+use aptos_crypto::{
     ed25519::{Ed25519PrivateKey, Ed25519Signature},
     hash::{CryptoHash, HashValue, ACCUMULATOR_PLACEHOLDER_HASH},
 };
-use diem_global_constants::CONSENSUS_KEY;
-use diem_secure_storage::CryptoStorage;
-use diem_types::{
+use aptos_global_constants::CONSENSUS_KEY;
+use aptos_secure_storage::CryptoStorage;
+use aptos_types::{
     account_address::AccountAddress,
     block_info::BlockInfo,
     epoch_state::EpochState,

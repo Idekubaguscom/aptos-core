@@ -1,4 +1,4 @@
-// Copyright (c) The Diem Core Contributors
+// Copyright (c) The Aptos Core Contributors
 // SPDX-License-Identifier: Apache-2.0
 
 use forge::{forge_main, ForgeConfig, InitialVersion, LocalFactory, Options, Result};
@@ -9,7 +9,7 @@ use testcases::{
 };
 
 fn main() -> Result<()> {
-    ::diem_logger::Logger::init_for_testing();
+    ::aptos_logger::Logger::init_for_testing();
 
     let tests = ForgeConfig::default()
         .with_initial_validator_count(NonZeroUsize::new(4).unwrap())

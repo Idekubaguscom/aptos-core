@@ -1,4 +1,4 @@
-// Copyright (c) The Diem Core Contributors
+// Copyright (c) The Aptos Core Contributors
 // SPDX-License-Identifier: Apache-2.0
 use crate::{
     counters::{self, FAILED_LABEL, SUCCEEDED_LABEL},
@@ -8,10 +8,10 @@ use crate::{
 };
 use anyhow::format_err;
 use channel::{self};
-use diem_config::network_id::NetworkContext;
-use diem_logger::prelude::*;
-use diem_time_service::{TimeService, TimeServiceTrait};
-use diem_types::{network_address::NetworkAddress, PeerId};
+use aptos_config::network_id::NetworkContext;
+use aptos_logger::prelude::*;
+use aptos_time_service::{TimeService, TimeServiceTrait};
+use aptos_types::{network_address::NetworkAddress, PeerId};
 use futures::{
     channel::oneshot,
     future::{BoxFuture, FutureExt},

@@ -1,15 +1,15 @@
-// Copyright (c) The Diem Core Contributors
+// Copyright (c) The Aptos Core Contributors
 // SPDX-License-Identifier: Apache-2.0
 
 #![forbid(unsafe_code)]
 
 use crate::logging::{LogEntry, LogSchema};
 use anyhow::Result;
-use diem_crypto::HashValue;
-use diem_logger::prelude::*;
-use diem_state_view::StateViewId;
-use diem_types::{ledger_info::LedgerInfoWithSignatures, transaction::Transaction};
-use diem_vm::VMExecutor;
+use aptos_crypto::HashValue;
+use aptos_logger::prelude::*;
+use aptos_state_view::StateViewId;
+use aptos_types::{ledger_info::LedgerInfoWithSignatures, transaction::Transaction};
+use aptos_vm::VMExecutor;
 use executor_types::{BlockExecutorTrait, Error, StateComputeResult};
 use fail::fail_point;
 use std::marker::PhantomData;

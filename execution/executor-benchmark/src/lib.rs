@@ -1,4 +1,4 @@
-// Copyright (c) The Diem Core Contributors
+// Copyright (c) The Aptos Core Contributors
 // SPDX-License-Identifier: Apache-2.0
 
 pub mod db_generator;
@@ -10,11 +10,11 @@ use crate::{
     transaction_committer::TransactionCommitter, transaction_executor::TransactionExecutor,
     transaction_generator::TransactionGenerator,
 };
-use diem_config::config::{NodeConfig, RocksdbConfig};
-use diem_logger::prelude::*;
+use aptos_config::config::{NodeConfig, RocksdbConfig};
+use aptos_logger::prelude::*;
 
-use diem_vm::DiemVM;
-use diemdb::DiemDB;
+use aptos_vm::AptosVM;
+use aptosdb::AptosDB;
 use executor::block_executor::BlockExecutor;
 use executor_types::BlockExecutorTrait;
 use std::{
@@ -24,9 +24,9 @@ use std::{
 };
 use storage_interface::{DbReader, DbReaderWriter};
 
-pub fn init_db_and_executor(config: &NodeConfig) -> (Arc<dyn DbReader>, BlockExecutor<DiemVM>) {
+pub fn init_db_and_executor(config: &NodeConfig) -> (Arc<dyn DbReader>, BlockExecutor<AptosVM>) {
     let (db, dbrw) = DbReaderWriter::wrap(
-        DiemDB::open(
+        AptosDB::open(
             &config.storage.dir(),
             false, /* readonly */
             None,  /* pruner */
@@ -51,11 +51,11 @@ pub fn run_benchmark(
 ) {
     // Create rocksdb checkpoint.
     if checkpoint_dir.as_ref().exists() {
-        fs::remove_dir_all(checkpoint_dir.as_ref().join("diemdb")).unwrap_or(());
+        fs::remove_dir_all(checkpoint_dir.as_ref().join("aptosdb")).unwrap_or(());
     }
     std::fs::create_dir_all(checkpoint_dir.as_ref()).unwrap();
 
-    DiemDB::open(
+    AptosDB::open(
         &source_dir,
         true, /* readonly */
         None, /* pruner */
@@ -63,10 +63,10 @@ pub fn run_benchmark(
         true, /* account_count_migration */
     )
     .expect("db open failure.")
-    .create_checkpoint(checkpoint_dir.as_ref().join("diemdb"))
+    .create_checkpoint(checkpoint_dir.as_ref().join("aptosdb"))
     .expect("db checkpoint creation fails.");
 
-    let (mut config, genesis_key) = diem_genesis_tool::test_config();
+    let (mut config, genesis_key) = aptos_genesis_tool::test_config();
     config.storage.dir = checkpoint_dir.as_ref().to_path_buf();
 
     let (db, executor) = init_db_and_executor(&config);
@@ -128,7 +128,7 @@ pub fn run_benchmark(
 
 #[cfg(test)]
 mod tests {
-    use diem_temppath::TempPath;
+    use aptos_temppath::TempPath;
 
     #[test]
     fn test_benchmark() {

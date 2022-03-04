@@ -1,4 +1,4 @@
-// Copyright (c) The Diem Core Contributors
+// Copyright (c) The Aptos Core Contributors
 // SPDX-License-Identifier: Apache-2.0
 
 use crate::{
@@ -14,10 +14,10 @@ use crate::{
     round_manager::VerifiedEvent,
     state_replication::StateComputer,
 };
-use channel::diem_channel::Receiver;
+use channel::aptos_channel::Receiver;
 use consensus_types::common::Author;
-use diem_infallible::Mutex;
-use diem_types::{account_address::AccountAddress, validator_verifier::ValidatorVerifier};
+use aptos_infallible::Mutex;
+use aptos_types::{account_address::AccountAddress, validator_verifier::ValidatorVerifier};
 use futures::channel::mpsc::UnboundedReceiver;
 use std::sync::Arc;
 

@@ -1,7 +1,7 @@
-// Copyright (c) The Diem Core Contributors
+// Copyright (c) The Aptos Core Contributors
 // SPDX-License-Identifier: Apache-2.0
 use crate::config::{PeerRole, RoleType};
-use diem_types::PeerId;
+use aptos_types::PeerId;
 use serde::{Deserialize, Deserializer, Serialize, Serializer};
 use short_hex_str::AsShortHexStr;
 use std::{fmt, str::FromStr};

@@ -1,10 +1,10 @@
-// Copyright (c) The Diem Core Contributors
+// Copyright (c) The Aptos Core Contributors
 // SPDX-License-Identifier: Apache-2.0
 
 use super::{ChainInfo, CoreContext, Test};
 use crate::{Result, TestReport};
-use diem_rest_client::Client as RestClient;
-use diem_sdk::types::LocalAccount;
+use aptos_rest_client::Client as RestClient;
+use aptos_sdk::types::LocalAccount;
 use reqwest::Url;
 
 /// The testing interface which defines a test written from the perspective of the Admin of the

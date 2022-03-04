@@ -6,13 +6,13 @@ smoke-test = { path = "smoke-test" }
 testcases = { path = "testsuite/testcases" }
 
 [cargo.sccache]
-bucket = "ci-artifacts.diem.com"
-prefix = "sccache/diem/"
+bucket = "ci-artifacts.aptos.com"
+prefix = "sccache/aptos/"
 public = true
 region = "us-west-2"
 endpoint = "https://s3-us-west-2.amazonaws.com"
 required-cargo-home = "/opt/cargo/"
-required-git-home = "/opt/git/diem"
+required-git-home = "/opt/git/aptos"
 envs = [
    #To debug sccache uncomment the two lines below.
    #["SCCACHE_ERROR_LOG","/tmp/sccache_log"],
@@ -21,7 +21,7 @@ envs = [
 
 [cargo.sccache.installer]
 version = "0.2.16-alpha.0"
-git = "https://github.com/diem/sccache.git"
+git = "https://github.com/aptos/sccache.git"
 git-rev = "ef50d87a58260c30767520045e242ccdbdb965af"
 features = [ "s3" ]
 
@@ -50,7 +50,7 @@ warn = [
 
 [hakari]
 resolver = "2"
-hakari-package = "diem-workspace-hack"
+hakari-package = "aptos-workspace-hack"
 exact-versions = true
 platforms = [
     "x86_64-unknown-linux-gnu",
@@ -64,8 +64,8 @@ platforms = [
 [hakari.traversal-excludes]
 workspace-members = [
     # Don't consider the crypto packages as they do weird things with mutually exclusive features.
-    "diem-crypto",
-    "diem-crypto-derive",
+    "aptos-crypto",
+    "aptos-crypto-derive",
 
     # Also exclude the devtools packages since they get compiled with a different set of options.
     "x",
@@ -101,7 +101,7 @@ target-features = "all"
 
 [summaries.default.omitted-packages]
 workspace-members = [
-    "diem-workspace-hack",
+    "aptos-workspace-hack",
 ]
 
 [summaries.full]
@@ -118,7 +118,7 @@ allowed-paths = "^([a-zA-Z0-9._\\-/@:]|-)+$"
 whitespace-exceptions = [
     ".github/actions/*/dist/*",
     # TODO: reevaluate skipping whitespace checks in .md files for the website
-    "developers.diem.com/**/*.md",
+    "developers.aptos.com/**/*.md",
     "developer-docs-site/**/*",
     "**/*.exp",
     "**/*.errmap",
@@ -131,7 +131,7 @@ license-exceptions = [
 ]
 
 [workspace.enforced-attributes]
-authors = ["Diem Association <opensource@diem.com>"]
+authors = ["Aptos Association <opensource@aptos.com>"]
 license = "Apache-2.0"
 
 [workspace.banned-deps.direct]
@@ -149,11 +149,11 @@ allow = [
 features = ["failpoints", "fuzzing"]
 
 # This is a list of test-only members. These are workspace members that do not form part of the main
-# Diem production codebase, and are only used to verify correctness and/or performance.
+# Aptos production codebase, and are only used to verify correctness and/or performance.
 #
 # *** IMPORTANT ***
 #
-# Published developer tools (e.g. Move compiler) ARE part of the production Diem codebase.
+# Published developer tools (e.g. Move compiler) ARE part of the production Aptos codebase.
 # They should be listed in the root Cargo.toml's default-members, not here!
 #
 # Before adding a new crate to this list, ensure that it is *actually* test-only. If not, add it
@@ -165,18 +165,18 @@ members = [
     # Please keep this list in alphabetical order!
 
     "testcases",
-    "diem-documentation-tool",
-    "diem-e2e-tests-replay",
-    "diem-experimental-framework-releases",
-    "diem-fuzz",
-    "diem-fuzzer",
-    "diem-keygen",
-    "diem-proptest-helpers",
-    "diem-retrier",
-    "diem-transactional-test-harness",
-    "diem-transaction-benchmarks",
-    "diem-wallet",
-    "diem-writeset-generator",
+    "aptos-documentation-tool",
+    "aptos-e2e-tests-replay",
+    "aptos-experimental-framework-releases",
+    "aptos-fuzz",
+    "aptos-fuzzer",
+    "aptos-keygen",
+    "aptos-proptest-helpers",
+    "aptos-retrier",
+    "aptos-transactional-test-harness",
+    "aptos-transaction-benchmarks",
+    "aptos-wallet",
+    "aptos-writeset-generator",
     "executor-benchmark",
     "executor-test-helpers",
     "forge",
@@ -196,53 +196,53 @@ members = [
     # Please keep this list in alphabetical order!
 ]
 
-[workspace.move-to-diem-deps]
+[workspace.move-to-aptos-deps]
 # By default, all crates in the language directory are considered Move crates
-# and are forbidden from depending on any Diem crates.
+# and are forbidden from depending on any Aptos crates.
 #
-# Adding a crate's name to this list will mark it as a Diem crate so that the
+# Adding a crate's name to this list will mark it as a Aptos crate so that the
 # linter will not impose said restriction on it.
 #
 # Note: if your crate is indeed a Move crate and you are getting the linter
 # yelling at you, you should redesign your crate and properly remove that
 # dependency, instead of adding the crate to this list and silencing the lint.
-diem_crates_in_language = [
+aptos_crates_in_language = [
 ]
-# A special set of diem crates Move crates are allowed to depend on.
+# A special set of aptos crates Move crates are allowed to depend on.
 #
 # You should not add new entries to this list unless you have a rare justifiable
 # reason. (read: Just don't.)
 #
 # Particularly, please do not abuse this to silence the lint when it complains
-# about Move crates depending on Diem ones. Again, you should instead fix
-# the design of your crate so it doesn't have to depend on Diem.
+# about Move crates depending on Aptos ones. Again, you should instead fix
+# the design of your crate so it doesn't have to depend on Aptos.
 exclude = [
-    "diem-workspace-hack",
+    "aptos-workspace-hack",
 ]
 
 # Interesting subsets of the workspace, These are used for generating and
 # checking dependency summaries.
 
 [subsets.lsr]
-# The Diem safety rules TCB.
+# The Aptos safety rules TCB.
 root-members = [
     "safety-rules",
 ]
 
 [subsets.lec]
-# The Diem execution correctness TCB.
+# The Aptos execution correctness TCB.
 root-members = [
     "execution-correctness",
 ]
 
 [subsets.release]
-# The Diem release binaries
+# The Aptos release binaries
 root-members = [
     "backup-cli",
     "db-bootstrapper",
-    "diem-genesis-tool",
-    "diem-node",
-    "diem-operational-tool",
+    "aptos-genesis-tool",
+    "aptos-node",
+    "aptos-operational-tool",
     "execution-correctness",
     "safety-rules",
 ]
@@ -263,12 +263,12 @@ mark-changed = "all"
 
 [[determinator.path-rule]]
 # Ignore website and other ancillary files, and scripts not listed above.
-globs = ["developers.diem.com/**/*", "developer-docs-site/**/*", "documentation/**/*", "docker/**/*", "language/documentation/**/*", "specifications/**/*", "scripts/**/*", "terraform/**/*"]
+globs = ["developers.aptos.com/**/*", "developer-docs-site/**/*", "documentation/**/*", "docker/**/*", "language/documentation/**/*", "specifications/**/*", "scripts/**/*", "terraform/**/*"]
 mark-changed = []
 
 [[determinator.path-rule]]
 # A bunch of images that should be ignored, I guess.
-globs = ["diem.png", ".assets/diem.png", "storage/data.png"]
+globs = ["aptos.png", ".assets/aptos.png", "storage/data.png"]
 mark-changed = []
 
 [[determinator.path-rule]]
@@ -278,7 +278,7 @@ mark-changed = []
 
 [[determinator.path-rule]]
 # Required by get_stdlib_script_abis in transaction-builder-generator.
-globs = ["diem-move/diem-framework/DPN/releases/artifacts/current/**/*"]
+globs = ["aptos-move/diem-framework/DPN/releases/artifacts/current/**/*"]
 mark-changed = ["transaction-builder-generator"]
 post-rule = "skip-rules"
 

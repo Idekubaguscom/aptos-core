@@ -1,18 +1,18 @@
-// Copyright (c) The Diem Core Contributors
+// Copyright (c) The Aptos Core Contributors
 // SPDX-License-Identifier: Apache-2.0
 
 #![forbid(unsafe_code)]
 
 use crate::components::apply_chunk_output::ApplyChunkOutput;
 use anyhow::Result;
-use diem_crypto::hash::TransactionAccumulatorHasher;
-use diem_logger::trace;
-use diem_state_view::StateView;
-use diem_types::{
+use aptos_crypto::hash::TransactionAccumulatorHasher;
+use aptos_logger::trace;
+use aptos_state_view::StateView;
+use aptos_types::{
     proof::accumulator::InMemoryAccumulator,
     transaction::{Transaction, TransactionOutput},
 };
-use diem_vm::VMExecutor;
+use aptos_vm::VMExecutor;
 use executor_types::ExecutedChunk;
 use fail::fail_point;
 use std::{collections::HashSet, sync::Arc};

@@ -1,16 +1,16 @@
-// Copyright (c) The Diem Core Contributors
+// Copyright (c) The Aptos Core Contributors
 // SPDX-License-Identifier: Apache-2.0
 
 #![forbid(unsafe_code)]
 
 use crate::{network::StorageServiceNetworkEvents, StorageReader, StorageServiceServer};
 use anyhow::Result;
-use channel::diem_channel;
+use channel::aptos_channel;
 use claim::{assert_none, assert_some};
-use diem_config::config::StorageServiceConfig;
-use diem_crypto::{ed25519::Ed25519PrivateKey, HashValue, PrivateKey, SigningKey, Uniform};
-use diem_logger::Level;
-use diem_types::{
+use aptos_config::config::StorageServiceConfig;
+use aptos_crypto::{ed25519::Ed25519PrivateKey, HashValue, PrivateKey, SigningKey, Uniform};
+use aptos_logger::Level;
+use aptos_types::{
     account_address::AccountAddress,
     account_state_blob::AccountStatesChunkWithProof,
     block_info::BlockInfo,
@@ -310,7 +310,7 @@ async fn test_get_epoch_ending_ledger_infos() {
 /// A wrapper around the inbound network interface/channel for easily sending
 /// mock client requests to a [`StorageServiceServer`].
 struct MockClient {
-    peer_mgr_notifs_tx: diem_channel::Sender<(PeerId, ProtocolId), PeerManagerNotification>,
+    peer_mgr_notifs_tx: aptos_channel::Sender<(PeerId, ProtocolId), PeerManagerNotification>,
 }
 
 impl MockClient {
@@ -550,9 +550,9 @@ impl DbReader for MockDbReader {
     }
 }
 
-/// Initializes the Diem logger for tests
+/// Initializes the Aptos logger for tests
 pub fn initialize_logger() {
-    diem_logger::DiemLogger::builder()
+    aptos_logger::AptosLogger::builder()
         .is_async(false)
         .level(Level::Debug)
         .build();

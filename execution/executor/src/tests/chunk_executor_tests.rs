@@ -1,4 +1,4 @@
-// Copyright (c) The Diem Core Contributors
+// Copyright (c) The Aptos Core Contributors
 // SPDX-License-Identifier: Apache-2.0
 
 #![forbid(unsafe_code)]
@@ -10,27 +10,27 @@ use crate::{
     mock_vm::{encode_mint_transaction, MockVM},
     tests,
 };
-use diem_crypto::HashValue;
-use diem_types::{
+use aptos_crypto::HashValue;
+use aptos_types::{
     ledger_info::LedgerInfoWithSignatures,
     transaction::{TransactionListWithProof, TransactionOutputListWithProof},
 };
-use diemdb::DiemDB;
+use aptosdb::AptosDB;
 use executor_types::{BlockExecutorTrait, ChunkExecutorTrait};
 use proptest::prelude::Rng;
 use storage_interface::DbReaderWriter;
 
 pub struct TestExecutor {
-    _path: diem_temppath::TempPath,
+    _path: aptos_temppath::TempPath,
     pub db: DbReaderWriter,
     pub executor: ChunkExecutor<MockVM>,
 }
 
 impl TestExecutor {
     pub fn new() -> TestExecutor {
-        let path = diem_temppath::TempPath::new();
+        let path = aptos_temppath::TempPath::new();
         path.create_as_dir().unwrap();
-        let db = DbReaderWriter::new(DiemDB::new_for_test(path.path()));
+        let db = DbReaderWriter::new(AptosDB::new_for_test(path.path()));
         let genesis = vm_genesis::test_genesis_transaction();
         let waypoint = generate_waypoint::<MockVM>(&db, &genesis).unwrap();
         maybe_bootstrap::<MockVM>(&db, &genesis, waypoint).unwrap();

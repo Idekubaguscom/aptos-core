@@ -1,17 +1,17 @@
-// Copyright (c) The Diem Core Contributors
+// Copyright (c) The Aptos Core Contributors
 // SPDX-License-Identifier: Apache-2.0
 
-//! This module defines the DiemNet v1 message types, how they are
+//! This module defines the AptosNet v1 message types, how they are
 //! serialized/deserialized, and provides a `Sink` and `Stream` implementation
 //! for sending `NetworkMessage`s over an abstract IO object (presumably a socket).
 //!
-//! The [DiemNet specification](https://github.com/diem/diem/blob/main/specifications/network/messaging-v1.md)
+//! The [AptosNet specification](https://github.com/aptos/aptos/blob/main/specifications/network/messaging-v1.md)
 //! describes in greater detail how these messages are sent and received
 //! over-the-wire.
 
 use crate::protocols::wire::handshake::v1::ProtocolId;
 use bytes::Bytes;
-use diem_rate_limiter::{async_lib::AsyncRateLimiter, rate_limit::SharedBucket};
+use aptos_rate_limiter::{async_lib::AsyncRateLimiter, rate_limit::SharedBucket};
 use futures::{
     io::{AsyncRead, AsyncWrite},
     sink::Sink,

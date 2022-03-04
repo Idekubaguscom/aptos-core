@@ -1,9 +1,9 @@
-// Copyright (c) The Diem Core Contributors
+// Copyright (c) The Aptos Core Contributors
 // SPDX-License-Identifier: Apache-2.0
 
 use crate::{rest_client::RestClient, TransactionContext};
-use diem_management::{config::ConfigPath, error::Error};
-use diem_types::account_address::AccountAddress;
+use aptos_management::{config::ConfigPath, error::Error};
+use aptos_types::account_address::AccountAddress;
 use structopt::StructOpt;
 
 #[derive(Debug, StructOpt)]

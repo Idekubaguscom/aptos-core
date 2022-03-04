@@ -1,20 +1,20 @@
-// Copyright (c) The Diem Core Contributors
+// Copyright (c) The Aptos Core Contributors
 // SPDX-License-Identifier: Apache-2.0
 
 use crate::{
     account_address::{AccountAddress, HashAccountAddress},
-    account_config::{AccountResource, BalanceResource, DiemAccountResource},
+    account_config::{AccountResource, BalanceResource, AptosAccountResource},
     account_state::AccountState,
     ledger_info::LedgerInfo,
     proof::{AccountStateProof, SparseMerkleRangeProof},
     transaction::Version,
 };
 use anyhow::{anyhow, ensure, Error, Result};
-use diem_crypto::{
+use aptos_crypto::{
     hash::{CryptoHash, CryptoHasher},
     HashValue,
 };
-use diem_crypto_derive::CryptoHasher;
+use aptos_crypto_derive::CryptoHasher;
 #[cfg(any(test, feature = "fuzzing"))]
 use proptest::{arbitrary::Arbitrary, prelude::*};
 #[cfg(any(test, feature = "fuzzing"))]
@@ -112,31 +112,31 @@ impl TryFrom<&AccountStateBlob> for AccountState {
     }
 }
 
-impl TryFrom<(&AccountResource, &DiemAccountResource, &BalanceResource)> for AccountStateBlob {
+impl TryFrom<(&AccountResource, &AptosAccountResource, &BalanceResource)> for AccountStateBlob {
     type Error = Error;
 
     fn try_from(
-        (account_resource, diem_account_resource, balance_resource): (
+        (account_resource, aptos_account_resource, balance_resource): (
             &AccountResource,
-            &DiemAccountResource,
+            &AptosAccountResource,
             &BalanceResource,
         ),
     ) -> Result<Self> {
         Self::try_from(&AccountState::try_from((
             account_resource,
-            diem_account_resource,
+            aptos_account_resource,
             balance_resource,
         ))?)
     }
 }
 
-impl TryFrom<&AccountStateBlob> for DiemAccountResource {
+impl TryFrom<&AccountStateBlob> for AptosAccountResource {
     type Error = Error;
 
     fn try_from(account_state_blob: &AccountStateBlob) -> Result<Self> {
         AccountState::try_from(account_state_blob)?
-            .get_diem_account_resource()?
-            .ok_or_else(|| anyhow!("DiemAccountResource not found."))
+            .get_aptos_account_resource()?
+            .ok_or_else(|| anyhow!("AptosAccountResource not found."))
     }
 }
 
@@ -160,8 +160,8 @@ impl CryptoHash for AccountStateBlob {
 
 #[cfg(any(test, feature = "fuzzing"))]
 prop_compose! {
-    fn account_state_blob_strategy()(account_resource in any::<AccountResource>(), diem_account_resource in any::<DiemAccountResource>(), balance_resource in any::<BalanceResource>()) -> AccountStateBlob {
-        AccountStateBlob::try_from((&account_resource, &diem_account_resource, &balance_resource)).unwrap()
+    fn account_state_blob_strategy()(account_resource in any::<AccountResource>(), aptos_account_resource in any::<AptosAccountResource>(), balance_resource in any::<BalanceResource>()) -> AccountStateBlob {
+        AccountStateBlob::try_from((&account_resource, &aptos_account_resource, &balance_resource)).unwrap()
     }
 }
 

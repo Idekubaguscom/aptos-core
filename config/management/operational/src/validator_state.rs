@@ -1,11 +1,11 @@
-// Copyright (c) The Diem Core Contributors
+// Copyright (c) The Aptos Core Contributors
 // SPDX-License-Identifier: Apache-2.0
 
 use crate::{rest_client::RestClient, validator_config::DecodedValidatorConfig};
-use diem_global_constants::{
+use aptos_global_constants::{
     CONSENSUS_KEY, FULLNODE_NETWORK_KEY, OWNER_ACCOUNT, VALIDATOR_NETWORK_KEY,
 };
-use diem_management::{
+use aptos_management::{
     config::ConfigPath, error::Error, secure_backend::ValidatorBackend, storage::to_x25519,
 };
 use serde::Serialize;

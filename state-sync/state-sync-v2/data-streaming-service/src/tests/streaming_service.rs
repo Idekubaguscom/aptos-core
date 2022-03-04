@@ -1,4 +1,4 @@
-// Copyright (c) The Diem Core Contributors
+// Copyright (c) The Aptos Core Contributors
 // SPDX-License-Identifier: Apache-2.0
 
 use crate::{
@@ -10,14 +10,14 @@ use crate::{
     },
     streaming_service::DataStreamingService,
     tests::utils::{
-        create_ledger_info, get_data_notification, initialize_logger, MockDiemDataClient,
+        create_ledger_info, get_data_notification, initialize_logger, MockAptosDataClient,
         MAX_ADVERTISED_ACCOUNTS, MAX_ADVERTISED_EPOCH_END, MAX_ADVERTISED_TRANSACTION,
         MAX_ADVERTISED_TRANSACTION_OUTPUT, MIN_ADVERTISED_ACCOUNTS, MIN_ADVERTISED_EPOCH_END,
         MIN_ADVERTISED_TRANSACTION, MIN_ADVERTISED_TRANSACTION_OUTPUT, TOTAL_NUM_ACCOUNTS,
     },
 };
 use claim::{assert_le, assert_matches, assert_ok, assert_some};
-use diem_config::config::DataStreamingServiceConfig;
+use aptos_config::config::DataStreamingServiceConfig;
 
 macro_rules! unexpected_payload_type {
     ($received:expr) => {
@@ -949,10 +949,10 @@ fn create_new_streaming_client_and_service() -> StreamingServiceClient {
         new_streaming_service_client_listener_pair();
 
     // Create the streaming service and connect it to the listener
-    let diem_data_client = MockDiemDataClient::new();
+    let aptos_data_client = MockAptosDataClient::new();
     let streaming_service = DataStreamingService::new(
         DataStreamingServiceConfig::default(),
-        diem_data_client,
+        aptos_data_client,
         streaming_service_listener,
     );
     tokio::spawn(streaming_service.start_service());

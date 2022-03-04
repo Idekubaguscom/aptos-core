@@ -1,4 +1,4 @@
-// Copyright (c) The Diem Core Contributors
+// Copyright (c) The Aptos Core Contributors
 // SPDX-License-Identifier: Apache-2.0
 
 use crate::{
@@ -6,13 +6,13 @@ use crate::{
     PublicKeyResponse,
 };
 use chrono::DateTime;
-use diem_crypto::{
+use aptos_crypto::{
     ed25519::{Ed25519PrivateKey, Ed25519PublicKey, Ed25519Signature},
     hash::CryptoHash,
 };
-use diem_infallible::RwLock;
-use diem_time_service::{TimeService, TimeServiceTrait};
-use diem_vault_client::Client;
+use aptos_infallible::RwLock;
+use aptos_time_service::{TimeService, TimeServiceTrait};
+use aptos_vault_client::Client;
 use serde::{de::DeserializeOwned, Serialize};
 use std::{
     collections::HashMap,
@@ -20,15 +20,15 @@ use std::{
 };
 
 #[cfg(any(test, feature = "testing"))]
-use diem_vault_client::ReadResponse;
+use aptos_vault_client::ReadResponse;
 
 const TRANSIT_NAMESPACE_SEPARATOR: &str = "__";
 
-/// VaultStorage utilizes Vault for maintaining encrypted, authenticated data for Diem. This
+/// VaultStorage utilizes Vault for maintaining encrypted, authenticated data for Aptos. This
 /// version currently matches the behavior of OnDiskStorage and InMemoryStorage. In the future,
 /// Vault will be able to create keys, sign messages, and handle permissions across different
 /// services. The specific vault service leveraged herein is called KV (Key Value) Secrets Engine -
-/// Version 2 (https://www.vaultproject.io/api/secret/kv/kv-v2.html). So while Diem Secure Storage
+/// Version 2 (https://www.vaultproject.io/api/secret/kv/kv-v2.html). So while Aptos Secure Storage
 /// calls pointers to data keys, Vault has actually a secret that contains multiple key value
 /// pairs.
 pub struct VaultStorage {
@@ -77,7 +77,7 @@ impl VaultStorage {
                     let next_renewal = now + (ttl as u64) / 2;
                     self.next_renewal.store(next_renewal, Ordering::Relaxed);
                 } else if let Err(e) = result {
-                    diem_logger::error!("Unable to renew lease: {}", e.to_string());
+                    aptos_logger::error!("Unable to renew lease: {}", e.to_string());
                 }
             }
         }
@@ -103,7 +103,7 @@ impl VaultStorage {
         let keys = match self.client().list_keys() {
             Ok(keys) => keys,
             // No keys were found, so there's no need to reset.
-            Err(diem_vault_client::Error::NotFound(_, _)) => return Ok(()),
+            Err(aptos_vault_client::Error::NotFound(_, _)) => return Ok(()),
             Err(e) => return Err(e.into()),
         };
         for key in keys {
@@ -278,7 +278,7 @@ impl CryptoStorage for VaultStorage {
         message: &T,
     ) -> Result<Ed25519Signature, Error> {
         let name = self.crypto_name(name);
-        let mut bytes = <T::Hasher as diem_crypto::hash::CryptoHasher>::seed().to_vec();
+        let mut bytes = <T::Hasher as aptos_crypto::hash::CryptoHasher>::seed().to_vec();
         bcs::serialize_into(&mut bytes, &message).map_err(|e| {
             Error::InternalError(format!(
                 "Serialization of signable material should not fail, yet returned Error:{}",
@@ -296,7 +296,7 @@ impl CryptoStorage for VaultStorage {
     ) -> Result<Ed25519Signature, Error> {
         let name = self.crypto_name(name);
         let vers = self.key_version(&name, &version)?;
-        let mut bytes = <T::Hasher as diem_crypto::hash::CryptoHasher>::seed().to_vec();
+        let mut bytes = <T::Hasher as aptos_crypto::hash::CryptoHasher>::seed().to_vec();
         bcs::serialize_into(&mut bytes, &message).map_err(|e| {
             Error::InternalError(format!(
                 "Serialization of signable material should not fail, yet returned Error:{}",
@@ -311,15 +311,15 @@ impl CryptoStorage for VaultStorage {
 pub mod policy {
     use super::*;
     use crate::{Capability, Identity, Policy};
-    use diem_vault_client as vault;
+    use aptos_vault_client as vault;
 
-    const DIEM_DEFAULT: &str = "diem_default";
+    const DIEM_DEFAULT: &str = "aptos_default";
 
-    /// VaultStorage utilizes Vault for maintaining encrypted, authenticated data for Diem. This
+    /// VaultStorage utilizes Vault for maintaining encrypted, authenticated data for Aptos. This
     /// version currently matches the behavior of OnDiskStorage and InMemoryStorage. In the future,
     /// Vault will be able to create keys, sign messages, and handle permissions across different
     /// services. The specific vault service leveraged herein is called KV (Key Value) Secrets Engine -
-    /// Version 2 (https://www.vaultproject.io/api/secret/kv/kv-v2.html). So while Diem Secure Storage
+    /// Version 2 (https://www.vaultproject.io/api/secret/kv/kv-v2.html). So while Aptos Secure Storage
     /// calls pointers to data keys, Vault has actually a secret that contains multiple key value
     /// pairs.
     pub struct VaultPolicy {
@@ -340,7 +340,7 @@ pub mod policy {
         fn reset_policies(&self) -> Result<(), Error> {
             let policies = match self.client().list_policies() {
                 Ok(policies) => policies,
-                Err(diem_vault_client::Error::NotFound(_, _)) => return Ok(()),
+                Err(aptos_vault_client::Error::NotFound(_, _)) => return Ok(()),
                 Err(e) => return Err(e.into()),
             };
 

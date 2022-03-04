@@ -1,4 +1,4 @@
-// Copyright (c) The Diem Core Contributors
+// Copyright (c) The Aptos Core Contributors
 // SPDX-License-Identifier: Apache-2.0
 
 use crate::{
@@ -8,13 +8,13 @@ use crate::{
     tests::common::TestTransaction,
     ConsensusRequest, MempoolClientRequest, MempoolClientSender,
 };
-use diem_config::{
+use aptos_config::{
     config::NodeConfig,
     network_id::{NetworkId, PeerNetworkId},
 };
-use diem_id_generator::{IdGenerator, U32IdGenerator};
-use diem_infallible::{Mutex, RwLock};
-use diem_types::{
+use aptos_id_generator::{IdGenerator, U32IdGenerator};
+use aptos_infallible::{Mutex, RwLock};
+use aptos_types::{
     account_address::AccountAddress, mempool_status::MempoolStatusCode,
     on_chain_config::ON_CHAIN_CONFIG_REGISTRY, transaction::SignedTransaction,
 };

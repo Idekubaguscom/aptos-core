@@ -1,7 +1,7 @@
-// Copyright (c) The Diem Core Contributors
+// Copyright (c) The Aptos Core Contributors
 // SPDX-License-Identifier: Apache-2.0
 
-use diem_logger::prelude::*;
+use aptos_logger::prelude::*;
 use futures::{
     future::{AbortHandle, Abortable},
     Future, FutureExt, SinkExt,
@@ -123,7 +123,7 @@ impl TimeService for ClockTimeService {
     }
 
     fn get_current_timestamp(&self) -> Duration {
-        diem_infallible::duration_since_epoch()
+        aptos_infallible::duration_since_epoch()
     }
 
     fn sleep(&self, t: Duration) {

@@ -1,4 +1,4 @@
-// Copyright (c) The Diem Core Contributors
+// Copyright (c) The Aptos Core Contributors
 // SPDX-License-Identifier: Apache-2.0
 
 use crate::{
@@ -11,8 +11,8 @@ use crate::{
     waypoint::Waypoint,
 };
 use anyhow::{bail, ensure, format_err, Result};
-use diem_crypto::HashValue;
-use diem_crypto_derive::{BCSCryptoHash, CryptoHasher};
+use aptos_crypto::HashValue;
+use aptos_crypto_derive::{BCSCryptoHash, CryptoHasher};
 #[cfg(any(test, feature = "fuzzing"))]
 use proptest_derive::Arbitrary;
 use serde::{Deserialize, Serialize};
