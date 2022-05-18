@@ -57,13 +57,13 @@ jobs:
       - run: docker run --detach -p 5432:5432 cimg/postgres:14.2
       - run: echo "export INDEXER_DATABASE_URL=postgresql://postgres@localhost/postgres" >> $BASH_ENV
       - run: cargo nextest --nextest-profile ci --partition hash:1/1 --unit --exclude backup-cli --changed-since "origin/main"
-  docker-build-push:
+  build-push-rust-code:
     executor: ubuntu-2xl
     parameters:
-      addl_tag:
-        description: Additional image tag
+      image_target:
+        description: what value to pass to `IMAGE_TARGET=<value>` when running the docker/build-common.sh script which runs the Rust build.
         type: string
-        default: latest
+        default: NOT_PROVIDED
     steps:
       - checkout
       - aws-ecr-setup
@@ -71,10 +71,12 @@ jobs:
       - run:
           name: Build and Push
           shell: /bin/bash
+          environment:
+            IMAGE_TARGET: << parameters.image_target >>
           command: |
-              set -e
-              docker buildx create --use
-              docker/docker-bake-rust-all.sh
+            set -e
+            docker buildx create --use
+            docker/docker-bake-rust-all.sh
   build-push-community-platform:
     executor: ubuntu-medium
     steps:
@@ -248,8 +250,8 @@ workflows:
     jobs:
       - build-push-community-platform:
           context:
-          - aws-dev
-          - gcp-global
+            - aws-dev
+            - gcp-global
 
   build-test-deploy:
     when:
@@ -261,8 +263,14 @@ workflows:
       - lint
       - ecosystem-lint
       - unit-test
-      - docker-build-push:
+      - build-push-rust-code: &BuildPushRustRelease
+          name: build-push-rust-release-target
           context: aws-dev
+          image_target: release
+      - build-push-rust-code: &BuildPushRustTest
+          name: build-push-rust-test-target
+          context: aws-dev
+          image_target: test
           # filters:
           #   branches:
           #     only:
@@ -274,43 +282,45 @@ workflows:
       - ecosystem-test:
           context: aws-dev
           requires:
-            - docker-build-push
+            - build-push-rust-release-target
+            - build-push-rust-test-target
       - forge-k8s-test:
           context: aws-dev
           requires:
-            - docker-build-push
+            - build-push-rust-release-target
+            - build-push-rust-test-target
+
   ### on devnet branch update ###
   # Ensure the latest is built on the "devnet" branch, and mirror from ECR to Dockerhub
   devnet-branch-cut:
     when:
       equal: [devnet, << pipeline.git.branch >>]
     jobs:
-      - docker-build-push:
-          context: aws-dev
-          addl_tag: devnet
+      - build-push-rust-code: *BuildPushRustRelease
+      - build-push-rust-code: *BuildPushRustTest
       - ecr-dockerhub-mirror:
           context:
             - aws-dev
             - docker-aptoslabsbots
-          addl_tag: devnet
           requires:
-            - docker-build-push
+            - build-push-rust-release-target
+            - build-push-rust-test-target
   ### on testnet branch update ###
   # Ensure the latest is built on the "testnet" branch, and mirror from ECR to Dockerhub
   testnet-branch-cut:
     when:
       equal: [testnet, << pipeline.git.branch >>]
     jobs:
-      - docker-build-push:
-          context: aws-dev
-          addl_tag: testnet
+      - build-push-rust-code: *BuildPushRustRelease
+      - build-push-rust-code: *BuildPushRustTest
       - ecr-dockerhub-mirror:
           context:
             - aws-dev
             - docker-aptoslabsbots
           addl_tag: testnet
           requires:
-            - docker-build-push
+            - build-push-rust-release-target
+            - build-push-rust-test-target
   ### on continuous_push scheduled pipeline ###
   # Build the latest on "main" branch
   continuous-push:
@@ -319,9 +329,8 @@ workflows:
         - equal: [scheduled_pipeline, << pipeline.trigger_source >>]
         - equal: ["continuous_push", << pipeline.schedule.name >>]
     jobs:
-      - docker-build-push:
-          context: aws-dev
-          addl_tag: main
+      - build-push-rust-code: *BuildPushRustRelease
+      - build-push-rust-code: *BuildPushRustTest
   ### on nightly scheduled pipeline ###
   # Ensure the latest on "main" branch is built, and mirror from ECR to Dockerhub
   nightly:
@@ -330,16 +339,16 @@ workflows:
         - equal: [scheduled_pipeline, << pipeline.trigger_source >>]
         - equal: ["nightly", << pipeline.schedule.name >>]
     jobs:
-      - docker-build-push:
-          context: aws-dev
-          addl_tag: main
+      - build-push-rust-code: *BuildPushRustRelease
+      - build-push-rust-code: *BuildPushRustTest
       - ecr-dockerhub-mirror:
           context:
             - aws-dev
             - docker-aptoslabsbots
           addl_tag: main
           requires:
-            - docker-build-push
+            - build-push-rust-release-target
+            - build-push-rust-test-target
 commands:
   dev-setup:
     steps:

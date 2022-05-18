@@ -22,13 +22,13 @@ RUN rustup install $(cat rust-toolchain)
 COPY --link . /aptos
 
 # must be: release|test depending on the target, defaults to release
-ARG IMAGE_TARGETS=REQUIRED_DOCKER_ARG
+ARG IMAGE_TARGET=REQUIRED_DOCKER_ARG
 
 ARG AWS_REGION
 ARG AWS_ACCESS_KEY_ID
 ARG AWS_SECRET_ACCESS_KEY
 
-RUN IMAGE_TARGETS="${IMAGE_TARGETS}" \
+RUN IMAGE_TARGET="${IMAGE_TARGET}" \
     ./docker/build-common.sh
 
 ### Validator Image ###

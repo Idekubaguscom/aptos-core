@@ -17,10 +17,11 @@ variable "ecr_base" {
 }
 
 variable "gh_image_cache" {
-  default = "ghcr.io/aptos-labs/aptos-core/image-cache"
+  default = "ghcr.io/aptos-labs/aptos-core"
 }
 
-group "all" {
+# images with IMAGE_TARGET=release for rust build
+group "release" {
   targets = [
     "validator",
     "indexer",
@@ -28,6 +29,12 @@ group "all" {
     "tools",
     "init",
     "txn-emitter",
+  ]
+}
+
+# images with IMAGE_TARGET=test for rust build
+group "test" {
+  targets = [
     "faucet",
     "forge",
   ]
@@ -53,7 +60,7 @@ target "_common" {
     "org.label-schema.vcs-ref"        = "${GIT_REV}"
   }
   args = {
-    IMAGE_TARGETS = "release"
+    IMAGE_TARGET = "release"
   }
 }
 
@@ -105,7 +112,7 @@ target "faucet" {
   cache-to = generate_cache_to("faucet")
   tags     = generate_tags("faucet")
   args = {
-    IMAGE_TARGETS = "test"
+    IMAGE_TARGET = "test"
   }
 }
 
@@ -115,7 +122,7 @@ target "forge" {
   cache-to = generate_cache_to("forge")
   tags     = generate_tags("forge")
   args = {
-    IMAGE_TARGETS = "test"
+    IMAGE_TARGET = "test"
   }
 }
 

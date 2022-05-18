@@ -17,7 +17,7 @@ export CARGO_PROFILE_RELEASE_LTO=thin # override lto setting to turn on thin-LTO
 # TODO: consider using ${CARGO} once upstream issues are fixed.
 cargo x generate-workspace-hack --mode disable
 
-if [ "$IMAGE_TARGETS" = "release" ]; then
+if [ "$IMAGE_TARGET" = "release" ]; then
   # Build release binaries (TODO: use x to run this?)
   cargo build --release \
           -p aptos-genesis-tool \
@@ -38,7 +38,7 @@ if [ "$IMAGE_TARGETS" = "release" ]; then
 fi
 
 
-if [ "$IMAGE_TARGETS" = "test" ]; then
+if [ "$IMAGE_TARGET" = "test" ]; then
   # These non-release binaries are built separately to avoid feature unification issues
   cargo build --release \
           -p aptos-faucet \
